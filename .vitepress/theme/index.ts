@@ -14,9 +14,9 @@ export default {
   extends: DefaultTheme,
   Layout() {
     return h(DefaultTheme.Layout, null, {
-      'home-features-after': () => h(HomeSponsors),
-      'aside-outline-after': () => h(WwAds),
-      'aside-bottom': () => h(AsideSponsors)
+      // 'home-features-after': () => h(HomeSponsors),
+      // 'aside-outline-after': () => h(WwAds),
+      // 'aside-bottom': () => h(AsideSponsors)
     })
   },
   enhanceApp({ app }) {

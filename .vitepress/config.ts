@@ -4,9 +4,9 @@ import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 import { buildEnd } from './buildEnd.config'
 
 const ogDescription = 'Next Generation Frontend Tooling'
-const ogImage = 'https://vitejs.dev/og-image.png'
+const ogImage = 'https://vite.zhcndoc.com/og-image.png'
 const ogTitle = 'Vite'
-const ogUrl = 'https://vitejs.dev'
+const ogUrl = 'https://vite.zhcndoc.com'
 
 // netlify envs
 const deployURL = process.env.DEPLOY_PRIME_URL || ''
@@ -64,7 +64,7 @@ const versionLinks = ((): DefaultTheme.NavItemWithLink[] => {
 })()
 
 export default defineConfig({
-  title: 'Vite 官方中文文档',
+  title: 'Vite 中文文档',
   description: '下一代前端工具链',
   lang: 'zh-CN',
 
@@ -103,6 +103,10 @@ export default defineConfig({
     pt: { label: 'Português', link: 'https://pt.vitejs.dev' },
     ko: { label: '한국어', link: 'https://ko.vitejs.dev' },
     de: { label: 'Deutsch', link: 'https://de.vitejs.dev' },
+  },
+
+  sitemap: {
+    hostname: 'https://vite.zhcndoc.com'
   },
 
   themeConfig: {

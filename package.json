@@ -27,5 +27,6 @@
 	},
 	"gitHooks": {
 		"commit-msg": "node scripts/verifyCommit.js"
-	}
+	},
+	"packageManager": "pnpm@8.15.4"
 }
