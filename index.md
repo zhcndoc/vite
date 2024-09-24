@@ -1,8 +1,8 @@
 ---
 layout: home
 
-title: Vite
-titleTemplate: 下一代的前端工具链
+title: Vite 中文文档
+titleTemplate: ':title - 下一代的前端工具链'
 
 hero:
   name: Vite
