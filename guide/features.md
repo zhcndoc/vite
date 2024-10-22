@@ -2,7 +2,7 @@
 
 对非常基础的使用来说，使用 Vite 开发和使用一个静态文件服务器并没有太大区别。然而，Vite 还通过原生 ESM 导入提供了许多主要用于打包场景的增强功能。
 
-## NPM 依赖解析和预构建 {#npm-dependency-resolving-and-pre-bundling}
+## npm 依赖解析和预构建 {#npm-dependency-resolving-and-pre-bundling}
 
 原生 ES 导入不支持下面这样的裸模块导入：
 
@@ -88,11 +88,12 @@ export type { T }
 
 - [TypeScript 文档](https://www.typescriptlang.org/tsconfig#target)
 
-Vite 默认不会转译 TypeScript，而是使用 `esbuild` 的默认行为。
+Vite 忽略 `tsconfig.json` 中的 `target` 值，遵循与 `esbuild` 相同的行为。
 
-该 [`esbuild.target`](/config/shared-options.html#esbuild) 选项可以用来代替上述行为，默认值为 `esnext`，以进行最小的转译。在构建中，[`build.target`](/config/build-options.html#build-target) 选项优先级更高，如果需要也可以设置。
+要在开发中指定目标，可使用 [`esbuild.target`](/config/shared-options.html#esbuild) 选项，默认值为 `esnext`，以实现最小的转译。在构建中，[`build.target`](/config/build-options.html#build-target) 选项优先于 `esbuild.target`，如有需要也可以进行设置。
 
 ::: warning `useDefineForClassFields`
+
 如果 `target` 不是 `ESNext` 或 `ES2022` 或更新版本，或者没有 `tsconfig.json` 文件，`useDefineForClassFields` 将默认为 `false`，这可能会导致默认的 `esbuild.target` 值为 `esnext` 的问题。它可能会转译为 [static initialization blocks](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Static_initialization_blocks#browser_compatibility)，这在你的浏览器中可能不被支持。
 
 因此，建议将 `target` 设置为 `ESNext` 或 `ES2022` 或更新版本，或者在配置 `tsconfig.json` 时将 `useDefineForClassFields` 显式设置为 `true`。
@@ -542,7 +543,7 @@ const modules = import.meta.glob('./dir/*.js', {
 
 - 这只是一个 Vite 独有的功能而不是一个 Web 或 ES 标准
 - 该 Glob 模式会被当成导入标识符：必须是相对路径（以 `./` 开头）或绝对路径（以 `/` 开头，相对于项目根目录解析）或一个别名路径（请看 [`resolve.alias` 选项](/config/shared-options.md#resolve-alias))。
-- Glob 匹配是使用 [fast-glob](https://github.com/mrmlnc/fast-glob) 来实现的 —— 阅读它的文档来查阅 [支持的 Glob 模式](https://github.com/mrmlnc/fast-glob#pattern-syntax)。
+- Glob 匹配是使用 [`tinyglobby`](https://github.com/SuperchupuDev/tinyglobby) 来实现的 —— 阅读它的文档来查阅 [支持的 Glob 模式](https://github.com/mrmlnc/fast-glob#pattern-syntax)。
 - 你还需注意，所有 `import.meta.glob` 的参数都必须以字面量传入。你 **不** 可以在其中使用变量或表达式。
 
 ## 动态导入 {#dynamic-import}
