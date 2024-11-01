@@ -208,6 +208,9 @@ export default defineConfig({
     },
 
     nav: [
+      {
+        component: 'ReleaseTag'
+      },
       { text: '指引', link: '/guide/', activeMatch: '/guide/' },
       { text: '配置', link: '/config/', activeMatch: '/config/' },
       { text: '插件', link: '/plugins/', activeMatch: '/plugins/' },
@@ -506,19 +509,13 @@ export default defineConfig({
         },
       }),
     ],
-    environments: {
-      client: {
-        dev: {
-          optimizeDeps: {
-            include: [
-              '@shikijs/vitepress-twoslash/client',
-              'gsap',
-              'gsap/dist/ScrollTrigger',
-              'gsap/dist/MotionPathPlugin',
-            ],
-          },
-        },
-      },
+    optimizeDeps: {
+      include: [
+        '@shikijs/vitepress-twoslash/client',
+        'gsap',
+        'gsap/dist/ScrollTrigger',
+        'gsap/dist/MotionPathPlugin',
+      ],
     },
   },
   buildEnd,
