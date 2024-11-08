@@ -37,13 +37,13 @@
 
 Vite 6 还为 `json.stringify` 引入了一个新的默认值，即 `'auto'`，它只会对大型 JSON 文件进行字符串化处理。要禁用此行为，请设置 `json.stringify: false`。
 
-### 扩展对 HTML 元素中 asset 引用的支持 {#extended-support-of-asset-references-in-html-elements}
+### 在 HTML 元素中扩展对资源引用的支持 {#extended-support-of-asset-references-in-html-elements}
 
-在 Vite 5 中，只有少数受支持的 HTML 元素能够引用由 Vite 处理和捆绑的 asset，如`<link href>`、`<img src>`等。
+在 Vite 5 中，只有少数支持的 HTML 元素能够引用由 Vite 处理和打包的资源，如`<link href>`、`<img src>` 等。
 
-Vite 6 扩展了对更多 HTML 元素的支持。完整列表请参见 [HTML features](/guide/features.html#html) 文档。
+Vite 6 扩展了对更多 HTML 元素的支持。完整列表请参见 [HTML 功能介绍](/guide/features.html#html) 文档。
 
-要退出对某些元素的 HTML 处理，可以在元素上添加 `vite-ignore` 属性。
+要在某些元素上选择不进行 HTML 处理，可以在元素上添加 `vite-ignore` 属性。
 
 ### postcss-load-config
 
@@ -88,7 +88,9 @@ Vite 6 扩展了对更多 HTML 元素的支持。完整列表请参见 [HTML fea
 - [[#18209] refactor!: bump minimal terser version to 5.16.0](https://github.com/vitejs/vite/pull/18209)
   - [`build.minify: 'terser'`](/config/build-options#build-minify) 所支持的最小 terser 版本从 5.4.0 提升至 5.16.0
 - [[#18231] chore(deps): update dependency @rollup/plugin-commonjs to v28](https://github.com/vitejs/vite/pull/18231)
-  - [`commonjsOptions.strictRequires`](https://github.com/rollup/plugins/blob/master/packages/commonjs/README.md#strictrequires) 现在默认为 `true`（之前为 `'auto'`)。
+  - [`commonjsOptions.strictRequires`](https://github.com/rollup/plugins/blob/master/packages/commonjs/README.md#strictrequires) 现在默认为 `true`（之前为 `'auto'`）。
+    - 这可能会导致包的大小增大，但会使构建更加确定。
+    - 如果将 CommonJS 文件指定为入口点，则可能需要额外的步骤。阅读 [commonjs plugin 文档](https://github.com/rollup/plugins/blob/master/packages/commonjs/README.md#using-commonjs-files-as-entry-points) 了解更多详情.
 - [[#18243] chore(deps)!: migrate `fast-glob` to `tinyglobby`](https://github.com/vitejs/vite/pull/18243)
   - globs 中不再支持范围大括号 (`{01..03}` ⇒ `['01', '02', '03']`) 和递增大括号 (`{2..8..2}` ⇒ `['2', '4', '6', '8']`) 。
 - [[#18493] refactor!: remove fs.cachedChecks option](https://github.com/vitejs/vite/pull/18493)

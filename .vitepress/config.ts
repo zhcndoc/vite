@@ -166,10 +166,11 @@ export default defineConfig({
     },
 
     socialLinks: [
-      // { icon: 'mastodon', link: 'https://elk.zone/m.webtoo.ls/@vite' },
-      // { icon: 'twitter', link: 'https://twitter.com/vite_js' },
-      // { icon: 'discord', link: 'https://chat.vite.dev' },
-      { icon: 'github', link: 'https://github.com/zhcndoc/vite' },
+      { icon: 'bluesky', link: 'https://bsky.app/profile/vite.dev' },
+      { icon: 'mastodon', link: 'https://elk.zone/m.webtoo.ls/@vite' },
+      { icon: 'x', link: 'https://x.com/vite_js' },
+      { icon: 'discord', link: 'https://chat.vite.dev' },
+      { icon: 'github', link: 'https://github.com/vitejs/vite' },
     ],
 
     search: {
@@ -223,12 +224,16 @@ export default defineConfig({
           {
             items: [
               {
+                text: 'Bluesky',
+                link: 'https://bsky.app/profile/vite.dev',
+              },
+              {
                 text: 'Mastodon',
                 link: 'https://elk.zone/m.webtoo.ls/@vite',
               },
               {
-                text: 'Twitter',
-                link: 'https://twitter.com/vite_js',
+                text: 'X',
+                link: 'https://x.com/vite_js',
               },
               {
                 text: 'Discord 聊天室',
@@ -463,7 +468,7 @@ export default defineConfig({
               link: '/changes/hotupdate-hook',
             },
             {
-              text: '迁移到按环境划分的 API',
+              text: '迁移到基于环境的API',
               link: '/changes/per-environment-apis',
             },
             {
