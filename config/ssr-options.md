@@ -34,7 +34,7 @@ SSR 服务器的构建目标。
 ## ssr.resolve.conditions {#ssr-resolve-conditions}
 
 - **类型：** `string[]`
-- **默认：** `['module', 'node', 'development|production']`（当 `ssr.target === 'webworker'` 时为 `['module', 'browser', 'development|production']`）
+- **默认：** `['module', 'node', 'development|production']`(`defaultServerConditions`) (当 `ssr.target === 'webworker'` 时为 `['module', 'browser', 'development|production']` (`defaultClientConditions`) )
 - **相关：** [解析情景](./shared-options.md#resolve-conditions)
 
 这些条件会在插件管道中使用，并且只会影响 SSR 构建期间的非外部化依赖项。使用 `ssr.resolve.externalConditions` 来影响外部化导入。
@@ -44,4 +44,19 @@ SSR 服务器的构建目标。
 - **类型：** `string[]`
 - **默认：** `['node']`
 
-在 SSR 导入（包括 `ssrLoadModule`）外部化依赖项时使用的条件。
+在对外部化的直接依赖项（由 Vite 导入的外部依赖项）进行 SSR 导入（包括 `ssrLoadModule`）期间所使用的条件。
+
+:::tip
+
+使用该选项时，请确保在开发和构建中使用 [`--conditions` flag](https://nodejs.org/docs/latest/api/cli.html#-c-condition---conditionscondition) 以相同的值运行 Node，以获得一致的行为。
+
+例如，当设置 `['node', 'custom']` 时，应该在 dev 中运行 `NODE_OPTIONS='--conditions custom' vite`，在 build 后运行 `NODE_OPTIONS="--conditions custom" node ./dist/server.js`。
+
+:::
+
+### ssr.resolve.mainFields
+
+- **类型：** `string[]`
+- **默认：** `['module', 'jsnext:main', 'jsnext']`
+  
+在解析一个包的入口文件时，会尝试使用 `package.json` 中的字段列表。请注意，这些字段的优先级低于从条件导出解析的 `exports` 字段：如果能从 `exports` 字段成功解析出入口文件，那么 main 字段将会被忽略。此设置仅影响未外部化的依赖项。

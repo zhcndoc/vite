@@ -177,7 +177,7 @@ HTML 文件位于 Vite 项目的[最前端和中心](/guide/#index-html-and-proj
 - `<img src>` 和 `<img srcset>`
 - `<image src>`
 - `<input src>`
-- `<link href>` 和 `<link imagesrcet>`
+- `<link href>` 和 `<link imagesrcset>`
 - `<object data>`
 - `<script type="module" src>`
 - `<source src>` 和 `<source srcset>`
@@ -295,7 +295,7 @@ document.getElementById('foo').className = applyColor
 
 由于 Vite 的目标仅为现代浏览器，因此建议使用原生 CSS 变量和实现 CSSWG 草案的 PostCSS 插件（例如 [postcss-nesting](https://github.com/csstools/postcss-plugins/tree/main/plugins/postcss-nesting)）来编写简单的、符合未来标准的 CSS。
 
-话虽如此，但 Vite 也同时提供了对 `.scss`, `.sass`, `.less`, `.styl` 和 `.stylus` 文件的内置支持。没有必要为它们安装特定的 Vite 插件，但必须安装相应的预处理器依赖：
+话虽如此，但 Vite 也同时提供了对 `.scss`，`.sass`，`.less`，`.styl` 和 `.stylus` 文件的内置支持。没有必要为它们安装特定的 Vite 插件，但必须安装相应的预处理器依赖：
 
 ```bash
 # .scss 和 .sass

@@ -117,7 +117,7 @@ declare const __APP_VERSION__: string
 ## resolve.conditions {#resolve-conditions}
 
 - **类型：** `string[]`
-- **默认：** `['module', 'browser', 'development|production']`
+- **默认：** `['module', 'browser', 'development|production']` (`defaultClientConditions`)
 
 解决程序包中 [情景导出](https://nodejs.org/api/packages.html#packages_conditional_exports) 时的其他允许条件。
 
@@ -136,9 +136,9 @@ declare const __APP_VERSION__: string
 
 在这里，`import` 和 `require` 被称为“情景”。情景可以嵌套，并且应该从最特定的到最不特定的指定。
 
-`development|production` 是一个特殊值，会根据 `process.env.NODE_ENV` 的值被替换为 `production` 或  `development` 。如果 `process.env.NODE_ENV === 'production'`，则替换为`production`，否则替换为`development`。
+`development|production` 是一个特殊值，根据 `process.env.NODE_ENV` 的值替换为 `production` 或  `development` 。如果 `process.env.NODE_ENV === 'production'`，则替换为 `production`，否则替换为 `development`。
 
-请注意，如果符合要求，`import`, `require`, `default` 条件始终会被应用。
+请注意，如果符合要求，`import`，`require`，`default` 始终会被应用。
 
 :::warning 解决子路径导出问题
 导出以“/”结尾的 key 已被 Node 弃用，可能无法正常工作。请联系包的作者改为使用 [`*` 子路径模式](https://nodejs.org/api/packages.html#package-entry-points)。
@@ -147,7 +147,7 @@ declare const __APP_VERSION__: string
 ## resolve.mainFields {#resolve-mainfields}
 
 - **类型：** `string[]`
-- **默认：** `['browser', 'module', 'jsnext:main', 'jsnext']`
+- **默认：** `['browser', 'module', 'jsnext:main', 'jsnext']` (`defaultClientMainFields`)
 
 `package.json` 中，在解析包的入口点时尝试的字段列表。注意：这比从 `exports` 字段解析的情景导出优先级低：如果一个入口起点从 `exports` 成功解析，`resolve.mainFields` 将被忽略。
 

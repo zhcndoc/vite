@@ -24,10 +24,10 @@
 - `resolve.conditions` 是 `['module', 'browser', 'development|production']`
 - `ssr.resolve.conditions` 是 `['module', 'node', 'development|production']`
 
-这些选项的默认值会更新为相应的值，`ssr.resolve.conditions` 不再使用 `resolve.conditions` 作为默认值。请注意，`development|production`是一个特殊变量，会根据 `process.env.NODE_ENV` 的值被替换为 `production` 或 `development`。
+这些选项的默认值会更新为相应的值，`ssr.resolve.conditions` 不再使用 `resolve.conditions` 作为默认值。请注意，`development|production`是一个特殊变量，会根据 `process.env.NODE_ENV` 的值被替换为 `production` 或 `development`。这些默认值从 `vite` 导出为 `defaultClientConditions` 和 `defaultServerConditions`。
 
 如果为 `resolve.conditions` 或 `ssr.resolve.conditions` 指定了自定义值，则需要更新该值以包含新条件。
-例如，如果先前为 `resolve.conditions` 指定了 `['custom']`，那么现在就需要指定 `['custom','module','browser','develop|production']`。
+例如，如果先前为 `resolve.conditions` 指定了 `['custom']`，那么现在就需要指定 `['custom', ...defaultClientConditions]`。
 
 ### JSON stringify
 
@@ -93,6 +93,8 @@ Vite 6 扩展了对更多 HTML 元素的支持。完整列表请参见 [HTML 功
     - 如果将 CommonJS 文件指定为入口点，则可能需要额外的步骤。阅读 [commonjs plugin 文档](https://github.com/rollup/plugins/blob/master/packages/commonjs/README.md#using-commonjs-files-as-entry-points) 了解更多详情.
 - [[#18243] chore(deps)!: migrate `fast-glob` to `tinyglobby`](https://github.com/vitejs/vite/pull/18243)
   - globs 中不再支持范围大括号 (`{01..03}` ⇒ `['01', '02', '03']`) 和递增大括号 (`{2..8..2}` ⇒ `['2', '4', '6', '8']`) 。
+- [[#18395] feat(resolve)!: allow removing conditions](https://github.com/vitejs/vite/pull/18395)
+  - 此 PR 不仅引入了上文提到的 " `resolve.conditions` 的默认值" 这一破坏性变更，还使得在 SSR 中，`resolve.mainFields` 不能用于无外部化依赖关系。如果您正在使用 `resolve.mainFields`，并希望将其应用于 SSR 中的无外部化依赖关系，您可以使用 [`ssr.resolve.mainFields`](/config/ssr-options#ssr-resolve-mainfields)。
 - [[#18493] refactor!: remove fs.cachedChecks option](https://github.com/vitejs/vite/pull/18493)
   - 由于在缓存文件夹中写入文件并立即导入时会出现边缘情况，因此删除了这一选择优化。
 
