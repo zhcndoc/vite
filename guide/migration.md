@@ -81,6 +81,8 @@ Vite 6 扩展了对更多 HTML 元素的支持。完整列表请参见 [HTML 功
 
 还有其他一些只影响少数用户的破坏性更改。
 
+- [[#17922] fix(css)!: remove default import in ssr dev](https://github.com/vitejs/vite/pull/17922)
+  - 对 CSS 文件默认导入的支持在 Vite 4 中[已被弃用](https://v4.vite.dev/guide/migration.html#importing-css-as-a-string)，并在 Vite 5 中被移除，但在 SSR 开发模式中仍被无意支持。现在该支持已被移除。
 - [[#15637] fix!: default `build.cssMinify` to `'esbuild'` for SSR](https://github.com/vitejs/vite/pull/15637)
   - [`build.cssMinify`](/config/build-options#build-cssminify) 现在即使是 SSR 版本也默认为启用。
 - [[#18070] feat!: proxy bypass with WebSocket](https://github.com/vitejs/vite/pull/18070)
@@ -97,6 +99,8 @@ Vite 6 扩展了对更多 HTML 元素的支持。完整列表请参见 [HTML 功
   - 此 PR 不仅引入了上文提到的 " `resolve.conditions` 的默认值" 这一破坏性变更，还使得在 SSR 中，`resolve.mainFields` 不能用于无外部化依赖关系。如果您正在使用 `resolve.mainFields`，并希望将其应用于 SSR 中的无外部化依赖关系，您可以使用 [`ssr.resolve.mainFields`](/config/ssr-options#ssr-resolve-mainfields)。
 - [[#18493] refactor!: remove fs.cachedChecks option](https://github.com/vitejs/vite/pull/18493)
   - 由于在缓存文件夹中写入文件并立即导入时会出现边缘情况，因此删除了这一选择优化。
+- [[#18697] fix(deps)!: update dependency dotenv-expand to v12](https://github.com/vitejs/vite/pull/18697)
+  - 插值中使用的变量应在插值之前声明。更多详情，请参阅 [`dotenv-expand` changelog](https://github.com/motdotla/dotenv-expand/blob/v12.0.1/CHANGELOG.md#1200-2024-11-16).
 
 ## 从 v4 迁移 {#migration-from-v4}
 
