@@ -1,14 +1,14 @@
 # 环境 API {#environment-api}
 
 :::warning 实验性
-这个 API 的初始版本在 Vite 5.1 中以 "Vite Runtime API" 的名字被引入。这份指南介绍了经过修订后的 API，被重新命名为环境 API（Environment API）。这个 API 将在 Vite 6 中作为实验性功能发布。你现在已经可以在最新的 `vite@6.0.0-beta.x` 版本中进行测试。
+环境 API 是实验性的。在 Vite 6 期间，我们将保持这些 API 的稳定，以便生态系统可以在其基础上进行实验和构建。我们计划在 Vite 7 中稳定这些新 API，并可能进行一些重大更改。
 
 资料：
 
 - [反馈讨论](https://github.com/vitejs/vite/discussions/16358) 我们在此处收集新 API 的反馈。
 - [环境 API PR](https://github.com/vitejs/vite/pull/16471) 新 API 在此处被实现并进行了审查。
 
-在参与测试这个提议的过程中，请与我们分享您的反馈。
+请与我们分享您的反馈。
 :::
 
 ## 引入环境概念 {#formalizing-environments} 
@@ -24,7 +24,7 @@ Vite 6 正式引入了环境（Environments）的概念。在 Vite 5 之前，�
 - `client`: 在浏览器中运行应用程序。
 - `server`: 在 node（或其他服务器运行时）中运行应用程序，渲染页面后再发送到浏览器。
 
-在开发过程中，Vite 会在与 Vite 开发服务器相同的 Node 进程中执行服务器代码，从而接近生产环境。不过，服务器也有可能在其他 JS 运行时中运行，如[Cloudflare 的 workerd](https://github.com/cloudflare/workerd)，它们有不同的限制。现代应用程序也可能在两个以上的环境中运行，例如浏览器、节点服务器和边缘服务器。Vite 5 无法正确表示这些环境。
+在开发过程中，Vite 会在与 Vite 开发服务器相同的 Node 进程中执行服务器代码，从而接近生产环境。不过，服务器也有可能在其他 JS 运行时中运行，如 [Cloudflare 的 workerd](https://github.com/cloudflare/workerd)，它们有不同的限制。现代应用程序也可能在两个以上的环境中运行，例如浏览器、节点服务器和边缘服务器。Vite 5 无法正确表示这些环境。
 
 Vite 6 允许用户在构建和开发过程中配置应用程序，以映射其所有环境。在开发期间，一个 Vite 开发服务器现在可用于在多个不同环境中同时运行代码。应用程序源代码仍由 Vite 开发服务器进行转换。在共享 HTTP 服务器、中间件、解析配置和插件管道的基础上，Vite 开发服务器现在拥有一组独立的开发环境。每个开发环境的配置都尽可能与生产环境相匹配，并连接到执行代码的开发运行时（对于 Workerd，服务器代码现在可以在本地 miniflare 中运行）。在客户端，浏览器导入并执行代码。在其他环境中，模块运行程序会获取并评估转换后的代码。
 

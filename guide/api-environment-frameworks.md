@@ -1,14 +1,14 @@
 # 用于框架的环境 API {#environment-api-for-frameworks}
 
 :::warning 实验性
-这个 API 的初始版本在 Vite 5.1 中以 "Vite Runtime API" 的名字被引入。这份指南介绍了经过修订后的 API，被重新命名为环境 API（Environment API）。这个 API 将在 Vite 6 中作为实验性功能发布。你现在已经可以在最新的 `vite@6.0.0-beta.x` 版本中进行测试。
+环境 API 是实验性的。在 Vite 6 期间，我们将保持这些 API 的稳定，以便生态系统可以在其基础上进行实验和构建。我们计划在 Vite 7 中稳定这些新 API，并可能进行一些重大更改。
 
 资料：
 
 - [反馈讨论](https://github.com/vitejs/vite/discussions/16358) 我们在此处收集新 API 的反馈。
 - [环境 API PR](https://github.com/vitejs/vite/pull/16471) 新 API 在此处被实现并进行了审查。
 
-在参与测试这个提议的过程中，请与我们分享您的反馈。
+请与我们分享您的反馈。
 :::
 
 ## 环境和框架 {#environments-and-frameworks}
@@ -266,7 +266,7 @@ export function createHandler(input) {
 
 ## 构建过程中的环境 {#environments-during-build}
 
-在命令行界面，调用 `vite build` 和 `vite build --ssr` 仍将只构建客户端和仅 ssr 环境以保证向后兼容性。
+在命令行接口，调用 `vite build` 和 `vite build --ssr` 仍将只构建客户端和仅 ssr 环境以保证向后兼容性。
 
 当 `builder` 未 `undefined` 时（或者调用 `vite build --app`）时，`vite build` 将选择构建整个应用。这将在未来的主要版本中成为默认设置。将创建一个 `ViteBuilder` 实例（构建时等同于 `ViteDevServer`），用于为生产环境构建所有配置的环境。默认情况下，环境的构建按照 `environments` 记录的顺序依次运行。框架或用户可以进一步配置环境的构建方式，使用：
 
