@@ -120,8 +120,8 @@ export default defineConfig({
     [
       'script',
       {
+        src: 'https://www.zhcndoc.com/js/common.js',
         async: '',
-        src: 'https://www.zhcndoc.com/common/analytics.js',
       },
     ],
   ],
