@@ -140,10 +140,6 @@ declare const __APP_VERSION__: string
 
 请注意，如果符合要求，`import`，`require`，`default` 始终会被应用。
 
-:::warning 解决子路径导出问题
-导出以“/”结尾的 key 已被 Node 弃用，可能无法正常工作。请联系包的作者改为使用 [`*` 子路径模式](https://nodejs.org/api/packages.html#package-entry-points)。
-:::
-
 ## resolve.mainFields {#resolve-mainfields}
 
 - **类型：** `string[]`
@@ -459,10 +455,10 @@ export default defineConfig({
 
 ## envDir {#envdir}
 
-- **类型：** `string`
+- **类型：** `string | false`
 - **默认：** `root`
 
-用于加载 `.env` 文件的目录。可以是一个绝对路径，也可以是相对于项目根的路径。
+用于加载 `.env` 文件的目录。可以是一个绝对路径，也可以是相对于项目根的路径。设置为 `false` 将禁用 `.env` 文件的加载。
 
 关于环境文件的更多信息，请参见 [这里](/guide/env-and-mode#env-files)。
 
