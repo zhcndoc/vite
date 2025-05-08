@@ -10,7 +10,7 @@ Vite（法语意为 "快速的"，发音 `/vit/`<button id="play-vite-audio" onc
 
 - 一个开发服务器，它基于 [原生 ES 模块](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) 提供了 [丰富的内建功能](./features)，如速度快到惊人的 [模块热替换（HMR）](./features#hot-module-replacement)。
 
-- 一套构建指令，它使用 [Rollup](https://rollupjs.org) 打包你的代码，并且它是预配置的，可输出用于生产环境的高度优化过的静态资源。
+- 一套构建指令，它使用 [Rollup](https://cn.rollupjs.org) 打包你的代码，并且它是预配置的，可输出用于生产环境的高度优化过的静态资源。
 
 Vite 是一种具有明确建议的工具，具备合理的默认设置。您可以在 [功能指南](./features) 中了解 Vite 的各种可能性。通过 [插件](./using-plugins)，Vite 支持与其他框架或工具的集成。如有需要，您可以通过 [配置部分](../config/) 自定义适应你的项目。
 
@@ -65,6 +65,10 @@ $ pnpm create vite
 $ bun create vite
 ```
 
+```bash [Deno]
+$ deno init --npm vite
+```
+
 :::
 
 然后按照提示操作即可！
@@ -88,6 +92,10 @@ $ pnpm create vite my-vue-app --template vue
 
 ```bash [Bun]
 $ bun create vite my-vue-app --template vue
+```
+
+```bash [Deno]
+$ deno init --npm vite my-vue-app --template vue
 ```
 
 :::
@@ -134,6 +142,10 @@ $ pnpm add -D vite
 $ bun add -D vite
 ```
 
+```bash [Deno]
+$ deno add -D npm:vite
+```
+
 :::
 
 并创建一个像这样的 `index.html` 文件：
@@ -160,6 +172,10 @@ $ pnpm vite
 
 ```bash [Bun]
 $ bunx vite
+```
+
+```bash [Deno]
+$ deno run -A npm:vite
 ```
 
 :::

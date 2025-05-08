@@ -377,6 +377,12 @@ export default defineConfig({
 
 用于限制 Vite 开发服务器提供敏感文件的黑名单。这会比 [`server.fs.allow`](#server-fs-allow) 选项的优先级更高。同时还支持 [picomatch 模式](https://github.com/micromatch/picomatch#globbing-features)。
 
+::: tip NOTE
+
+此黑名单不适用于[公共目录](/guide/assets.md#the-public-directory)。公共目录中的所有文件均未经任何过滤，因为它们会在构建过程中直接复制到输出目录。
+
+:::
+
 ## server.origin {#server-origin}
 
 - **类型：** `string`
@@ -398,7 +404,7 @@ export default defineConfig({
 
 是否忽略服务器 sourcemap 中的源文件，用于填充 [`x_google_ignoreList` source map 扩展](https://developer.chrome.com/articles/x-google-ignore-list/)。
 
-对开发服务器来说 `server.sourcemapIgnoreList` 等价于 [`build.rollupOptions.output.sourcemapIgnoreList`](https://rollupjs.org/configuration-options/#output-sourcemapignorelist)。两个配置选项之间的区别在于，rollup 函数使用相对路径调用 `sourcePath`，而 `server.sourcemapIgnoreList` 使用绝对路径调用。在开发过程中，大多数模块的映射和源文件位于同一个文件夹中，因此 `sourcePath` 的相对路径就是文件名本身。在这些情况下，使用绝对路径更加方便。
+对开发服务器来说 `server.sourcemapIgnoreList` 等价于 [`build.rollupOptions.output.sourcemapIgnoreList`](https://cn.rollupjs.org/configuration-options/#output-sourcemapignorelist)。两个配置选项之间的区别在于，rollup 函数使用相对路径调用 `sourcePath`，而 `server.sourcemapIgnoreList` 使用绝对路径调用。在开发过程中，大多数模块的映射和源文件位于同一个文件夹中，因此 `sourcePath` 的相对路径就是文件名本身。在这些情况下，使用绝对路径更加方便。
 
 默认情况下，它会排除所有包含 `node_modules` 的路径。你可以传递 `false` 来禁用此行为，或者为了获得完全的控制，可以传递一个函数，该函数接受源路径和 sourcemap 的路径，并返回是否忽略源路径。
 
@@ -415,5 +421,5 @@ export default defineConfig({
 ```
 
 ::: tip 注意
-需要单独设置 [`server.sourcemapIgnoreList`](#server-sourcemapignorelist) 和 [`build.rollupOptions.output.sourcemapIgnoreList`](https://rollupjs.org/configuration-options/#output-sourcemapignorelist)。`server.sourcemapIgnoreList` 是一个仅适用于服务端的配置，并不从定义好的 rollup 选项中获得其默认值。
+需要单独设置 [`server.sourcemapIgnoreList`](#server-sourcemapignorelist) 和 [`build.rollupOptions.output.sourcemapIgnoreList`](https://cn.rollupjs.org/configuration-options/#output-sourcemapignorelist)。`server.sourcemapIgnoreList` 是一个仅适用于服务端的配置，并不从定义好的 rollup 选项中获得其默认值。
 :::
