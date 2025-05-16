@@ -1,0 +1,93 @@
+# Vite 中文文档
+
+> The Build Tool for the Web
+
+- 💡 Instant Server Start
+- ⚡️ Lightning Fast HMR
+- 🛠️ Rich Features
+- 📦 Optimized Build
+- 🔩 Universal Plugin Interface
+- 🔑 Fully Typed APIs
+
+Vite is a new breed of frontend build tooling that significantly improves the frontend development experience. It consists of two major parts:
+
+- A dev server that serves your source files over [native ES modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), with [rich built-in features](https://vite.dev/guide/features.md) and astonishingly fast [Hot Module Replacement (HMR)](https://vite.dev/guide/features.md#hot-module-replacement).
+
+- A [build command](https://vite.dev/guide/build.md) that bundles your code with [Rollup](https://cn.rollupjs.org), pre-configured to output highly optimized static assets for production.
+
+In addition, Vite is highly extensible via its [Plugin API](https://vite.dev/guide/api-plugin.md) and [JavaScript API](https://vite.dev/guide/api-javascript.md) with full typing support.
+
+## Table of Contents
+
+### 介绍
+
+- [开始 {#getting-started}](/guide.md)
+- [项目理念 {#project-philosophy}](/guide/philosophy.md)
+- [为什么选 Vite {#why-vite}](/guide/why.md)
+
+### 指引
+
+- [功能 {#features}](/guide/features.md)
+- [命令行接口 {#command-line-interface}](/guide/cli.md)
+- [使用插件 {#using-plugins}](/guide/using-plugins.md)
+- [依赖预构建 {#dependency-pre-bundling}](/guide/dep-pre-bundling.md)
+- [静态资源处理 {#static-asset-handling}](/guide/assets.md)
+- [构建生产版本 {#building-for-production}](/guide/build.md)
+- [部署静态站点 {#deploying-a-static-site}](/guide/static-deploy.md)
+- [环境变量和模式 {#env-variables-and-modes}](/guide/env-and-mode.md)
+- [服务端渲染 (SSR) {#server-side-rendering}](/guide/ssr.md)
+- [后端集成 {#backend-integration}](/guide/backend-integration.md)
+- [排错指南 {#troubleshooting}](/guide/troubleshooting.md)
+- [性能 {#performance}](/guide/performance.md)
+- [Rolldown 集成 {#rolldown-integration}](/guide/rolldown.md)
+- [从 v5 迁移 {#migration-from-v5}](/guide/migration.md)
+- [破坏性变更 {#breaking-changes}](/changes.md)
+
+### API
+
+- [插件 API {#plugin-api}](/guide/api-plugin.md)
+- [HMR API {#hmr-api}](/guide/api-hmr.md)
+- [JavaScript API {#javascript-api}](/guide/api-javascript.md)
+- [配置 Vite](/config.md)
+
+### 环境 API
+
+- [环境 API {#environment-api}](/guide/api-environment.md)
+- [使用 `Environment` 实例 {#using-environment-instances}](/guide/api-environment-instances.md)
+- [用于插件的环境 API {#environment-api-for-plugins}](/guide/api-environment-plugins.md)
+- [用于框架的环境 API {#environment-api-for-frameworks}](/guide/api-environment-frameworks.md)
+- [用于运行时的环境 API {#environment-api-for-runtimes}](/guide/api-environment-runtimes.md)
+
+### 配置
+
+- [配置 Vite](/config.md)
+- [共享选项 {#shared-options}](/config/shared-options.md)
+- [开发服务器选项 {#server-options}](/config/server-options.md)
+- [构建选项 {#build-options}](/config/build-options.md)
+- [预览选项 {#preview-options}](/config/preview-options.md)
+- [依赖优化选项 {#dep-optimization-options}](/config/dep-optimization-options.md)
+- [SSR 选项 {#ssr-options}](/config/ssr-options.md)
+- [Worker 选项 {#worker-options}](/config/worker-options.md)
+
+
+
+### 未来
+
+- [钩子函数中的 this.environment {#this-environment-in-hooks}](/changes/this-environment-in-hooks.md)
+- [HMR `hotUpdate` 插件钩子 {#hmr-hotupdate-plugin-hook}](/changes/hotupdate-hook.md)
+- [迁移到基于环境的API {#move-to-per-environment-apis}](/changes/per-environment-apis.md)
+- [使用 ModuleRunner API 进行服务端渲染 {#ssr-using-modulerunner-api}](/changes/ssr-using-modulerunner.md)
+- [构建过程中的共享插件 {#shared-plugins-during-build}](/changes/shared-plugins-during-build.md)
+
+
+### Other
+
+- [Untitled](/README.md)
+- [Vite Runtime API {#vite-runtime-api}](/guide/api-vite-runtime.md)
+- [与其他工具比较 {#comparisons}](/guide/comparisons.md)
+- [从 v1 迁移 {#migration-from-v1}](/guide/migration-from-v1.md)
+- [从 v2 迁移 {#migration-from-v2}](/guide/migration-from-v2.md)
+- [从 v3 迁移 {#migration-from-v3}](/guide/migration-from-v3.md)
+- [从 v4 迁移 {#migration-from-v4}](/guide/migration-from-v4.md)
+- [发布 {#releases}](/releases.md)
+- [插件 {#plugins}](/plugins.md)
