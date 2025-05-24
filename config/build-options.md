@@ -5,10 +5,10 @@
 ## build.target
 
 - **类型：** `string | string[]`
-- **默认：** `'modules'`
+- **默认：** `'baseline-widely-available'`
 - **相关内容：** [浏览器兼容性](/guide/build#browser-compatibility)
 
-设置最终构建的浏览器兼容目标。默认值是一个 Vite 特有的值：`'modules'`，这是指 [支持原生 ES 模块](https://caniuse.com/es6-module)、[原生 ESM 动态导入](https://caniuse.com/es6-module-dynamic-import) 和 [`import.meta`](https://caniuse.com/mdn-javascript_operators_import_meta) 的浏览器。Vite 将替换 `modules` 为 `['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14']`
+最终软件包的浏览器兼容性目标。默认值是 Vite 的一个特殊值 `'baseline-widely-available'`，该值针对的是包含在 2025 年 5 月 1 日广泛可用的 [Baseline](https://web-platform-dx.github.io/web-features/) 中的浏览器。具体来说，它是 `['chrome107', 'edge107', 'firefox104', 'safari16']`。
 
 另一个特殊值是 `'esnext'` —— 即假设有原生动态导入支持，并只执行最低限度的转译。
 
@@ -119,7 +119,7 @@ Git LFS 占位符会自动排除在内联之外，因为它们不包含其所表
 ## build.cssTarget {#build-csstarget}
 
 - **类型：** `string | string[]`
-- **默认值：** 与 [`build.target`](/config/#build-target) 一致
+- **默认值：** 与 [`build.target`](#build-target) 一致
 
 此选项允许用户为 CSS 的压缩设置一个不同的浏览器 target，此处的 target 并非是用于 JavaScript 转写目标。
 
