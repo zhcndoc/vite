@@ -584,7 +584,7 @@ const modules = import.meta.glob('./dir/*.js', {
 
 你还可以使用 `base` 选项为导入提供基础路径:
 
-```ts twoslash
+```ts
 import 'vite/client'
 // ---cut---
 const modulesWithBase = import.meta.glob('./**/*.js', {
