@@ -31,11 +31,19 @@ Vite 服务器有一个共享的插件管道，但在处理模块时，它总是
 
 ## 使用钩子注册新环境 {#registering-new-environments-using-hooks}
 
-插件可以在 `config` 钩子中添加新环境（例如，为了有一个专门用于 [RSC](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components) 的模块图）：
+插件可以在 `config` 钩子中添加新环境。例如，[RSC 支持](/plugins/#vitejs-plugin-rsc)使用一个额外的环境来拥有一个带有 `react-server` 条件的独立模块图：
 
 ```ts
   config(config: UserConfig) {
-    config.environments.rsc ??= {}
+    return {
+      environments: {
+        rsc: {
+          resolve: {
+            conditions: ['react-server', ...defaultServerConditions],
+          },
+        },
+      },
+    }
   }
 ```
 
@@ -48,13 +56,21 @@ Vite 服务器有一个共享的插件管道，但在处理模块时，它总是
 
 ```ts
   configEnvironment(name: string, options: EnvironmentOptions) {
+    // add "workerd" condition to the rsc environment
     if (name === 'rsc') {
-      options.resolve.conditions = // ...
+      return {
+        resolve: {
+          conditions: ['workerd'],
+        },
+      }
+    }
+  }
 ```
 
 ## `hotUpdate` 钩子 {#the-hotupdate-hook}
 
 - **类型：** `(this: { environment: DevEnvironment }, options: HotUpdateOptions) => Array<EnvironmentModuleNode> | void | Promise<Array<EnvironmentModuleNode> | void>`
+- **种类:** `async`, `sequential`
 - **查看：** [HMR API](./api-hmr)
 
 `hotUpdate` 钩子允许插件为特定环境执行自定义的 HMR 更新处理。当一个文件发生变化时，会按照 `server.environments` 中的顺序为每个环境依次运行 HMR 算法，因此 `hotUpdate` 钩子会被多次调用。这个钩子会接收一个带有以下签名的上下文对象：
