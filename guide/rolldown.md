@@ -43,6 +43,12 @@ Rolldown 专注于三个主要原则：
 }
 ```
 
+::: tip 请固定版本!
+
+虽然这些示例使用了 `@latest`，但我们建议使用特定的版本号，以避免意外的重大更改，因为 [`rolldown-vite` 被认为是实验性的](#versioning-policy)。
+
+:::
+
 如果你使用了 Vitepress 或其他以 Vite 作为同等依赖（peer dependency）的元框架，你需要在 `package.json` 文件中覆盖 `vite` 依赖，具体操作方式会因你使用的包管理器而略有不同。
 
 :::code-group
@@ -84,6 +90,8 @@ Rolldown 专注于三个主要原则：
 :::
 
 在添加 overrides 之后，重新安装你的依赖并像往常一样启动你的开发服务器或构建你的项目即可，无需进一步的配置更改。
+
+如果你正在启动一个新项目，你也可以像平常一样使用 `create-vite` 来创建 rolldown-vite 项目。最新版本会询问你是否要使用 `rolldown-vite`。
 
 ## 已知限制 {#known-limitations}
 
