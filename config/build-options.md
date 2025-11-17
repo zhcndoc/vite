@@ -185,6 +185,33 @@ export default defineConfig({
 })
 ```
 
+## build.license {#build-license}
+
+- **类型：** `boolean | { fileName?: string }`
+- **默认：** `false`
+- **相关：** [许可证](/guide/features#license)
+
+当设置为 `true` 时，构建过程将生成一个 `.vite/license.md` 文件，其中包含所有打包依赖项的许可证信息。
+
+如果传入了 `fileName` 参数，它将被用作相对于 `outDir` 的许可证文件名。如果文件名以 `.json` 结尾，则会生成原始的 JSON 元数据，并可以用于进一步处理。例如：
+
+```json
+[
+  {
+    "name": "dep-1",
+    "version": "1.2.3",
+    "identifier": "CC0-1.0",
+    "text": "CC0 1.0 Universal\n\n..."
+  },
+  {
+    "name": "dep-2",
+    "version": "4.5.6",
+    "identifier": "MIT",
+    "text": "MIT License\n\n..."
+  }
+]
+```
+
 ## build.manifest {#build-manifest}
 
 - **类型：** `boolean | string`

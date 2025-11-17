@@ -10,7 +10,7 @@
 
 默认情况下，Vite 会抓取你的 `index.html` 来检测需要预构建的依赖项（忽略了`node_modules`、`build.outDir`、`__tests__` 和 `coverage`）。如果指定了 `build.rollupOptions.input`，Vite 将转而去抓取这些入口点。
 
-如果这两者都不合你意，则可以使用此选项指定自定义条目——该值需要遵循 [tinyglobby 模式](https://github.com/SuperchupuDev/tinyglobby) ，或者是相对于 Vite 项目根目录的匹配模式数组。当显式声明了 `optimizeDeps.entries` 时默认只有 `node_modules` 和 `build.outDir` 文件夹会被忽略。如果还需忽略其他文件夹，你可以在模式列表中使用以 `!` 为前缀的、用来匹配忽略项的模式。对于明确包含字符串 `node_modules` 的模式，不会忽略 `node_modules`。
+如果这两者都不合你意，则可以使用此选项指定自定义条目——该值需要遵循 [tinyglobby 模式](https://superchupu.dev/tinyglobby/comparison) ，或者是相对于 Vite 项目根目录的匹配模式数组。当显式声明了 `optimizeDeps.entries` 时默认只有 `node_modules` 和 `build.outDir` 文件夹会被忽略。如果还需忽略其他文件夹，你可以在模式列表中使用以 `!` 为前缀的、用来匹配忽略项的模式。对于明确包含字符串 `node_modules` 的模式，不会忽略 `node_modules`。
 
 ## optimizeDeps.exclude <NonInheritBadge /> {#optimizedeps-exclude}
 
@@ -51,7 +51,7 @@ export default defineConfig({
 })
 ```
 
-## optimizeDeps.esbuildOptions <NonInheritBadge /> {#optimizedeps-esbuild-options}
+## optimizeDeps.esbuildOptions <NonInheritBadge /> {#optimizedeps-esbuildoptions}
 
 - **类型：** [`Omit`](https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys)`<`[`EsbuildBuildOptions`](https://esbuild.github.io/api/#general-options)`,
 | 'bundle'
@@ -78,7 +78,7 @@ export default defineConfig({
 
 设置为 `true` 可以强制依赖预构建，而忽略之前已经缓存过的、已经优化过的依赖。
 
-## optimizeDeps.noDiscovery <NonInheritBadge /> {#optimizedeps-no-discovery}
+## optimizeDeps.noDiscovery <NonInheritBadge /> {#optimizedeps-nodiscovery}
 
 - **类型：** `boolean`
 - **默认：** `false`
