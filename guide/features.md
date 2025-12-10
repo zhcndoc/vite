@@ -53,6 +53,10 @@ export type { T }
 
 ### TypeScript 编译器选项 {#typescript-compiler-options}
 
+Vite 会参考 `tsconfig.json` 中的一些配置项，并设置相应的 esbuild 选项。对于每个文件，Vite 会使用距离最近的父级目录中的 `tsconfig.json`。如果该 `tsconfig.json` 包含 [`references`](https://www.typescriptlang.org/tsconfig/#references) 字段，Vite 将使用满足 [`include`](https://www.typescriptlang.org/tsconfig/#include) 和 [`exclude`](https://www.typescriptlang.org/tsconfig/#exclude) 字段的被引用配置文件。
+
+当选项同时在 Vite 配置和 `tsconfig.json` 中设置时，Vite 配置中的值优先。
+
 `tsconfig.json` 中 `compilerOptions` 下的一些配置项需要特别注意。
 
 #### `isolatedModules`
@@ -87,12 +91,19 @@ Vite 忽略 `tsconfig.json` 中的 `target` 值，遵循与 `esbuild` 相同的�
 
 要在开发中指定目标，可使用 [`esbuild.target`](/config/shared-options.html#esbuild) 选项，默认值为 `esnext`，以实现最小的转译。在构建中，[`build.target`](/config/build-options.html#build-target) 选项优先于 `esbuild.target`，如有需要也可以进行设置。
 
-::: warning `useDefineForClassFields`
+#### `emitDecoratorMetadata` {#emitDecoratorMetadata}
 
-如果 `target` 不是 `ESNext` 或 `ES2022` 或更新版本，或者没有 `tsconfig.json` 文件，`useDefineForClassFields` 将默认为 `false`，这可能会导致默认的 `esbuild.target` 值为 `esnext` 的问题。它可能会转译为 [static initialization blocks](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Static_initialization_blocks#browser_compatibility)，这在你的浏览器中可能不被支持。
+- [TypeScript 文档](https://www.typescriptlang.org/tsconfig#emitDecoratorMetadata)
 
-因此，建议将 `target` 设置为 `ESNext` 或 `ES2022` 或更新版本，或者在配置 `tsconfig.json` 时将 `useDefineForClassFields` 显式设置为 `true`。
-:::
+此选项仅被部分支持。完全支持需要 TypeScript 编译器进行类型推断，而这是不受支持的。详情请参见 [Oxc Transformer 的文档](https://oxc.rs/docs/guide/usage/transformer/typescript#decorators)。
+
+#### `paths` {#paths}
+
+- [TypeScript 文档](https://www.typescriptlang.org/tsconfig/#paths)
+
+可以指定 `resolve.tsconfigPaths: true` 来告诉 Vite 使用 [tsconfig.json](file:///Users/liuxin/Project/开源/vite-docs-cn/tsconfig.json) 中的 `paths` 选项来解析导入。
+
+需要注意的是，这个功能会有性能损耗，并且 [TypeScript 团队不建议使用这个选项来改变外部工具的行为](https://www.typescriptlang.org/tsconfig/#paths:~:text=Note%20that%20this%20feature%20does%20not%20change%20how%20import%20paths%20are%20emitted%20by%20tsc%2C%20so%20paths%20should%20only%20be%20used%20to%20inform%20TypeScript%20that%20another%20tool%20has%20this%20mapping%20and%20will%20use%20it%20at%20runtime%20or%20when%20bundling.)。
 
 #### 影响构建结果的其他编译器选项 {#other-compiler-options-affecting-the-build-result}
 
@@ -105,7 +116,6 @@ Vite 忽略 `tsconfig.json` 中的 `target` 值，遵循与 `esbuild` 相同的�
 - [`jsxFragmentFactory`](https://www.typescriptlang.org/tsconfig#jsxFragmentFactory)
 - [`jsxImportSource`](https://www.typescriptlang.org/tsconfig#jsxImportSource)
 - [`experimentalDecorators`](https://www.typescriptlang.org/tsconfig#experimentalDecorators)
-- [`alwaysStrict`](https://www.typescriptlang.org/tsconfig#alwaysStrict)
 
 ::: tip `skipLibCheck`
 Vite 启动模板默认情况下会设置 `"skipLibCheck": "true"`，以避免对依赖项进行类型检查，因为它们可能只支持特定版本和配置的 TypeScript。你可以在 [vuejs/vue-cli#5688](https://github.com/vuejs/vue-cli/pull/5688) 了解更多信息。
@@ -146,7 +156,7 @@ Vite 默认的类型定义是写给它的 Node.js API 的。要将其补充到�
 
 例如，要为 React 组件中的 `*.svg` 文件定义类型：
 
-- `vite-env-override.d.ts` (the file that contains your typings):
+- `vite-env-override.d.ts` （包含您输入内容的文件）：
   ```ts
   declare module '*.svg' {
     const content: React.FC<React.SVGProps<SVGElement>>
@@ -600,7 +610,7 @@ const modulesWithBase = import.meta.glob('./**/*.js', {
 ```
 
 ```ts
-// code produced by vite:
+// vite 生成的代码：
 const modulesWithBase = {
   './dir/foo.js': () => import('./base/dir/foo.js'),
   './dir/bar.js': () => import('./base/dir/bar.js')
