@@ -1,0 +1,1 @@
+import{_ as e,c as d,o,as as r}from"./chunks/framework.69qA47HI.js";const b=JSON.parse('{"title":"命令行接口","description":"","frontmatter":{},"headers":[],"relativePath":"guide/cli.md","filePath":"guide/cli.md"}'),c={name:"guide/cli.md"};function a(i,t,s,l,n,h){return o(),d("div",null,[...t[0]||(t[0]=[r("",30)])])}const p=e(c,[["render",a]]);export{b as __pageData,p as default};
