@@ -1,0 +1,1 @@
+import{_ as s,c as i,o as t,as as a}from"./chunks/framework.69qA47HI.js";const d=JSON.parse('{"title":"Vite 中文文档","description":"","frontmatter":{},"headers":[],"relativePath":"README.md","filePath":"README.md"}'),n={name:"README.md"};function r(l,e,h,o,p,c){return t(),i("div",null,[...e[0]||(e[0]=[a("",20)])])}const k=s(n,[["render",r]]);export{d as __pageData,k as default};
