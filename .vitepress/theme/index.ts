@@ -7,11 +7,11 @@ import './styles.css'
 
 // components
 import SvgImage from './components/SvgImage.vue'
-import WwAds from './components/WwAds.vue'
+// import WwAds from './components/WwAds.vue'
 import './custom.css'
 import YouTubeVideo from './components/YouTubeVideo.vue'
 import NonInheritBadge from './components/NonInheritBadge.vue'
-import AsideSponsors from './components/AsideSponsors.vue'
+// import AsideSponsors from './components/AsideSponsors.vue'
 
 export default {
   Layout() {

@@ -15,7 +15,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style>
+<!-- <style>
 .wwads-container {
   padding: 1px 15px 10px;
   margin-top: 20px;
@@ -27,4 +27,4 @@ onMounted(() => {
 .wwads-text {
   color: var(--vt-c-text-2) !important;
 }
-</style>
+</style> -->
