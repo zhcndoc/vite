@@ -52,8 +52,6 @@
 
 构建过程可以通过多种 [构建配置选项](/config/#build-options) 来自定义构建。具体来说，你可以通过 `build.rolldownOptions` 直接调整底层的 [Rolldown 选项](https://rolldown.rs/reference/)：
 
-<!-- TODO: update the link above and below to Rolldown's documentation -->
-
 ```js [vite.config.js]
 export default defineConfig({
   build: {
@@ -68,7 +66,7 @@ export default defineConfig({
 
 ## 产物分块策略 {#chunking-strategy}
 
-你可以通过配置 `build.rolldownOptions.output.advancedChunks` 来自定义 chunk 分割策略（查看 [Rolldown 相应文档](https://rolldown.rs/in-depth/advanced-chunks)）。如果你使用的是一个框架，那么请参考他们的文档来了解如何配置分割 chunk。
+你可以通过配置 [`build.rolldownOptions.output.codeSplitting`](https://rolldown.rs/reference/OutputOptions.codeSplitting) 来自定义 chunk 分割策略（查看 [Rolldown 相应文档](https://rolldown.rs/in-depth/manual-code-splitting)）。如果你使用的是一个框架，那么请参考他们的文档来了解如何配置分割 chunk。
 
 ## 处理加载报错 {#load-error-handling}
 
@@ -85,8 +83,6 @@ window.addEventListener('vite:preloadError', (event) => {
 ## 文件变化时重新构建 {#rebuild-on-files-changes}
 
 你可以使用 `vite build --watch` 来启用 rollup 的监听器。或者，你可以直接通过 `build.watch` 调整底层的 [`WatcherOptions`](https://rolldown.rs/reference/InputOptions.watch) 选项：
-
-<!-- TODO: update the link above to Rolldown's documentation -->
 
 ```js [vite.config.js]
 export default defineConfig({
