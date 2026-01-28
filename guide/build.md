@@ -2,6 +2,8 @@
 
 当需要将应用部署到生产环境时，只需运行 `vite build` 命令。默认情况下，它使用 `<root>/index.html` 作为其构建入口点，并生成能够静态部署的应用程序包。请查阅 [部署静态站点](./static-deploy) 获取常见服务的部署指引。
 
+<ScrimbaLink href="https://scrimba.com/intro-to-vite-c03p6pbbdq/~037q?via=vite" title="Building for Production">在 Scrimba 上观看互动课程</ScrimbaLink>
+
 ## 浏览器兼容性 {#browser-compatibility}
 
 默认情况下，生产包假定使用包含在 [Baseline](https://web-platform-dx.github.io/web-features/) 广泛可用目标中的现代浏览器。默认的浏览器支持范围是：
@@ -78,7 +80,7 @@ window.addEventListener('vite:preloadError', (event) => {
 })
 ```
 
-当发生新的部署时，托管服务可能会删除先前部署中的资源。因此，在新部署之前访问过您网站的用户可能会遇到导入错误。发生此错误的原因是，该用户设备上运行的资源已过期，并且系统尝试导入相应的旧数据块，而该数据块已被删除。此事件对于解决这种情况很有用。在这种情况下，请确保在 HTML 文件中设置 `Cache-Control: no-cache`，否则旧资源仍会被引用。
+当发生新的部署时，托管服务可能会删除先前部署中的资源。因此，在新部署之前访问过您网站的用户可能会遇到导入错误。发生此错误的原因是，该用户设备上运行的资源已过期，并且系统尝试导入相应的旧数据块，而该数据块已被删除。此事件对于解决这种情况很有用。在这种情况下，请确保对 HTML 文件设置 `Cache-Control: no-cache`，否则旧资源仍会被引用。
 
 ## 文件变化时重新构建 {#rebuild-on-files-changes}
 
