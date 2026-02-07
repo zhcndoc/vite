@@ -92,7 +92,7 @@ declare const __APP_VERSION__: string
 ## resolve.alias {#resolve-alias}
 
 - **类型：**
-  `Record<string, string> | Array<{ find: string | RegExp, replacement: string, customResolver?: ResolverFunction | ResolverObject }>`
+  `Record<string, string> | Array<{ find: string | RegExp, replacement: string }>`
 
 定义用于替换 `import` 或 `require` 语句中值的别名。其工作方式类似于 [`@rollup/plugin-alias`](https://github.com/rollup/plugins/tree/master/packages/alias)。
 
@@ -119,7 +119,7 @@ resolve: {
 }
 ```
 
-### Array Format (`Array<{ find: string | RegExp, replacement: string, customResolver?: ResolverFunction | ResolverObject }>`)
+### Array Format (`Array<{ find: string | RegExp, replacement: string }>`)
 
 数组格式允许将别名指定为对象，这对于复杂的键/值对非常有用。
 
@@ -137,8 +137,6 @@ resolve: {
 ```js
 { find:/^(.*)\.js$/, replacement: '$1.alias' }
 ```
-
-`customResolver` 选项可用于为单个别名提供单独的模块解析。
 
 ## resolve.dedupe {#resolve-dedupe}
 
@@ -549,7 +547,18 @@ define: {
 
 要了解更多，请查看 Vite 的 [SSR 指引](/guide/ssr#vite-cli)。相关内容：[`server.middlewareMode`](./server-options#server-middlewaremode)。
 
-## future
+## devtools {#devtools}
+
+- **实验性：** [提供反馈](https://github.com/vitejs/devtools/discussions)
+- **类型：** `boolean` | `DevToolsConfig`
+- **默认：** `false`
+
+启用 devtools 集成，用于可视化内部状态和构建分析。
+确保 `@vitejs/devtools` 已作为依赖项安装。此功能目前仅在构建模式下受支持。
+
+更多详情请参见 [Vite DevTools](https://github.com/vitejs/devtools)。
+
+## future {#future}
 
 - **类型：** `Record<string, 'warn' | undefined>`
 - **默认：** [破坏性变更](/changes/)
