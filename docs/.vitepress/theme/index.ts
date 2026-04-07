@@ -17,6 +17,18 @@ export default {
   Layout() {
     return h((Theme as any).Layout, null, {
       'aside-ads-before': () => h(AsideSponsors),
+      'aside-outline-before': () =>
+        h('div', {
+          class: 'wwads-cn wwads-vertical',
+          style: 'margin-top: 0; margin-bottom: 1rem; max-width:200px;',
+          'data-id': '354',
+        }),
+      'doc-after': () =>
+        h('div', {
+          class: 'wwads-cn wwads-horizontal',
+          style: 'margin-top: 1rem; margin-bottom: 1rem; max-width:100%;',
+          'data-id': '354',
+        }),
     })
   },
   enhanceApp(ctx: any) {

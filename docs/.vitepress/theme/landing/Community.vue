@@ -15,7 +15,7 @@ const testimonials: Testimonial[] = [
     avatar:
       'https://pbs.twimg.com/profile_images/1810837163447308292/8Piov0f6_400x400.jpg',
     comment: [
-      `I'm loving what Vite enables. We've found building SolidStart that it is less a metaframework but a system of symbiotic Vite plugins. While built with SolidJS in mind, they should scale from our simplest template to opinionated starter. We're building an ecosystem on Vite.`,
+      `我很喜欢 Vite 所带来的可能性。在构建 SolidStart 的过程中，我们发现它与其说是一个元框架，不如说是一套共生的 Vite 插件系统。虽然它是围绕 SolidJS 构建的，但它应当能够从最简单的模板扩展到更有主见的脚手架。我们正在 Vite 之上构建一个生态系统。`,
     ],
   },
   {
@@ -24,7 +24,7 @@ const testimonials: Testimonial[] = [
     avatar:
       'https://pbs.twimg.com/profile_images/557940120184041473/bFyXy8Pu_400x400.jpeg',
     comment: [
-      `Vite is basically the united nations of JavaScript at this point. I'll be there as a representative of Sveltelandia`,
+      `现在的 Vite 基本上就是 JavaScript 的联合国。我会作为 Sveltelandia 的代表出席。`,
     ],
   },
   {
@@ -32,9 +32,7 @@ const testimonials: Testimonial[] = [
     handle: '@_davideast',
     avatar:
       'https://pbs.twimg.com/profile_images/1691627325794725888/voQFcYjY_400x400.jpg',
-    comment: [
-      'Each and every time I use Vite, I feel a true sense of pure and unbridled joy.',
-    ],
+    comment: ['每次使用 Vite，我都会感受到纯粹而毫无保留的喜悦。'],
   },
   {
     name: 'Mark Dalgleish',
@@ -42,8 +40,8 @@ const testimonials: Testimonial[] = [
     avatar:
       'https://pbs.twimg.com/profile_images/754886061872979968/BzaOWhs1_400x400.jpg',
     comment: [
-      `It's also a great platform to build a framework on since it provides a pluggable dev environment.`,
-      `Community is amazing too.`,
+      `它也是一个用来构建框架的绝佳平台，因为它提供了可插拔的开发环境。`,
+      `社区也同样出色。`,
     ],
   },
   {
@@ -52,7 +50,7 @@ const testimonials: Testimonial[] = [
     avatar:
       'https://pbs.twimg.com/profile_images/1374778373239681025/Sc9ehtAr_400x400.jpg',
     comment: [
-      `Every time I suspect I've hit the bounds of what Vite can do, I end up being wrong.`,
+      `每次我以为自己已经触到了 Vite 能做到的边界时，事实证明我总是错的。`,
     ],
   },
   {
@@ -60,7 +58,7 @@ const testimonials: Testimonial[] = [
     handle: '@zeeg',
     avatar:
       'https://pbs.twimg.com/profile_images/1911613315765133312/HVkULegC_400x400.jpg',
-    comment: ['Vite has been a game changer for the industry.'],
+    comment: ['Vite 改变了整个行业的游戏规则。'],
   },
   {
     name: 'Dion Almaer',
@@ -68,7 +66,7 @@ const testimonials: Testimonial[] = [
     avatar:
       'https://pbs.twimg.com/profile_images/3380865881/f73b3687ff39b795db05fcaf35972270_400x400.jpeg',
     comment: [
-      'I am so excited to see so many great frameworks teaming up on top of vite. So many will benefit. ❤️ to the vite team.',
+      '看到这么多优秀框架在 Vite 之上协同合作，我感到非常兴奋。会有很多人从中受益。❤️ 致 Vite 团队。',
     ],
   },
   {
@@ -76,15 +74,13 @@ const testimonials: Testimonial[] = [
     handle: '@cpojer',
     avatar:
       'https://pbs.twimg.com/profile_images/1910252462126313472/gXgT-jxL_400x400.jpg',
-    comment: ['Vite is gonna eat the (JavaScript) world.'],
+    comment: ['Vite 将改变整个（JavaScript）世界。'],
   },
   {
     name: 'Nikolaj',
     handle: '@lopugit',
     avatar: 'https://avatars.githubusercontent.com/u/13629190?v=4',
-    comment: [
-      'Wow, wow, wow, wow, wow, wow, Vite is..... Vite is.... Wow 🤤🤯🙏',
-    ],
+    comment: ['哇，哇，哇，哇，哇，哇，Vite 是……Vite 是……哇 🤤🤯🙏'],
   },
 ]
 </script>
@@ -95,10 +91,9 @@ const testimonials: Testimonial[] = [
       class="flex flex-col sm:flex-row justify-between items-center gap-8 sm:gap-20 text-center sm:text-left"
     >
       <div class="flex flex-col gap-3">
-        <h3 class="text-white max-w-xl text-balance">Loved by the community</h3>
+        <h3 class="text-white max-w-xl text-balance">深受社区喜爱</h3>
         <p class="max-w-md text-white/70 text-balance">
-          Don't take our word for it - listen to what Vite community members
-          have to say.
+          别只听我们说，来看看 Vite 社区成员怎么说。
         </p>
       </div>
       <div
@@ -109,14 +104,14 @@ const testimonials: Testimonial[] = [
           <h2 class="text-white">75k+</h2>
           <p class="text-grey flex items-center gap-2">
             <Icon icon="simple-icons:github" width="20px" height="20px" />
-            Github Stars
+            GitHub 星标
           </p>
         </div>
 
         <!-- NPM Downloads -->
         <div class="flex flex-col gap-3">
           <h2 class="text-white">40m+</h2>
-          <p class="text-grey">Weekly NPM downloads</p>
+          <p class="text-grey">每周 NPM 下载量</p>
         </div>
       </div>
     </div>

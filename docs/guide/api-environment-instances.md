@@ -1,24 +1,24 @@
-# Using `Environment` Instances
+# 使用 `Environment` 实例
 
-:::info Release Candidate
-The Environment API is generally in the release candidate phase. We'll maintain stability in the APIs between major releases to allow the ecosystem to experiment and build upon them. However, note that [some specific APIs](/changes/#considering) are still considered experimental.
+:::info 发布候选
+Environment API 通常处于发布候选阶段。我们将在主要版本之间保持 API 的稳定性，以便生态系统可以进行实验并在此基础上构建。但是，请注意 [一些特定的 API](/changes/#considering) 仍被视为实验性的。
 
-We plan to stabilize these new APIs (with potential breaking changes) in a future major release once downstream projects have had time to experiment with the new features and validate them.
+我们计划在未来的主要版本中稳定这些新 API（可能会有破坏性变更），一旦下游项目有时间实验新功能并验证它们。
 
-Resources:
+资源：
 
-- [Feedback discussion](https://github.com/vitejs/vite/discussions/16358) where we are gathering feedback about the new APIs.
-- [Environment API PR](https://github.com/vitejs/vite/pull/16471) where the new APIs were implemented and reviewed.
+- [反馈讨论](https://github.com/vitejs/vite/discussions/16358) 我们在此收集关于新 API 的反馈。
+- [Environment API PR](https://github.com/vitejs/vite/pull/16471) 新 API 在此实现和审查。
 
-Please share your feedback with us.
+请与我们分享您的反馈。
 :::
 
-## Accessing the Environments
+## 访问环境
 
-During dev, the available environments in a dev server can be accessed using `server.environments`:
+在开发期间，开发服务器中可用的环境可以使用 `server.environments` 访问：
 
 ```js
-// create the server, or get it from the configureServer hook
+// 创建服务器，或从 configureServer 钩子获取它
 const server = await createServer(/* options */)
 
 const clientEnvironment = server.environments.client
@@ -26,43 +26,43 @@ clientEnvironment.transformRequest(url)
 console.log(server.environments.ssr.moduleGraph)
 ```
 
-You can also access the current environment from plugins. See the [Environment API for Plugins](./api-environment-plugins.md#accessing-the-current-environment-in-hooks) for more details.
+您也可以从插件中访问当前环境。有关更多详细信息，请参阅 [插件的环境 API](./api-environment-plugins.md#accessing-the-current-environment-in-hooks)。
 
-## `DevEnvironment` class
+## `DevEnvironment` 类
 
-During dev, each environment is an instance of the `DevEnvironment` class:
+在开发期间，每个环境都是 `DevEnvironment` 类的一个实例：
 
 ```ts
 class DevEnvironment {
   /**
-   * Unique identifier for the environment in a Vite server.
-   * By default Vite exposes 'client' and 'ssr' environments.
+   * Vite 服务器中环境的唯一标识符。
+   * 默认情况下，Vite 暴露 'client' 和 'ssr' 环境。
    */
   name: string
   /**
-   * Communication channel to send and receive messages from the
-   * associated module runner in the target runtime.
+   * 用于与目标运行时中关联的模块运行器
+   * 发送和接收消息的通信通道。
    */
   hot: NormalizedHotChannel
   /**
-   * Graph of module nodes, with the imported relationship between
-   * processed modules and the cached result of the processed code.
+   * 模块节点图，包含已处理模块之间的导入关系
+   * 以及已处理代码的缓存结果。
    */
   moduleGraph: EnvironmentModuleGraph
   /**
-   * Resolved plugins for this environment, including the ones
-   * created using the per-environment `create` hook
+   * 此环境解析的插件，包括使用
+   * 每个环境的 `create` 钩子创建的插件
    */
   plugins: Plugin[]
   /**
-   * Allows to resolve, load, and transform code through the
-   * environment plugins pipeline
+   * 允许通过环境插件管道
+   * 解析、加载和转换代码
    */
   pluginContainer: EnvironmentPluginContainer
   /**
-   * Resolved config options for this environment. Options at the server
-   * global scope are taken as defaults for all environments, and can
-   * be overridden (resolve conditions, external, optimizedDeps)
+   * 此环境解析的配置选项。服务器
+   * 全局范围的选项作为所有环境的默认值，并且可以
+   * 被覆盖（解析条件、external、optimizedDeps）
    */
   config: ResolvedConfig & ResolvedDevEnvironmentOptions
 
@@ -73,24 +73,24 @@ class DevEnvironment {
   )
 
   /**
-   * Resolve the URL to an id, load it, and process the code using the
-   * plugins pipeline. The module graph is also updated.
+   * 将 URL 解析为 id，加载它，并使用
+   * 插件管道处理代码。模块图也会被更新。
    */
   async transformRequest(url: string): Promise<TransformResult | null>
 
   /**
-   * Register a request to be processed with low priority. This is useful
-   * to avoid waterfalls. The Vite server has information about the
-   * imported modules by other requests, so it can warmup the module graph
-   * so the modules are already processed when they are requested.
+   * 注册一个低优先级处理的请求。这有助于
+   * 避免级联请求。Vite 服务器拥有关于
+   * 其他请求导入的模块的信息，因此它可以预热模块图，
+   * 以便在请求模块时它们已经被处理。
    */
   async warmupRequest(url: string): Promise<void>
 
   /**
-   * Called by the module runner to retrieve information about the specified
-   * module. Internally calls `transformRequest` and wraps the result in the
-   * format that the module runner understands.
-   * This method is not meant to be called manually.
+   * 由模块运行器调用以检索有关指定
+   * 模块的信息。内部调用 `transformRequest` 并将结果包装为
+   * 模块运行器理解的格式。
+   * 此方法不应手动调用。
    */
   async fetchModule(
     id: string,
@@ -100,7 +100,7 @@ class DevEnvironment {
 }
 ```
 
-With `DevEnvironmentContext` being:
+`DevEnvironmentContext` 为：
 
 ```ts
 interface DevEnvironmentContext {
@@ -114,7 +114,7 @@ interface DevEnvironmentContext {
 }
 ```
 
-and with `TransformResult` being:
+`TransformResult` 为：
 
 ```ts
 interface TransformResult {
@@ -126,21 +126,21 @@ interface TransformResult {
 }
 ```
 
-An environment instance in the Vite server lets you process a URL using the `environment.transformRequest(url)` method. This function will use the plugin pipeline to resolve the `url` to a module `id`, load it (reading the file from the file system or through a plugin that implements a virtual module), and then transform the code. While transforming the module, imports and other metadata will be recorded in the environment module graph by creating or updating the corresponding module node. When processing is done, the transform result is also stored in the module.
+Vite 服务器中的环境实例允许您使用 `environment.transformRequest(url)` 方法处理 URL。此函数将使用插件管道将 `url` 解析为模块 `id`，加载它（从文件系统读取文件或通过实现虚拟模块的插件），然后转换代码。在转换模块时，导入和其他元数据将通过创建或更新相应的模块节点记录在环境模块图中。处理完成后，转换结果也存储在模块中。
 
-:::info transformRequest naming
-We are using `transformRequest(url)` and `warmupRequest(url)` in the current version of this proposal so it is easier to discuss and understand for users used to Vite's current API. Before releasing, we can take the opportunity to review these names too. For example, it could be named `environment.processModule(url)` or `environment.loadModule(url)` taking a page from Rollup's `context.load(id)` in plugin hooks. For the moment, we think keeping the current names and delaying this discussion is better.
+:::info transformRequest 命名
+我们在当前版本的提案中使用 `transformRequest(url)` 和 `warmupRequest(url)`，以便习惯于 Vite 当前 API 的用户更容易讨论和理解。在发布之前，我们也可以借此机会审查这些名称。例如，可以命名为 `environment.processModule(url)` 或 `environment.loadModule(url)`，借鉴 Rollup 插件钩子中的 `context.load(id)`。目前，我们认为保留当前名称并推迟此讨论更好。
 :::
 
-## Separate Module Graphs
+## 独立的模块图
 
-Each environment has an isolated module graph. All module graphs have the same signature, so generic algorithms can be implemented to crawl or query the graph without depending on the environment. `hotUpdate` is a good example. When a file is modified, the module graph of each environment will be used to discover the affected modules and perform HMR for each environment independently.
+每个环境都有一个隔离的模块图。所有模块图都有相同的签名，因此可以实现通用算法来遍历或查询图，而不依赖于环境。`hotUpdate` 就是一个很好的例子。当文件被修改时，将使用每个环境的模块图来发现受影响的模块，并为每个环境独立执行 HMR。
 
 ::: info
-Vite v5 had a mixed Client and SSR module graph. Given an unprocessed or invalidated node, it isn't possible to know if it corresponds to the Client, SSR, or both environments. Module nodes have some properties prefixed, like `clientImportedModules` and `ssrImportedModules` (and `importedModules` that returns the union of both). `importers` contains all importers from both the Client and SSR environment for each module node. A module node also has `transformResult` and `ssrTransformResult`. A backward compatibility layer allows the ecosystem to migrate from the deprecated `server.moduleGraph`.
+Vite v5 拥有混合的客户端和 SSR 模块图。给定一个未处理或失效的节点，不可能知道它对应于客户端、SSR 还是两者环境。模块节点有一些加前缀的属性，如 `clientImportedModules` 和 `ssrImportedModules`（以及 `importedModules` 返回两者的联合）。`importers` 包含每个模块节点来自客户端和 SSR 环境的所有导入者。模块节点还有 `transformResult` 和 `ssrTransformResult`。向后兼容层允许生态系统从已弃用的 `server.moduleGraph` 迁移。
 :::
 
-Each module is represented by a `EnvironmentModuleNode` instance. Modules may be registered in the graph without yet being processed (`transformResult` would be `null` in that case). `importers` and `importedModules` are also updated after the module is processed.
+每个模块都由一个 `EnvironmentModuleNode` 实例表示。模块可以在图中注册而尚未被处理（在这种情况下 `transformResult` 将为 `null`）。`importers` 和 `importedModules` 也会在模块处理后更新。
 
 ```ts
 class EnvironmentModuleNode {
@@ -168,7 +168,7 @@ class EnvironmentModuleNode {
 }
 ```
 
-`environment.moduleGraph` is an instance of `EnvironmentModuleGraph`:
+`environment.moduleGraph` 是 `EnvironmentModuleGraph` 的一个实例：
 
 ```ts
 export class EnvironmentModuleGraph {
@@ -225,65 +225,65 @@ export class EnvironmentModuleGraph {
 
 ## `FetchResult`
 
-The `environment.fetchModule` method returns a `FetchResult` that is meant to be consumed by the module runner. `FetchResult` is a union of `CachedFetchResult`, `ExternalFetchResult`, and `ViteFetchResult`.
+`environment.fetchModule` 方法返回一个 `FetchResult`，旨在由模块运行器使用。`FetchResult` 是 `CachedFetchResult`、`ExternalFetchResult` 和 `ViteFetchResult` 的联合。
 
-`CachedFetchResult` is analogous to the `304` (Not Modified) HTTP status code.
+`CachedFetchResult` 类似于 `304` (未修改) HTTP 状态码。
 
 ```ts
 export interface CachedFetchResult {
   /**
-   * If the module is cached in the runner, this confirms
-   * it was not invalidated on the server side.
+   * 如果模块已缓存于运行器中，这确认
+   * 它未在服务器端失效。
    */
   cache: true
 }
 ```
 
-`ExternalFetchResult` instructs the module runner to import the module using the `runExternalModule` method on the [`ModuleEvaluator`](/guide/api-environment-runtimes#moduleevaluator). In this case, the default module evaluator will use the runtime's native `import` instead of processing the file through Vite.
+`ExternalFetchResult` 指示模块运行器使用 [`ModuleEvaluator`](/guide/api-environment-runtimes#moduleevaluator) 上的 `runExternalModule` 方法导入模块。在这种情况下，默认模块评估器将使用运行时的原生 `import` 而不是通过 Vite 处理文件。
 
 ```ts
 export interface ExternalFetchResult {
   /**
-   * The path to the externalized module starting with file://.
-   * By default this will be imported via a dynamic "import"
-   * instead of being transformed by Vite and loaded with the Vite runner.
+   * 外部化模块的路径，以 file:// 开头。
+   * 默认情况下，这将通过动态 "import" 导入，
+   * 而不是由 Vite 转换并通过 Vite 运行器加载。
    */
   externalize: string
   /**
-   * Type of the module. Used to determine if the import statement is correct.
-   * For example, if Vite needs to throw an error if a variable is not actually exported.
+   * 模块类型。用于确定导入语句是否正确。
+   * 例如，如果变量实际上未导出，Vite 需要抛出错误。
    */
   type: 'module' | 'commonjs' | 'builtin' | 'network'
 }
 ```
 
-`ViteFetchResult` returns information about the current module, including the `code` to execute and the module's `id`, `file`, and `url`.
+`ViteFetchResult` 返回有关当前模块的信息，包括要执行的 `code` 以及模块的 `id`、`file` 和 `url`。
 
-The `invalidate` field instructs the module runner to invalidate the module before executing it again rather than serving it from cache. This is usually `true` when an HMR update was triggered.
+`invalidate` 字段指示模块运行器在再次执行之前使模块失效，而不是从缓存提供。这通常在触发 HMR 更新时为 `true`。
 
 ```ts
 export interface ViteFetchResult {
   /**
-   * Code that will be evaluated by the Vite runner.
-   * By default this will be wrapped in an async function.
+   * 将由 Vite 运行器评估的代码。
+   * 默认情况下，这将包装在异步函数中。
    */
   code: string
   /**
-   * File path of the module on disk.
-   * This will be resolved as import.meta.url/filename.
-   * Will be `null` for virtual modules.
+   * 磁盘上模块的文件路径。
+   * 这将解析为 import.meta.url/filename。
+   * 对于虚拟模块将为 `null`。
    */
   file: string | null
   /**
-   * Module ID in the server module graph.
+   * 服务器模块图中的模块 ID。
    */
   id: string
   /**
-   * Module URL used in the import.
+   * 导入中使用的模块 URL。
    */
   url: string
   /**
-   * Invalidate module on the client side.
+   * 使客户端上的模块失效。
    */
   invalidate: boolean
 }

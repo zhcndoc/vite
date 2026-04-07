@@ -1,7 +1,7 @@
 ---
-title: Vite 7.0 is out!
+title: Vite 7.0 发布
 author:
-  name: The Vite Team
+  name: Vite 团队
 date: 2025-06-24
 sidebar: false
 head:
@@ -10,86 +10,86 @@ head:
       content: website
   - - meta
     - property: og:title
-      content: Announcing Vite 7
+      content: Vite 7.0 发布
   - - meta
     - property: og:image
-      content: https://vite.dev/og-image-announcing-vite7.webp
+      content: https://vite.zhcndoc.com/og-image-announcing-vite7.webp
   - - meta
     - property: og:url
-      content: https://vite.dev/blog/announcing-vite7
+      content: https://vite.zhcndoc.com/blog/announcing-vite7
   - - meta
     - property: og:description
-      content: Vite 7 Release Announcement
+      content: Vite 7 发布公告
   - - meta
     - name: twitter:card
       content: summary_large_image
 ---
 
-# Vite 7.0 is out!
+# Vite 7.0 发布
 
-_June 24, 2025_
+_2025 年 6 月 24 日_
 
-![Vite 7 Announcement Cover Image](/og-image-announcing-vite7.webp)
+![Vite 7 公告封面图](/og-image-announcing-vite7.webp)
 
-We're happy to share the release of Vite 7! It has been 5 years since Evan You sent the first commit to the Vite repo, and nobody could have predicted how much the frontend ecosystem would change since then. Most modern frontend frameworks and tools are now working together, building on top of Vite's shared infrastructure. And they can innovate at a faster pace by sharing at a higher level. Vite is now being downloaded 31 million times a week, with a 14 million increase in the last seven months since the previous major release.
+我们很高兴分享 Vite 7 的发布！距离 Evan You 向 Vite 仓库提交第一个 commit 已经过去了 5 年，没有人能预测到前端生态系统自此会发生多大的变化。大多数现代前端框架和工具现在都在协同工作，建立在 Vite 共享的基础设施之上。并且它们可以通过在更高层次上共享，以更快的速度进行创新。Vite 现在的周下载量已达 3100 万次，自上次大版本发布以来的过去七个月中增加了 1400 万次。
 
-This year, we're making several big steps. To start with, [ViteConf](https://viteconf.org) is going to be in person! The Vite Ecosystem will gather in Amsterdam on October 9-10! Organized by [JSWorld](https://jsworldconference.com/) in partnership with [Bolt](https://bolt.new), [VoidZero](https://voidzero.dev), and the Vite Core Team! We had three incredible [ViteConf online editions](https://www.youtube.com/@viteconf/playlists), and we can't wait to meet in real life. Check out the speakers and get your ticket at the [ViteConf site](https://viteconf.org)!
+今年，我们迈出了几大步。首先，[ViteConf](https://viteconf.org) 将改为线下举行！Vite 生态系统将于 10 月 9-10 日在阿姆斯特丹聚会！由 [JSWorld](https://jsworldconference.com/) 与 [Bolt](https://bolt.new)、[VoidZero](https://voidzero.dev) 和 Vite 核心团队合作组织！我们已经举办了三届精彩的 [ViteConf 在线版](https://www.youtube.com/@viteconf/playlists)，我们迫不及待地想在现实生活中见面。请在 [ViteConf 网站](https://viteconf.org) 查看演讲者名单并获取门票！
 
-And [VoidZero](https://voidzero.dev/posts/announcing-voidzero-inc) continues to make significant strides in its mission to build an open source unified development toolchain for the JavaScript ecosystem. Over the last year, the VoidZero team has been working on [Rolldown](https://rolldown.rs/), a Rust-based next-generation bundler, as part of a broader effort to modernize Vite's core. You can try out the Rolldown-powered Vite today by using the `rolldown-vite` package instead of the default `vite` package. It is a drop-in replacement, as Rolldown will become the default bundler for Vite in the future. Switching should reduce your build time, especially for larger projects. Read more at the [Rolldown-vite announcement blog post](https://voidzero.dev/posts/announcing-rolldown-vite) and our [migration guide](https://vite.dev/rolldown).
+[VoidZero](https://voidzero.dev/posts/announcing-voidzero-inc) 继续在其为 JavaScript 生态系统构建开源统一开发工具链的使命上取得重大进展。在过去的一年里，VoidZero 团队一直在开发 [Rolldown](https://rolldown.rs/)，这是一个基于 Rust 的下一代打包工具，作为现代化 Vite 核心的更广泛努力的一部分。你今天可以通过使用 `rolldown-vite` 包而不是默认的 `vite` 包来尝试基于 Rolldown 的 Vite。它是一个无缝替换，因为 Rolldown 将成为 Vite 未来的默认打包工具。切换应该可以减少你的构建时间，尤其是对于大型项目。请在 [Rolldown-vite 公告博客文章](https://voidzero.dev/posts/announcing-rolldown-vite) 和我们的 [迁移指南](https://vite.zhcndoc.com/rolldown) 中阅读更多内容。
 
-Through a partnership between VoidZero and [NuxtLabs](https://nuxtlabs.com/), Anthony Fu is working on creating Vite DevTools. They will offer deeper and more insightful debugging and analysis for all Vite-based projects and frameworks. You can read more on the [VoidZero and NuxtLabs join forces on Vite Devtools blog post](https://voidzero.dev/posts/voidzero-nuxtlabs-vite-devtools).
+通过 VoidZero 和 [NuxtLabs](https://nuxtlabs.com/) 之间的合作，Anthony Fu 正在致力于创建 Vite DevTools。它们将为所有基于 Vite 的项目和框架提供更深层次、更有洞察力的调试和分析。你可以在 [VoidZero 和 NuxtLabs 联手打造 Vite Devtools 的博客文章](https://voidzero.dev/posts/voidzero-nuxtlabs-vite-devtools) 中阅读更多内容。
 
-Quick links:
+快速链接：
 
-- [Docs](/)
-- New Translation: [فارسی](https://fa.vite.dev/)
-- Other Translations: [简体中文](https://cn.vite.dev/), [日本語](https://ja.vite.dev/), [Español](https://es.vite.dev/), [Português](https://pt.vite.dev/), [한국어](https://ko.vite.dev/), [Deutsch](https://de.vite.dev/)
-- [Migration Guide](/guide/migration)
-- [GitHub Changelog](https://github.com/vitejs/vite/blob/main/packages/vite/CHANGELOG.md)
+- [文档](/)
+- 新翻译：[فارسی](https://fa.vite.dev/)
+- 其他翻译：[简体中文](https://cn.vite.dev/), [日本語](https://ja.vite.dev/), [Español](https://es.vite.dev/), [Português](https://pt.vite.dev/), [한국어](https://ko.vite.dev/), [Deutsch](https://de.vite.dev/)
+- [迁移指南](/guide/migration)
+- [GitHub 更新日志](https://github.com/vitejs/vite/blob/main/packages/vite/CHANGELOG.md)
 
-Play online with Vite 7 using [vite.new](https://vite.new) or scaffold a Vite app locally with your preferred framework running `pnpm create vite`. Check out the [Getting Started Guide](/guide/) for more information.
+使用 [vite.new](https://vite.new) 在线体验 Vite 7，或者运行 `pnpm create vite` 在本地 scaffold 一个你首选框架的 Vite 应用。查看 [入门指南](/guide/) 获取更多信息。
 
-We invite you to help us improve Vite (joining the more than [1.1K contributors to Vite Core](https://github.com/vitejs/vite/graphs/contributors)), our dependencies, or plugins and projects in the ecosystem. Learn more at our [Contributing Guide](https://github.com/vitejs/vite/blob/main/CONTRIBUTING.md). A good way to get started is by [triaging issues](https://github.com/vitejs/vite/issues), [reviewing PRs](https://github.com/vitejs/vite/pulls), sending tests PRs based on open issues, and supporting others in [Discussions](https://github.com/vitejs/vite/discussions) or Vite Land's [help forum](https://discord.com/channels/804011606160703521/1019670660856942652). If you have questions, join our [Discord community](https://chat.vite.dev) and talk to us in the [#contributing channel](https://discord.com/channels/804011606160703521/804439875226173480).
+我们邀请你帮助我们改进 Vite（加入超过 [1.1K 位 Vite Core 贡献者](https://github.com/vitejs/vite/graphs/contributors) 的行列）、我们的依赖项或生态系统中的插件和项目。在我们的 [贡献指南](https://github.com/vitejs/vite/blob/main/CONTRIBUTING.md) 中了解更多。一个好的开始方式是 [分类处理 issue](https://github.com/vitejs/vite/issues)、[审查 PR](https://github.com/vitejs/vite/pulls)、基于开放 issue 发送测试 PR，以及在 [Discussions](https://github.com/vitejs/vite/discussions) 或 Vite Land 的 [帮助论坛](https://discord.com/channels/804011606160703521/1019670660856942652) 中支持他人。如果你有问题，加入我们的 [Discord 社区](https://chat.vite.dev) 并在 [#contributing 频道](https://discord.com/channels/804011606160703521/804439875226173480) 与我们交谈。
 
-Stay updated and connect with others building on top of Vite by following us on [Bluesky](https://bsky.app/profile/vite.dev), [X](https://twitter.com/vite_js), or [Mastodon](https://webtoo.ls/@vite).
+通过在 [Bluesky](https://bsky.app/profile/vite.dev)、[X](https://twitter.com/vite_js) 或 [Mastodon](https://webtoo.ls/@vite) 上关注我们，保持更新并与建立在 Vite 之上的其他人联系。
 
-## Node.js Support
+## Node.js 支持
 
-Vite now requires Node.js 20.19+, 22.12+. We have dropped Node.js 18, now that it has reached its [EOL](https://endoflife.date/nodejs) at the end of April 2025.
+Vite 现在需要 Node.js 20.19+、22.12+。我们已经弃用了 Node.js 18，因为它已在 2025 年 4 月底达到 [EOL](https://endoflife.date/nodejs)。
 
-We require these new ranges so Node.js supports `require(esm)` without a flag. This allows us to distribute Vite 7.0 as ESM only without preventing the Vite JavaScript API from being required by CJS modules. Check out Anthony Fu's [Move on to ESM-only](https://antfu.me/posts/move-on-to-esm-only) for a detailed review of the current state of ESM in the ecosystem.
+我们需要这些新版本范围，以便 Node.js 无需标志即可支持 `require(esm)`。这允许我们仅将 Vite 7.0 分发为 ESM，而不会阻止 Vite JavaScript API 被 CJS 模块 require。查看 Anthony Fu 的 [Move on to ESM-only](https://antfu.me/posts/move-on-to-esm-only) 以详细了解生态系统中 ESM 的现状。
 
-## Default Browser Target Changed to Baseline Widely Available
+## 默认浏览器目标更改为 Baseline Widely Available
 
-[Baseline](https://web-platform-dx.github.io/web-features/) gives us clear information about which web platform features work across their core browser set today. Baseline Widely Available indicates the feature is well-established and works across many devices and browser versions, being available across browsers for at least 30 months.
+[Baseline](https://web-platform-dx.github.io/web-features/) 为我们提供了关于哪些 Web 平台功能可以在其核心浏览器集合中工作的清晰信息。Baseline Widely Available 表示该功能已成熟，并在许多设备和浏览器版本中工作，在浏览器中可用至少 30 个月。
 
-In Vite 7, the default browser target is changing from `'modules'` to a new default: `'baseline-widely-available'`. The set of browsers will be updated on each major to match the list of minimum browser versions compatible with Baseline Widely available features. The default browser value of `build.target` is changing in Vite 7.0:
+在 Vite 7 中，默认浏览器目标将从 `'modules'` 更改为新的默认值：`'baseline-widely-available'`。浏览器集合将在每个大版本中更新，以匹配与 Baseline Widely available 功能兼容的最小浏览器版本列表。`build.target` 的默认浏览器值在 Vite 7.0 中正在更改：
 
 - Chrome 87 → 107
 - Edge 88 → 107
 - Firefox 78 → 104
 - Safari 14.0 → 16.0
 
-This change adds predictability to the default browser target for future releases.
+此更改为未来版本的默认浏览器目标增加了可预测性。
 
 ## Vitest
 
-For Vitest users, Vite 7.0 is supported from Vitest 3.2. You can read more about how the Vitest team keeps improving Vite testing story in the [Vitest 3.2 release blog post](https://vitest.dev/blog/vitest-3-2.html).
+对于 Vitest 用户，Vite 7.0 从 Vitest 3.2 开始支持。你可以在 [Vitest 3.2 发布博客文章](https://vitest.dev/blog/vitest-3-2.html) 中阅读更多关于 Vitest 团队如何不断改进 Vite 测试故事的内容。
 
 ## Environment API
 
-Vite 6 was the most significant major release since Vite 2, adding new capabilities with the [new experimental Environment API](https://vite.dev/blog/announcing-vite6.html#experimental-environment-api). We are keeping the new APIs as experimental while the ecosystem reviews how the new APIs fit on their projects and provide feedback. If you're building on top of Vite, we encourage you to test the new APIs and reach out to us in the [open Feedback discussion here](https://github.com/vitejs/vite/discussions/16358).
+Vite 6 是自 Vite 2 以来最重要的大版本更新，增加了 [新的实验性 Environment API](https://vite.zhcndoc.com/blog/announcing-vite6.html#experimental-environment-api) 的新功能。我们将保留新 API 为实验性，同时生态系统审查新 API 如何适应他们的项目并提供反馈。如果你建立在 Vite 之上，我们鼓励你测试新 API 并在 [这里的开放反馈讨论](https://github.com/vitejs/vite/discussions/16358) 中联系我们。
 
-In Vite 7, we added a new `buildApp` hook to let plugins coordinate the building of environments. Read more in the [Environment API for Frameworks guide](/guide/api-environment-frameworks.html#environments-during-build).
+在 Vite 7 中，我们添加了一个新的 `buildApp` hook，让插件协调环境的构建。请在 [框架的 Environment API 指南](/guide/api-environment-frameworks.html#environments-during-build) 中阅读更多内容。
 
-We want to thank the teams that have been testing the new APIs and helping us stabilize the new features. The Cloudflare team, for example, announced the 1.0 release of their Cloudflare Vite plugin, as well as official support for React Router v7. Their plugin shows the potential of Environment API for runtime providers. Learn more about their approach and future steps at ["Just use Vite”… with the Workers runtime](https://blog.cloudflare.com/introducing-the-cloudflare-vite-plugin/).
+我们要感谢一直测试新 API 并帮助我们稳定新功能的团队。例如，Cloudflare 团队宣布了他们的 Cloudflare Vite 插件的 1.0 版本，以及对 React Router v7 的官方支持。他们的插件展示了 Environment API 对于运行时提供商的潜力。在 ["Just use Vite"… with the Workers runtime](https://blog.cloudflare.com/introducing-the-cloudflare-vite-plugin/) 中了解更多关于他们的方法和未来步骤。
 
-## Migrating to Vite 7
+## 迁移到 Vite 7
 
-Vite 7 should be a smooth update from Vite 6. We're removing already deprecated features, like Sass legacy API support and the `splitVendorChunkPlugin` that shouldn't affect your projects. We still suggest you review the [detailed Migration Guide](/guide/migration) before upgrading.
+Vite 7 应该是从 Vite 6 平滑升级。我们正在移除已经弃用的功能，比如 Sass 遗留 API 支持和 `splitVendorChunkPlugin`，这不应该影响你的项目。我们仍然建议你在升级前查看 [详细的迁移指南](/guide/migration)。
 
-The complete list of changes is at the [Vite 7 Changelog](https://github.com/vitejs/vite/blob/main/packages/vite/CHANGELOG.md).
+完整的更改列表在 [Vite 7 更新日志](https://github.com/vitejs/vite/blob/main/packages/vite/CHANGELOG.md)。
 
-## Acknowledgments
+## 致谢
 
-Vite 7 was crafted by the [Vite Team](/team) with the help of the wide community of contributors, downstream maintainers, plugin authors. A special shout-out to [sapphi-red](https://github.com/sapphi-red) for his remarkable work on `rolldown-vite` and this release. Vite is brought to you by [VoidZero](https://voidzero.dev), in partnership with [Bolt](https://bolt.new/) and [Nuxt Labs](https://nuxtlabs.com/). We also want to thank our sponsors on [Vite's GitHub Sponsors](https://github.com/sponsors/vitejs) and [Vite's Open Collective](https://opencollective.com/vite).
+Vite 7 由 [Vite 团队](/team) 在广泛的贡献者社区、下游维护者、插件作者的帮助下打造。特别感谢 [sapphi-red](https://github.com/sapphi-red) 在 `rolldown-vite` 和此版本上的杰出工作。Vite 由 [VoidZero](https://voidzero.dev) 为您带来，与 [Bolt](https://bolt.new/) 和 [Nuxt Labs](https://nuxtlabs.com/) 合作。我们还要感谢我们在 [Vite 的 GitHub Sponsors](https://github.com/sponsors/vitejs) 和 [Vite 的 Open Collective](https://opencollective.com/vite) 上的赞助商。

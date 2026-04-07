@@ -8,12 +8,9 @@ import flexiblePluginAnimation from '@assets/vite/animations/640_x_300_flexible_
     class="wrapper wrapper--ticks border-t grid lg:grid-cols-2 divide-x divide-y divide-nickel"
   >
     <div class="p-5 sm:p-10 flex flex-col gap-3">
-      <h5 class="text-balance sm:text-pretty text-white">
-        Flexible Plugin System
-      </h5>
+      <h5 class="text-balance sm:text-pretty text-white">灵活的插件系统</h5>
       <p class="sm:max-w-[28rem] text-pretty">
-        Vite plugins extends Rollup's well-designed plugin interface with a few
-        extra Vite-specific options.
+        Vite 插件在 Rollup 设计良好的插件接口之上，扩展了少量 Vite 专属选项。
       </p>
       <RiveAnimation
         :desktop-src="flexiblePluginAnimation"
@@ -25,8 +22,8 @@ import flexiblePluginAnimation from '@assets/vite/animations/640_x_300_flexible_
 
     <div class="flex flex-col gap-3 border-r-0 justify-between">
       <div class="p-5 sm:p-10 flex flex-col gap-3">
-        <h5 class="text-white">Fully Typed API</h5>
-        <p class="max-w-[26rem] text-pretty">Designed to be built on top of.</p>
+        <h5 class="text-white">完整类型化 API</h5>
+        <p class="max-w-[26rem] text-pretty">旨在为上层构建提供基础。</p>
       </div>
       <div class="relative p-5 sm:p-10 flex justify-center bg-[#370a7f]">
         <img
@@ -43,22 +40,21 @@ import flexiblePluginAnimation from '@assets/vite/animations/640_x_300_flexible_
           height="252"
           inert
           loading="lazy"
-          alt="typed api"
+          alt="类型化 API"
         />
       </div>
     </div>
 
     <div class="p-5 sm:p-10 flex flex-col gap-3 lg:border-b-0">
-      <h5 class="text-white">First class SSR Support</h5>
+      <h5 class="text-white">一流的 SSR 支持</h5>
       <p class="sm:max-w-[28rem] text-pretty mb-12 sm:mb-16">
-        It's never been easier to setup custom SSR (Server-Side Rendering), or
-        build your own SSR framework.
+        自定义 SSR（Server-Side Rendering）或构建自己的 SSR 框架，从未如此简单。
       </p>
       <img
         src="@assets/vite/vite-ssr-support.png"
         width="1008"
         height="466"
-        alt="SSR Support"
+        alt="SSR 支持"
         loading="lazy"
         class="w-full px-5"
       />
@@ -66,10 +62,11 @@ import flexiblePluginAnimation from '@assets/vite/animations/640_x_300_flexible_
 
     <div class="flex flex-col gap-3 justify-between">
       <div class="p-5 sm:p-10 flex flex-col gap-3">
-        <h5 class="text-white">Continuous ecosystem integration</h5>
+        <h5 class="text-white">持续的生态集成</h5>
         <p class="max-w-[25rem] text-pretty">
-          Our CI continuously tests Vite changes against downstream projects,
-          allowing us to improve Vite with stability and confidence.
+          我们的 CI 持续将 Vite
+          的改动与下游项目进行测试，确保我们能在稳定性与信心兼备的前提下持续改进
+          Vite。
         </p>
       </div>
       <div class="px-5 sm:px-10 flex justify-center">
@@ -79,7 +76,7 @@ import flexiblePluginAnimation from '@assets/vite/animations/640_x_300_flexible_
           height="272"
           inert
           loading="lazy"
-          alt="continuous ecosystem integration"
+          alt="持续的生态集成"
         />
       </div>
     </div>

@@ -1,25 +1,25 @@
-# Environment API for Frameworks
+# 框架的环境 API
 
-:::info Release Candidate
-The Environment API is generally in the release candidate phase. We'll maintain stability in the APIs between major releases to allow the ecosystem to experiment and build upon them. However, note that [some specific APIs](/changes/#considering) are still considered experimental.
+:::info 发布候选
+Environment API 通常处于发布候选阶段。我们将在主要版本之间保持 API 的稳定性，以便生态系统可以进行实验并在此基础上构建。但是，请注意 [某些特定 API](/changes/#considering) 仍被视为实验性的。
 
-We plan to stabilize these new APIs (with potential breaking changes) in a future major release once downstream projects have had time to experiment with the new features and validate them.
+我们计划在下一次主要版本中稳定这些新 API（可能会有破坏性更改），一旦下游项目有时间实验新功能并验证它们。
 
-Resources:
+资源：
 
-- [Feedback discussion](https://github.com/vitejs/vite/discussions/16358) where we are gathering feedback about the new APIs.
-- [Environment API PR](https://github.com/vitejs/vite/pull/16471) where the new APIs were implemented and reviewed.
+- [反馈讨论](https://github.com/vitejs/vite/discussions/16358) 我们正在收集关于新 API 的反馈。
+- [Environment API PR](https://github.com/vitejs/vite/pull/16471) 新 API 在此处实现和审查。
 
-Please share your feedback with us.
+请与我们分享您的反馈。
 :::
 
-## DevEnvironment Communication Levels
+## DevEnvironment 通信级别
 
-Since environments may run in different runtimes, communication against the environment may have constraints depending on the runtime. To allow frameworks to write runtime agnostic code easily, the Environment API provides three kinds of communication levels.
+由于环境可能运行在不同的运行时中，针对环境的通信可能会受到运行时的限制。为了允许框架轻松编写运行时无关的代码，Environment API 提供了三种通信级别。
 
 ### `RunnableDevEnvironment`
 
-`RunnableDevEnvironment` is an environment that can communicate arbitrary values. The implicit `ssr` environment and other non-client environments use a `RunnableDevEnvironment` by default during dev. While this requires the runtime to be the same with the one the Vite server is running in, this works similarly with `ssrLoadModule` and allows frameworks to migrate and enable HMR for their SSR dev story. You can guard any runnable environment with an `isRunnableDevEnvironment` function.
+`RunnableDevEnvironment` 是一个可以通信任意值的环境。隐式的 `ssr` 环境和其他非客户端环境在开发期间默认使用 `RunnableDevEnvironment`。虽然这需要运行时与 Vite 服务器运行的运行时相同，但这与 `ssrLoadModule` 的工作方式类似，并允许框架迁移并为他们的 SSR 开发故事启用 HMR。你可以使用 `isRunnableDevEnvironment` 函数保护任何可运行环境。
 
 ```ts
 export class RunnableDevEnvironment extends DevEnvironment {
@@ -28,13 +28,13 @@ export class RunnableDevEnvironment extends DevEnvironment {
 
 class ModuleRunner {
   /**
-   * URL to execute.
-   * Accepts file path, server path, or id relative to the root.
-   * Returns an instantiated module (same as in ssrLoadModule)
+   * 要执行的 URL。
+   * 接受文件路径、服务器路径或相对于根目录的 id。
+   * 返回一个实例化的模块（与 ssrLoadModule 中相同）
    */
   public async import(url: string): Promise<Record<string, any>>
   /**
-   * Other ModuleRunner methods...
+   * 其他 ModuleRunner 方法...
    */
 }
 
@@ -44,10 +44,10 @@ if (isRunnableDevEnvironment(server.environments.ssr)) {
 ```
 
 :::warning
-The `runner` is evaluated lazily only when it's accessed for the first time. Beware that Vite enables source map support when the `runner` is created by calling `process.setSourceMapsEnabled` or by overriding `Error.prepareStackTrace` if it's not available.
+只有在第一次访问时才会惰性评估 `runner`。请注意，当创建 `runner` 时，Vite 会通过调用 `process.setSourceMapsEnabled` 或在不可用时覆盖 `Error.prepareStackTrace` 来启用源映射支持。
 :::
 
-Given a Vite server configured in middleware mode as described by the [SSR setup guide](/guide/ssr#setting-up-the-dev-server), let's implement the SSR middleware using the environment API. Remember that it doesn't have to be called `ssr`, so we'll name it `server` in this example. Error handling is omitted.
+给定一个配置为中间件模式的 Vite 服务器，如 [SSR 设置指南](/guide/ssr#setting-up-the-dev-server) 所述，让我们使用环境 API 实现 SSR 中间件。请记住，它不一定非要叫 `ssr`，所以在本例中我们将它命名为 `server`。错误处理已省略。
 
 ```js
 import fs from 'node:fs'
@@ -59,48 +59,48 @@ const viteServer = await createServer({
   appType: 'custom',
   environments: {
     server: {
-      // by default, modules are run in the same process as the vite server
+      // 默认情况下，模块在与 vite 服务器相同的进程中运行
     },
   },
 })
 
-// You might need to cast this to RunnableDevEnvironment in TypeScript or
-// use isRunnableDevEnvironment to guard the access to the runner
+// 在 TypeScript 中你可能需要将其强制转换为 RunnableDevEnvironment 或者
+// 使用 isRunnableDevEnvironment 来保护对 runner 的访问
 const serverEnvironment = viteServer.environments.server
 
 app.use('*', async (req, res, next) => {
   const url = req.originalUrl
 
-  // 1. Read index.html
+  // 1. 读取 index.html
   const indexHtmlPath = path.resolve(import.meta.dirname, 'index.html')
   let template = fs.readFileSync(indexHtmlPath, 'utf-8')
 
-  // 2. Apply Vite HTML transforms. This injects the Vite HMR client,
-  //    and also applies HTML transforms from Vite plugins, e.g. global
-  //    preambles from @vitejs/plugin-react
+  // 2. 应用 Vite HTML 转换。这会注入 Vite HMR 客户端，
+  //    并应用来自 Vite 插件的 HTML 转换，例如 global
+  //    来自 @vitejs/plugin-react 的前导代码
   template = await viteServer.transformIndexHtml(url, template)
 
-  // 3. Load the server entry. import(url) automatically transforms
-  //    ESM source code to be usable in Node.js! There is no bundling
-  //    required, and provides full HMR support.
+  // 3. 加载服务器入口。import(url) 自动转换
+  //    ESM 源代码以便在 Node.js 中使用！不需要打包
+  //    ，并提供完整的 HMR 支持。
   const { render } = await serverEnvironment.runner.import(
     '/src/entry-server.js',
   )
 
-  // 4. render the app HTML. This assumes entry-server.js's exported
-  //     `render` function calls appropriate framework SSR APIs,
-  //    e.g. ReactDOMServer.renderToString()
+  // 4. 渲染应用 HTML。这假设 entry-server.js 导出的
+  //     `render` 函数调用适当的框架 SSR API，
+  //    例如 ReactDOMServer.renderToString()
   const appHtml = await render(url)
 
-  // 5. Inject the app-rendered HTML into the template.
+  // 5. 将应用渲染的 HTML 注入到模板中。
   const html = template.replace(`<!--ssr-outlet-->`, appHtml)
 
-  // 6. Send the rendered HTML back.
+  // 6. 发送渲染后的 HTML 回去。
   res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
 })
 ```
 
-When using environments that support HMR (such as `RunnableDevEnvironment`), you should add `import.meta.hot.accept()` in your server entry file for optimal behavior. Without this, server file changes will invalidate the entire server module graph:
+当使用支持 HMR 的环境（例如 `RunnableDevEnvironment`）时，你应该在服务器入口文件中添加 `import.meta.hot.accept()` 以获得最佳行为。如果没有这个，服务器文件更改将使整个服务器模块图失效：
 
 ```js
 // src/entry-server.js
@@ -115,13 +115,13 @@ if (import.meta.hot) {
 
 :::info
 
-We are looking for feedback on [the `FetchableDevEnvironment` proposal](https://github.com/vitejs/vite/discussions/18191).
+我们正在寻求关于 [`FetchableDevEnvironment` 提案](https://github.com/vitejs/vite/discussions/18191) 的反馈。
 
 :::
 
-`FetchableDevEnvironment` is an environment that can communicate with its runtime via the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Window/fetch) interface. Since the `RunnableDevEnvironment` is only possible to implement in a limited set of runtimes, we recommend to use the `FetchableDevEnvironment` instead of the `RunnableDevEnvironment`.
+`FetchableDevEnvironment` 是一个可以通过 [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Window/fetch) 接口与其运行时通信的环境。由于 `RunnableDevEnvironment` 只能在有限的运行时集中实现，我们建议使用 `FetchableDevEnvironment` 而不是 `RunnableDevEnvironment`。
 
-This environment provides a standardized way of handling requests via the `handleRequest` method:
+此环境提供了一种通过 `handleRequest` 方法处理请求的标准方式：
 
 ```ts
 import {
@@ -139,7 +139,7 @@ const server = await createServer({
         createEnvironment(name, config) {
           return createFetchableDevEnvironment(name, config, {
             handleRequest(request: Request): Promise<Response> | Response {
-              // handle Request and return a Response
+              // 处理 Request 并返回一个 Response
             },
           })
         },
@@ -148,7 +148,7 @@ const server = await createServer({
   },
 })
 
-// Any consumer of the environment API can now call `dispatchFetch`
+// 环境 API 的任何消费者现在都可以调用 `dispatchFetch`
 if (isFetchableDevEnvironment(server.environments.custom)) {
   const response: Response = await server.environments.custom.dispatchFetch(
     new Request('http://example.com/request-to-handle'),
@@ -157,35 +157,35 @@ if (isFetchableDevEnvironment(server.environments.custom)) {
 ```
 
 :::warning
-Vite validates the input and output of the `dispatchFetch` method: the request must be an instance of the global `Request` class and the response must be the instance of the global `Response` class. Vite will throw a `TypeError` if this is not the case.
+Vite 验证 `dispatchFetch` 方法的输入和输出：请求必须是全局 `Request` 类的实例，响应必须是全局 `Response` 类的实例。如果不是这种情况，Vite 将抛出 `TypeError`。
 
-Note that although the `FetchableDevEnvironment` is implemented as a class, it is considered an implementation detail by the Vite team and might change at any moment.
+请注意，虽然 `FetchableDevEnvironment` 是作为类实现的，但它被 Vite 团队视为实现细节，可能会随时更改。
 :::
 
-### raw `DevEnvironment`
+### 原始 `DevEnvironment`
 
-If the environment does not implement the `RunnableDevEnvironment` or `FetchableDevEnvironment` interfaces, you need to set up the communication manually.
+如果环境没有实现 `RunnableDevEnvironment` 或 `FetchableDevEnvironment` 接口，你需要手动设置通信。
 
-If your code can run in the same runtime as the user modules (i.e., it does not rely on Node.js-specific APIs), you can use a virtual module. This approach eliminates the need to access the value from the code using Vite's APIs.
+如果你的代码可以与用户模块在相同的运行时中运行（即，它不依赖于 Node.js 特定的 API），你可以使用虚拟模块。这种方法消除了使用 Vite 的 API 从代码中访问值的需求。
 
 ```ts
-// code using the Vite's APIs
+// 使用 Vite API 的代码
 import { createServer } from 'vite'
 
 const server = createServer({
   plugins: [
-    // a plugin that handles `virtual:entrypoint`
+    // 一个处理 `virtual:entrypoint` 的插件
     {
       name: 'virtual-module',
-      /* plugin implementation */
+      /* 插件实现 */
     },
   ],
 })
 const ssrEnvironment = server.environment.ssr
 const input = {}
 
-// use exposed functions by each environment factories that runs the code
-// check for each environment factories what they provide
+// 使用运行代码的每个环境工厂暴露的函数
+// 检查每个环境工厂提供什么
 if (ssrEnvironment instanceof CustomDevEnvironment) {
   ssrEnvironment.runEntrypoint('virtual:entrypoint')
 } else {
@@ -207,7 +207,7 @@ export function createHandler(input) {
 }
 ```
 
-For example, to call `transformIndexHtml` on the user module, the following plugin can be used:
+例如，要在用户模块上调用 `transformIndexHtml`，可以使用以下插件：
 
 ```ts {13-21}
 function vitePluginVirtualIndexHtml(): Plugin {
@@ -238,26 +238,26 @@ function vitePluginVirtualIndexHtml(): Plugin {
 }
 ```
 
-If your code requires Node.js APIs, you can use `hot.send` to communicate with the code that uses Vite's APIs from the user modules. However, be aware that this approach may not work the same way after the build process.
+如果你的代码需要 Node.js API，你可以使用 `hot.send` 与使用 Vite API 的用户模块代码通信。但是，请注意，这种方法在构建过程之后可能无法以相同的方式工作。
 
 ```ts
-// code using the Vite's APIs
+// 使用 Vite API 的代码
 import { createServer } from 'vite'
 
 const server = createServer({
   plugins: [
-    // a plugin that handles `virtual:entrypoint`
+    // 一个处理 `virtual:entrypoint` 的插件
     {
       name: 'virtual-module',
-      /* plugin implementation */
+      /* 插件实现 */
     },
   ],
 })
 const ssrEnvironment = server.environment.ssr
 const input = {}
 
-// use exposed functions by each environment factories that runs the code
-// check for each environment factories what they provide
+// 使用运行代码的每个环境工厂暴露的函数
+// 检查每个环境工厂提供什么
 if (ssrEnvironment instanceof RunnableDevEnvironment) {
   ssrEnvironment.runner.import('virtual:entrypoint')
 } else if (ssrEnvironment instanceof CustomDevEnvironment) {
@@ -301,11 +301,11 @@ export function createHandler(input) {
 }
 ```
 
-## Environments During Build
+## 构建期间的环境
 
-In the CLI, calling `vite build` and `vite build --ssr` will still build the client only and ssr only environments for backward compatibility.
+在 CLI 中，为了向后兼容，调用 `vite build` 和 `vite build --ssr` 仍然将只构建仅客户端和仅 SSR 环境。
 
-When `builder` option is not `undefined` (or when calling `vite build --app`), `vite build` will opt-in into building the entire app instead. This would later on become the default in a future major. A `ViteBuilder` instance will be created (build-time equivalent to a `ViteDevServer`) to build all configured environments for production. By default the build of environments is run in series respecting the order of the `environments` record. A framework or user can further configure how the environments are built using `builder.buildApp` option:
+当 `builder` 选项不是 `undefined` 时（或者当调用 `vite build --app` 时），`vite build` 将改为选择构建整个应用。这将在未来的主要版本中成为默认值。将创建一个 `ViteBuilder` 实例（构建时相当于 `ViteDevServer`）来构建所有配置的生产环境。默认情况下，环境的构建是串行运行的，遵循 `environments` 记录的顺序。框架或用户可以使用 `builder.buildApp` 选项进一步配置环境的构建方式：
 
 ```js [vite.config.js]
 import { defineConfig } from 'vite'
@@ -322,8 +322,8 @@ export default defineConfig({
 })
 ```
 
-Plugins can also define a `buildApp` hook. Order `'pre'` and `null` are executed before the configured `builder.buildApp`, and order `'post'` hooks are executed after it. `environment.isBuilt` can be used to check if an environment has already being build.
+插件也可以定义 `buildApp` 钩子。顺序为 `'pre'` 和 `null` 的钩子在配置的 `builder.buildApp` 之前执行，顺序为 `'post'` 的钩子在其之后执行。可以使用 `environment.isBuilt` 来检查环境是否已经构建。
 
-## Environment Agnostic Code
+## 与环境无关的代码
 
-Most of the time, the current `environment` instance will be available as part of the context of the code being run so the need to access them through `server.environments` should be rare. For example, inside plugin hooks the environment is exposed as part of the `PluginContext`, so it can be accessed using `this.environment`. See [Environment API for Plugins](./api-environment-plugins.md) to learn about how to build environment aware plugins.
+大多数时候，当前的 `environment` 实例将作为运行代码上下文的一部分可用，因此需要通过 `server.environments` 访问它们的情况应该很少见。例如，在插件钩子内部，环境作为 `PluginContext` 的一部分暴露出来，因此可以使用 `this.environment` 访问它。请参阅 [插件的环境 API](./api-environment-plugins.md) 以了解如何构建感知环境的插件。

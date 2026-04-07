@@ -1,21 +1,21 @@
-# Why Vite
+# 为什么选择 Vite
 
-As web applications have grown in size and complexity, the tools used to build them have struggled to keep up. Developers working on large projects have experienced painfully slow dev server startups, sluggish hot updates, and long production build times. Each generation of build tooling has improved on the last, but these problems have persisted.
+随着 Web 应用程序的规模和复杂性不断增长，用于构建它们的工具也难以跟上步伐。在大型项目上工作的开发者经历了痛苦缓慢的开发服务器启动、迟钝的热更新以及漫长的生产构建时间。每一代构建工具都比上一代有所改进，但这些问题依然存在。
 
-Vite was created to address this. Rather than incrementally improving existing approaches, it rethought how code should be served during development. Since then, Vite has evolved through multiple major versions, each time adapting to new capabilities in the ecosystem: from leveraging native ES modules in the browser, to adopting a fully Rust-powered toolchain.
+Vite 的创建正是为了解决这个问题。它不是渐进式地改进现有方法，而是重新思考了在开发期间应该如何提供代码。从那以后，Vite 经历了多个主要版本的演进，每次都适应生态系统中的新能力：从利用浏览器中的原生 ES 模块，到采用完全基于 Rust 的工具链。
 
-Today, Vite powers many frameworks and tools. Its architecture is designed to evolve with the web platform rather than lock into any single approach, making it a foundation you can build on for the long term.
+如今，Vite 为许多框架和工具提供动力。它的架构旨在随着 Web 平台演进，而不是锁定在任何单一方法上，使其成为您可以长期构建的基础。
 
-## The Origins
+## 起源
 
-When Vite was first created, browsers had just gained wide support for [ES modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) (ESM), a way to load JavaScript files directly, without needing a tool to bundle them into a single file first. Traditional build tools (often called _bundlers_) would process your entire application upfront before anything could be shown in the browser. The larger the app, the longer you waited.
+当 Vite 最初被创建时，浏览器刚刚广泛支持 [ES 模块](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)（ESM），这是一种直接加载 JavaScript 文件的方式，无需先使用工具将它们打包成单个文件。传统的构建工具（通常称为*打包工具*）会在浏览器中显示任何内容之前预先处理整个应用程序。应用程序越大，等待时间越长。
 
-Vite took a different approach. It split the work into two parts:
+Vite 采取了不同的方法。它将工作分为两部分：
 
-- **Dependencies** (libraries that rarely change) are [pre-bundled](./dep-pre-bundling.md) once using fast native tooling, so they're ready instantly.
-- **Source code** (your application code that changes frequently) is served on-demand over native ESM. The browser loads only what it needs for the current page, and Vite transforms each file as it's requested.
+- **依赖**（很少变化的库）使用快速的原生工具进行一次 [预打包](./dep-pre-bundling.md)，以便它们可以立即可用。
+- **源代码**（经常变化的应用程序代码）通过原生 ESM 按需服务。浏览器只加载当前页面所需的内容，Vite 会在请求时转换每个文件。
 
-This meant dev server startup was nearly instant, regardless of application size. When you edited a file, Vite used [Hot Module Replacement](./features.md#hot-module-replacement) (HMR) over native ESM to update just that module in the browser, without a full page reload or waiting for a rebuild.
+这意味着无论应用程序大小如何，开发服务器启动几乎是瞬间完成的。当您编辑文件时，Vite 使用原生 ESM 上的 [热模块替换](./features.md#hot-module-replacement)（HMR）仅更新浏览器中的该模块，无需完整页面重新加载或等待重新构建。
 
 <script setup>
 import bundlerSvg from '../images/bundler.svg?raw'
@@ -23,38 +23,38 @@ import esmSvg from '../images/esm.svg?raw'
 </script>
 <svg-image :svg="bundlerSvg" />
 
-_In a bundle-based dev server, the entire application is bundled before it can be served._
+_在基于打包的开发服务器中，整个应用程序在提供服务之前会被打包。_
 
 <svg-image :svg="esmSvg" />
 
-_In an ESM-based dev server, modules are served on-demand as the browser requests them._
+_在基于 ESM 的开发服务器中，模块会在浏览器请求时按需服务。_
 
-Vite was not the first tool to explore this approach. [Snowpack](https://www.snowpack.dev/) pioneered unbundled development and inspired Vite's dependency pre-bundling. [WMR](https://github.com/preactjs/wmr) by the Preact team inspired the universal plugin API that works in both dev and build. [@web/dev-server](https://modern-web.dev/docs/dev-server/overview/) influenced Vite 1.0's server architecture. Vite built on these ideas and carried them forward.
+Vite 并不是第一个探索这种方法的工具。[Snowpack](https://www.snowpack.dev/) 开创了无打包开发并启发了 Vite 的依赖预打包。Preact 团队的 [WMR](https://github.com/preactjs/wmr) 启发了在开发和构建中都能工作的通用插件 API。[@web/dev-server](https://modern-web.dev/docs/dev-server/overview/) 影响了 Vite 1.0 的服务器架构。Vite 在这些想法的基础上建立并将其发扬光大。
 
-Even though unbundled ESM works well during development, shipping it in production is still inefficient due to additional network round trips from nested imports. That's [why bundling is still necessary](https://rolldown.rs/in-depth/why-bundlers) for optimized production builds.
+尽管无打包的 ESM 在开发期间效果很好，但由于嵌套导入带来的额外网络往返，在生产环境中交付它仍然效率低下。这就是为什么 [打包仍然是必要的](https://rolldown.rs/in-depth/why-bundlers) 用于优化的生产构建。
 
-## Growing with the Ecosystem
+## 与生态系统共同成长
 
-As Vite matured, frameworks began adopting it as their build layer. Its [plugin API](./api-plugin.md), based on Rollup's conventions, made integration natural without requiring frameworks to work around Vite's internals. [Nuxt](https://nuxt.com/), [SvelteKit](https://svelte.dev/docs/kit), [Astro](https://astro.build/), [React Router](https://reactrouter.com/), [Analog](https://analogjs.org/), [SolidStart](https://start.solidjs.com/), and others chose Vite as their foundation. Tools like [Vitest](https://vitest.dev/) and [Storybook](https://storybook.js.org/) built on it too, extending Vite's reach beyond app bundling. Backend frameworks like [Laravel](https://laravel.com/docs/vite) and [Ruby on Rails](https://vite-ruby.netlify.app/) integrated Vite for their frontend asset pipelines.
+随着 Vite 的成熟，框架开始采用它作为构建层。它的 [插件 API](./api-plugin.md) 基于 Rollup 的约定，使得集成变得自然，无需框架绕过 Vite 的内部结构。[Nuxt](https://nuxt.com/)、[SvelteKit](https://svelte.dev/docs/kit)、[Astro](https://astro.build/)、[React Router](https://reactrouter.com/)、[Analog](https://analogjs.org/)、[SolidStart](https://start.solidjs.com/) 等选择 Vite 作为它们的基础。像 [Vitest](https://vitest.dev/) 和 [Storybook](https://storybook.js.org/) 这样的工具也基于它构建，将 Vite 的影响扩展到应用程序打包之外。像 [Laravel](https://laravel.com/docs/vite) 和 [Ruby on Rails](https://vite-ruby.netlify.app/) 这样的后端框架也将 Vite 集成到它们的前端资源管道中。
 
-This growth was not one-directional. The ecosystem shaped Vite as much as Vite shaped the ecosystem. The Vite team runs [vite-ecosystem-ci](https://github.com/vitejs/vite-ecosystem-ci), which tests major ecosystem projects against every Vite change. Ecosystem health is not an afterthought. It is part of the release process.
+这种增长不是单向的。生态系统塑造了 Vite，正如 Vite 塑造了生态系统一样。Vite 团队运行 [vite-ecosystem-ci](https://github.com/vitejs/vite-ecosystem-ci)，它针对每个 Vite 更改测试主要的生态系统项目。生态系统健康不是事后想法。它是发布过程的一部分。
 
-## A Unified Toolchain
+## 统一的工具链
 
-Vite originally relied on two separate tools under the hood: [esbuild](https://esbuild.github.io/) for fast compilation during development, and [Rollup](https://rollupjs.org/) for thorough optimization in production builds. This worked, but maintaining two pipelines introduced inconsistencies: different transformation behaviors, separate plugin systems, and growing glue code to keep them aligned.
+Vite 最初依赖于两个独立的底层工具：[esbuild](https://esbuild.github.io/) 用于开发期间的快速编译，[Rollup](https://rollupjs.org/) 用于生产构建中的彻底优化。这可行，但维护两个管道引入了不一致：不同的转换行为、独立的插件系统，以及越来越多的用于保持它们一致的胶水代码。
 
-[Rolldown](https://rolldown.rs/) was built to unify both into a single bundler: written in Rust for native speed, and compatible with the same plugin API the ecosystem already relied on. It uses [Oxc](https://oxc.rs/) for parsing, transforming, and minifying. This gives Vite an end-to-end toolchain where the build tool, bundler, and compiler are maintained together and evolve as a unit.
+[Rolldown](https://rolldown.rs/) 被构建用来将两者统一为一个打包工具：用 Rust 编写以获得原生速度，并与生态系统已经依赖的相同插件 API 兼容。它使用 [Oxc](https://oxc.rs/) 进行解析、转换和压缩。这为 Vite 提供了一个端到端的工具链，其中构建工具、打包工具和编译器一起维护并作为一个单元演进。
 
-The result is one consistent pipeline from development to [production](./build.md). The migration was done carefully: a [technical preview](https://voidzero.dev/posts/announcing-rolldown-vite) shipped first so early adopters could validate the change, ecosystem CI caught compatibility issues early, and a compatibility layer preserved existing configurations.
+结果是从开发到 [生产](./build.md) 的一致管道。迁移是谨慎完成的：首先发布 [技术预览](https://voidzero.dev/posts/announcing-rolldown-vite)，以便早期采用者可以验证更改，生态系统 CI 尽早发现兼容性问题，并且兼容层保留了现有配置。
 
-## Where Vite is Heading
+## Vite 的未来方向
 
-Vite's architecture continues to evolve. Several efforts are shaping its future:
+Vite 的架构仍在不断发展。几项工作正在塑造它的未来：
 
-- **Full bundle mode**: Unbundled ESM was the right tradeoff when Vite was created because no tool was both fast enough and had the HMR and plugin capabilities needed to bundle during dev. Rolldown changes that. Since exceptionally large codebases can experience slow page loads due to the high number of unbundled network requests, the team is exploring a mode where the dev server bundles code similarly to production, reducing network overhead.
+- **全量打包模式**：当 Vite 被创建时，无打包的 ESM 是正确的权衡，因为没有工具既足够快又拥有在开发期间打包所需的 HMR 和插件能力。Rolldown 改变了这一点。由于异常庞大的代码库可能会因为大量未打包的网络请求而导致页面加载缓慢，团队正在探索一种模式，其中开发服务器像生产环境一样打包代码，以减少网络开销。
 
-- **Environment API**: Instead of treating "client" and "SSR" as the only two build targets, the [Environment API](./api-environment-instances.md) lets frameworks define custom environments (edge runtimes, service workers, and other deployment targets), each with their own module resolution and execution rules. As where and how code runs continues to diversify, Vite's model expands with it.
+- **环境 API**：[环境 API](./api-environment-instances.md) 不让“客户端”和"SSR"作为仅有的两个构建目标，而是让框架定义自定义环境（边缘运行时、服务工作者和其他部署目标），每个环境都有各自的模块解析和执行规则。随着代码运行位置和方式的持续多样化，Vite 的模型也随之扩展。
 
-- **Evolving with JavaScript**: With Oxc and Rolldown closely collaborating with Vite, new language features and standards can be adopted quickly across the entire toolchain, without waiting on upstream dependencies.
+- **随 JavaScript 演进**：随着 Oxc 和 Rolldown 与 Vite 紧密合作，新的语言功能和标准可以在整个工具链中快速采用，无需等待上游依赖。
 
-Vite's goal is not to be the final tool, but to be one that keeps evolving with the web platform, and with the developers building on it.
+Vite 的目标不是成为最终的工具，而是成为一个能够随着 Web 平台以及在其上构建的开发者共同演进的工具。

@@ -1,41 +1,41 @@
-# Dependency Pre-Bundling
+# 依赖预构建
 
-When you run `vite` for the first time, Vite prebundles your project dependencies before loading your site locally. It is done automatically and transparently by default.
+当你第一次运行 `vite` 时，Vite 会在本地加载你的站点之前预构建你的项目依赖。默认情况下，这是自动且透明地完成的。
 
-## The Why
+## 原因
 
-This is Vite performing what we call "dependency pre-bundling". This process serves two purposes:
+这是 Vite 在执行我们所谓的“依赖预构建”。此过程有两个目的：
 
-1. **CommonJS and UMD compatibility:** During development, Vite serves all code as native ESM. Therefore, Vite must convert dependencies that are shipped as CommonJS or UMD into ESM first.
+1. **CommonJS 和 UMD 兼容性：** 在开发期间，Vite 将所有代码作为原生 ESM 提供服务。因此，Vite 必须先将作为 CommonJS 或 UMD 发布的依赖转换为 ESM。
 
-   When converting CommonJS dependencies, Vite performs smart import analysis so that named imports to CommonJS modules will work as expected even if the exports are dynamically assigned (e.g. React):
+   转换 CommonJS 依赖时，Vite 会执行智能导入分析，以便即使导出是动态分配的（例如 React），对 CommonJS 模块的命名导入也能按预期工作：
 
    ```js
-   // works as expected
+   // 符合预期
    import React, { useState } from 'react'
    ```
 
-2. **Performance:** Vite converts ESM dependencies with many internal modules into a single module to improve subsequent page load performance.
+2. **性能：** Vite 将具有许多内部模块的 ESM 依赖转换为单个模块，以提高后续页面加载性能。
 
-   Some packages ship their ES modules builds as many separate files importing one another. For example, [`lodash-es` has over 600 internal modules](https://unpkg.com/browse/lodash-es/)! When we do `import { debounce } from 'lodash-es'`, the browser fires off 600+ HTTP requests at the same time! Even though the server has no problem handling them, the large amount of requests create a network congestion on the browser side, causing the page to load noticeably slower.
+   有些包将其 ES 模块构建发布为许多相互导入的单独文件。例如，[`lodash-es` 有超过 600 个内部模块](https://unpkg.com/browse/lodash-es/)！当我们执行 `import { debounce } from 'lodash-es'` 时，浏览器会同时发起 600 多个 HTTP 请求！即使服务器处理它们没有问题，大量的请求也会在浏览器端造成网络拥塞，导致页面加载明显变慢。
 
-   By pre-bundling `lodash-es` into a single module, we now only need one HTTP request instead!
+   通过将 `lodash-es` 预构建为单个模块，我们现在只需要一个 HTTP 请求！
 
-::: tip NOTE
-Dependency pre-bundling only applies in development mode.
+::: tip 注意
+依赖预构建仅适用于开发模式。
 :::
 
-## Automatic Dependency Discovery
+## 自动依赖发现
 
-If an existing cache is not found, Vite will crawl your source code and automatically discover dependency imports (i.e. "bare imports" that expect to be resolved from `node_modules`) and use these found imports as entry points for the pre-bundle. The pre-bundling is performed with [Rolldown](https://rolldown.rs/) so it's typically very fast.
+如果未找到现有缓存，Vite 将抓取你的源代码并自动发现依赖导入（即期望从 `node_modules` 解析的“裸导入”），并将这些找到的导入用作预构建的入口点。预构建是使用 [Rolldown](https://rolldown.rs/) 执行的，因此通常非常快。
 
-After the server has already started, if a new dependency import is encountered that isn't already in the cache, Vite will re-run the dep bundling process and reload the page if needed.
+服务器启动后，如果遇到缓存中尚未存在的新依赖导入，Vite 将重新运行依赖构建过程，并在需要时重新加载页面。
 
-## Monorepos and Linked Dependencies
+## Monorepo 和链接依赖
 
-In a monorepo setup, a dependency may be a linked package from the same repo. Vite automatically detects dependencies that are not resolved from `node_modules` and treats the linked dep as source code. It will not attempt to bundle the linked dep, and will analyze the linked dep's dependency list instead.
+在 monorepo 设置中，依赖可能是来自同一仓库的链接包。Vite 会自动检测未从 `node_modules` 解析的依赖，并将链接依赖视为源代码。它不会尝试构建链接依赖，而是分析链接依赖的依赖列表。
 
-However, this requires the linked dep to be exported as ESM. If not, you can add the dependency to [`optimizeDeps.include`](/config/dep-optimization-options.md#optimizedeps-include) in your config.
+但是，这要求链接依赖导出为 ESM。如果不是，你可以在配置中将依赖添加到 [`optimizeDeps.include`](/config/dep-optimization-options.md#optimizedeps-include)。
 
 ```js twoslash [vite.config.js]
 import { defineConfig } from 'vite'
@@ -47,37 +47,37 @@ export default defineConfig({
 })
 ```
 
-When making changes to the linked dep, restart the dev server with the `--force` command line option for the changes to take effect.
+当更改链接依赖时，使用 `--force` 命令行选项重启开发服务器以使更改生效。
 
-## Customizing the Behavior
+## 自定义行为
 
-The default dependency discovery heuristics may not always be desirable. In cases where you want to explicitly include/exclude dependencies from the list, use the [`optimizeDeps` config options](/config/dep-optimization-options.md).
+默认的依赖发现启发式方法可能并不总是理想的。在你想要显式包含/排除依赖列表中的依赖的情况下，请使用 [`optimizeDeps` 配置选项](/config/dep-optimization-options.md)。
 
-A typical use case for `optimizeDeps.include` or `optimizeDeps.exclude` is when you have an import that is not directly discoverable in the source code. For example, maybe the import is created as a result of a plugin transform. This means Vite won't be able to discover the import on the initial scan - it can only discover it after the file is requested by the browser and transformed. This will cause the server to immediately re-bundle after server start.
+`optimizeDeps.include` 或 `optimizeDeps.exclude` 的一个典型用例是当你有一个无法在源代码中直接发现的导入时。例如，导入可能是插件转换的结果。这意味着 Vite 无法在初始扫描时发现该导入——它只能在文件被浏览器请求并转换后发现。这将导致服务器在启动后立即重新构建。
 
-Both `include` and `exclude` can be used to deal with this. If the dependency is large (with many internal modules) or is CommonJS, then you should include it; If the dependency is small and is already valid ESM, you can exclude it and let the browser load it directly.
+`include` 和 `exclude` 都可用于处理这种情况。如果依赖很大（具有许多内部模块）或者是 CommonJS，则你应该包含它；如果依赖很小且已经是有效的 ESM，你可以排除它并让浏览器直接加载它。
 
-You can further customize Rolldown too with the [`optimizeDeps.rolldownOptions` option](/config/dep-optimization-options.md#optimizedeps-rolldownoptions). For example, adding a Rolldown plugin to handle special files in dependencies or changing the [build `target`](https://rolldown.rs/reference/InputOptions.transform#target).
+你还可以使用 [`optimizeDeps.rolldownOptions` 选项](/config/dep-optimization-options.md#optimizedeps-rolldownoptions) 进一步自定义 Rolldown。例如，添加一个 Rolldown 插件来处理依赖中的特殊文件或更改 [构建 `target`](https://rolldown.rs/reference/InputOptions.transform#target)。
 
-## Caching
+## 缓存
 
-### File System Cache
+### 文件系统缓存
 
-Vite caches the pre-bundled dependencies in `node_modules/.vite`. It determines whether it needs to re-run the pre-bundling step based on a few sources:
+Vite 将预构建的依赖缓存到 `node_modules/.vite` 中。它根据以下几个来源确定是否需要重新运行预构建步骤：
 
-- Package manager lockfile content, e.g. `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml` or `bun.lock`.
-- Patches folder modification time.
-- Relevant fields in your `vite.config.js`, if present.
-- `NODE_ENV` value.
+- 包管理器锁文件内容，例如 `package-lock.json`、`yarn.lock`、`pnpm-lock.yaml` 或 `bun.lock`。
+- Patches 文件夹修改时间。
+- `vite.config.js` 中的相关字段（如果存在）。
+- `NODE_ENV` 值。
 
-The pre-bundling step will only need to be re-run when one of the above has changed.
+只有当上述之一发生变化时，才需要重新运行预构建步骤。
 
-If for some reason you want to force Vite to re-bundle deps, you can either start the dev server with the `--force` command line option, or manually delete the `node_modules/.vite` cache directory.
+如果出于某种原因你想强制 Vite 重新构建依赖，你可以使用 `--force` 命令行选项启动开发服务器，或者手动删除 `node_modules/.vite` 缓存目录。
 
-### Browser Cache
+### 浏览器缓存
 
-Resolved dependency requests are strongly cached with HTTP headers `max-age=31536000,immutable` to improve page reload performance during dev. Once cached, these requests will never hit the dev server again. They are auto invalidated by the appended version query if a different version is installed (as reflected in your package manager lockfile). If you want to debug your dependencies by making local edits, you can:
+解析后的依赖请求使用 HTTP 头 `max-age=31536000,immutable` 进行强缓存，以提高开发期间的页面重载性能。一旦缓存，这些请求将不再命中开发服务器。如果安装了不同版本（如包管理器锁文件中反映的那样），它们会通过附加的版本查询自动失效。如果你想通过本地编辑来调试你的依赖，你可以：
 
-1. Temporarily disable cache via the Network tab of your browser devtools.
-2. Restart Vite dev server with the `--force` flag to re-bundle the deps.
-3. Reload the page.
+1. 通过浏览器开发者工具的网络标签页临时禁用缓存。
+2. 使用 `--force` 标志重启 Vite 开发服务器以重新构建依赖。
+3. 重新加载页面。

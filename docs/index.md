@@ -1,6 +1,6 @@
 ---
-title: Vite
-titleTemplate: Next Generation Frontend Tooling
+title: Vite 中文文档
+titleTemplate: 面向 Web 的构建工具
 layout: home
 theme: dark
 ---

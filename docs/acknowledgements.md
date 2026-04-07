@@ -1,6 +1,6 @@
 ---
-title: Acknowledgements
-description: Vite is built upon the shoulders of giants. Thank you to all the projects and contributors that make Vite possible.
+title: 致谢
+description: Vite 站在巨人的肩膀上。感谢所有让 Vite 成为可能的项目和贡献者。
 ---
 
 <script setup>
@@ -28,53 +28,53 @@ function npmUrl(name) {
 }
 </script>
 
-# Acknowledgements
+# 致谢
 
-Vite is built upon the shoulders of giants. We would like to express our gratitude to all the projects, contributors, and sponsors that make Vite possible.
+Vite 站在巨人的肩膀上。我们要向所有让 Vite 成为可能的项目、贡献者和赞助商表示感谢。
 
-## Contributors
+## 贡献者
 
-Vite is developed by an international team of contributors. See the [Team page](/team) to meet the core team members.
+Vite 由一个国际贡献者团队开发。请参阅 [团队页面](/team) 认识核心团队成员。
 
-We also thank all the [contributors on GitHub](https://github.com/vitejs/vite/graphs/contributors) who have helped improve Vite through code contributions, bug reports, documentation, and documentation translation.
+我们也感谢所有 [GitHub 上的贡献者](https://github.com/vitejs/vite/graphs/contributors)，他们通过代码贡献、错误报告、文档和文档翻译帮助改进了 Vite。
 
-## Sponsors
+## 赞助商
 
-Vite's development is supported by generous sponsors. You can support Vite through [GitHub Sponsors](https://github.com/sponsors/vitejs) or [Open Collective](https://opencollective.com/vite).
+Vite 的开发得到了慷慨赞助商的支持。你可以通过 [GitHub Sponsors](https://github.com/sponsors/vitejs) 或 [Open Collective](https://opencollective.com/vite) 支持 Vite。
 
 <div class="sponsors-container">
   <VPSponsors :data="allSponsors" />
 </div>
 
-## Dependencies
+## 依赖项
 
-Vite depends on these amazing open source projects:
+Vite 依赖于这些惊人的开源项目：
 
-### Notable Dependencies
+### 主要依赖项
 
 <div class="deps-list notable">
   <div v-for="dep in data.notableDependencies" :key="dep.name" class="dep-item">
     <div class="dep-header">
       <a :href="npmUrl(dep.name)" target="_blank" rel="noopener"><code>{{ dep.name }}</code></a>
       <span class="dep-links">
-        <a v-if="dep.repository" :href="dep.repository" target="_blank" rel="noopener" class="dep-link">Repo</a>
-        <a v-if="dep.funding" :href="dep.funding" target="_blank" rel="noopener" class="dep-link sponsor">Sponsor</a>
+        <a v-if="dep.repository" :href="dep.repository" target="_blank" rel="noopener" class="dep-link">仓库</a>
+        <a v-if="dep.funding" :href="dep.funding" target="_blank" rel="noopener" class="dep-link sponsor">赞助</a>
       </span>
     </div>
     <p v-if="dep.author" class="dep-author">
-      by <a v-if="dep.authorUrl" :href="dep.authorUrl" target="_blank" rel="noopener">{{ dep.author }}</a><template v-else>{{ dep.author }}</template>
+      作者：<a v-if="dep.authorUrl" :href="dep.authorUrl" target="_blank" rel="noopener">{{ dep.author }}</a><template v-else>{{ dep.author }}</template>
     </p>
     <p v-if="dep.description">{{ dep.description }}</p>
   </div>
 </div>
 
-### Bundled Dependency Authors
+### 捆绑依赖项作者
 
 <table class="authors-table">
   <thead>
     <tr>
-      <th>Author</th>
-      <th>Packages</th>
+      <th>作者</th>
+      <th>包</th>
     </tr>
   </thead>
   <tbody>
@@ -82,58 +82,58 @@ Vite depends on these amazing open source projects:
       <td>
         <a v-if="author.url" :href="author.url" target="_blank" rel="noopener">{{ author.name }}</a>
         <template v-else>{{ author.name }}</template>
-        <a v-if="author.funding" :href="author.funding" target="_blank" rel="noopener" class="sponsor-link">Sponsor</a>
+        <a v-if="author.funding" :href="author.funding" target="_blank" rel="noopener" class="sponsor-link">赞助</a>
       </td>
       <td>
         <template v-for="(pkg, index) in author.packages" :key="pkg.name">
-          <span class="pkg-item"><a :href="npmUrl(pkg.name)" target="_blank" rel="noopener"><code>{{ pkg.name }}</code></a><a v-if="pkg.funding" :href="pkg.funding" target="_blank" rel="noopener" class="sponsor-link">Sponsor</a></span><template v-if="index < author.packages.length - 1">, </template>
+          <span class="pkg-item"><a :href="npmUrl(pkg.name)" target="_blank" rel="noopener"><code>{{ pkg.name }}</code></a><a v-if="pkg.funding" :href="pkg.funding" target="_blank" rel="noopener" class="sponsor-link">赞助</a></span><template v-if="index < author.packages.length - 1">, </template>
         </template>
       </td>
     </tr>
   </tbody>
 </table>
 
-::: tip For package authors
-This section is automatically generated from the `author` and `funding` fields in each package's `package.json`. If you'd like to update how your package appears here, you can update these fields in your package.
+::: tip 致包作者
+本节是根据每个包的 `author` 和 `funding` 字段自动生成的。如果你想更新你的包在此处的显示方式，可以在你的包中更新这些字段。
 :::
 
-## Development Tools
+## 开发工具
 
-Vite's development workflow is powered by these tools:
+Vite 的开发工作流程由这些工具提供支持：
 
 <div class="deps-list notable">
   <div v-for="dep in data.devTools" :key="dep.name" class="dep-item">
     <div class="dep-header">
       <a :href="npmUrl(dep.name)" target="_blank" rel="noopener"><code>{{ dep.name }}</code></a>
       <span class="dep-links">
-        <a v-if="dep.repository" :href="dep.repository" target="_blank" rel="noopener" class="dep-link">Repo</a>
-        <a v-if="dep.funding" :href="dep.funding" target="_blank" rel="noopener" class="dep-link sponsor">Sponsor</a>
+        <a v-if="dep.repository" :href="dep.repository" target="_blank" rel="noopener" class="dep-link">仓库</a>
+        <a v-if="dep.funding" :href="dep.funding" target="_blank" rel="noopener" class="dep-link sponsor">赞助</a>
       </span>
     </div>
     <p v-if="dep.author" class="dep-author">
-      by <a v-if="dep.authorUrl" :href="dep.authorUrl" target="_blank" rel="noopener">{{ dep.author }}</a><template v-else>{{ dep.author }}</template>
+      作者：<a v-if="dep.authorUrl" :href="dep.authorUrl" target="_blank" rel="noopener">{{ dep.author }}</a><template v-else>{{ dep.author }}</template>
     </p>
     <p v-if="dep.description">{{ dep.description }}</p>
   </div>
 </div>
 
-## Past Notable Dependencies
+## 过往主要依赖项
 
-We also thank the maintainers of these projects that Vite used in previous versions:
+我们也感谢这些在 Vite 早期版本中使用过的项目的维护者：
 
 <table>
   <thead>
     <tr>
-      <th>Package</th>
-      <th>Description</th>
-      <th>Links</th>
+      <th>包</th>
+      <th>描述</th>
+      <th>链接</th>
     </tr>
   </thead>
   <tbody>
     <tr v-for="dep in data.pastNotableDependencies" :key="dep.name">
       <td><a :href="npmUrl(dep.name)" target="_blank" rel="noopener"><code>{{ dep.name }}</code></a></td>
       <td>{{ dep.description }}</td>
-      <td><a :href="dep.repository" target="_blank" rel="noopener">Repo</a></td>
+      <td><a :href="dep.repository" target="_blank" rel="noopener">仓库</a></td>
     </tr>
   </tbody>
 </table>

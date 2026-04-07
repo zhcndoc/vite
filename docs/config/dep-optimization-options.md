@@ -1,25 +1,25 @@
-# Dep Optimization Options
+# 依赖优化选项
 
-- **Related:** [Dependency Pre-Bundling](/guide/dep-pre-bundling)
+- **相关：** [依赖预构建](/guide/dep-pre-bundling)
 
-Unless noted, the options in this section are only applied to the dependency optimizer, which is only used in dev.
+除非另有说明，本节中的选项仅应用于依赖优化器，该优化器仅在开发模式下使用。
 
 ## optimizeDeps.entries <NonInheritBadge />
 
-- **Type:** `string | string[]`
+- **类型：** `string | string[]`
 
-By default, Vite will crawl all your `.html` files to detect dependencies that need to be pre-bundled (ignoring `node_modules`, `build.outDir`, `__tests__` and `coverage`). If `build.rollupOptions.input` is specified, Vite will crawl those entry points instead.
+默认情况下，Vite 会爬取所有 `.html` 文件以检测需要预构建的依赖（忽略 `node_modules`、`build.outDir`、`__tests__` 和 `coverage`）。如果指定了 `build.rollupOptions.input`，Vite 将改为爬取那些入口点。
 
-If neither of these fit your needs, you can specify custom entries using this option - the value should be a [`tinyglobby` pattern](https://superchupu.dev/tinyglobby/comparison) or array of patterns that are relative from Vite project root. This will overwrite default entries inference. Only `node_modules` and `build.outDir` folders will be ignored by default when `optimizeDeps.entries` is explicitly defined. If other folders need to be ignored, you can use an ignore pattern as part of the entries list, marked with an initial `!`. `node_modules` will not be ignored for patterns that explicitly include the string `node_modules`.
+如果这些都不符合你的需求，你可以使用此选项指定自定义入口——值应该是相对于 Vite 项目根目录的 [`tinyglobby` 模式](https://superchupu.dev/tinyglobby/comparison) 或模式数组。这将覆盖默认的入口推断。当显式定义 `optimizeDeps.entries` 时，默认情况下只有 `node_modules` 和 `build.outDir` 文件夹会被忽略。如果需要忽略其他文件夹，你可以使用忽略模式作为入口列表的一部分，以初始 `!` 标记。对于显式包含字符串 `node_modules` 的模式，`node_modules` 不会被忽略。
 
 ## optimizeDeps.exclude <NonInheritBadge />
 
-- **Type:** `string[]`
+- **类型：** `string[]`
 
-Dependencies to exclude from pre-bundling.
+要从预构建中排除的依赖。
 
 :::warning CommonJS
-CommonJS dependencies should not be excluded from optimization. If an ESM dependency is excluded from optimization, but has a nested CommonJS dependency, the CommonJS dependency should be added to `optimizeDeps.include`. Example:
+CommonJS 依赖不应被排除在优化之外。如果一个 ESM 依赖被排除在优化之外，但有一个嵌套的 CommonJS 依赖，则该 CommonJS 依赖应添加到 `optimizeDeps.include` 中。示例：
 
 ```js twoslash
 import { defineConfig } from 'vite'
@@ -35,11 +35,11 @@ export default defineConfig({
 
 ## optimizeDeps.include <NonInheritBadge />
 
-- **Type:** `string[]`
+- **类型：** `string[]`
 
-By default, linked packages not inside `node_modules` are not pre-bundled. Use this option to force a linked package to be pre-bundled.
+默认情况下，不在 `node_modules` 内的链接包不会被预构建。使用此选项强制预构建链接包。
 
-**Experimental:** If you're using a library with many deep imports, you can also specify a trailing glob pattern to pre-bundle all deep imports at once. This will avoid constantly pre-bundling whenever a new deep import is used. [Give Feedback](https://github.com/vitejs/vite/discussions/15833). For example:
+**实验性：** 如果你使用的库有很多深层导入，你还可以指定一个尾部 glob 模式来一次性预构建所有深层导入。这将避免每当使用新的深层导入时不断进行预构建。[提供反馈](https://github.com/vitejs/vite/discussions/15833)。例如：
 
 ```js twoslash
 import { defineConfig } from 'vite'
@@ -53,60 +53,60 @@ export default defineConfig({
 
 ## optimizeDeps.rolldownOptions <NonInheritBadge />
 
-- **Type:** <code>Omit<<a href="https://rolldown.rs/reference/Interface.RolldownOptions">RolldownOptions</a>, 'input' | 'logLevel' | 'output'> & { output?: Omit<<a href="https://rolldown.rs/reference/#:~:text=Output%20Options">RolldownOutputOptions</a>, 'format' | 'sourcemap' | 'dir' | 'banner'> }</code>
+- **类型：** <code>Omit<<a href="https://rolldown.rs/reference/Interface.RolldownOptions">RolldownOptions</a>, 'input' | 'logLevel' | 'output'> & { output?: Omit<<a href="https://rolldown.rs/reference/#:~:text=Output%20Options">RolldownOutputOptions</a>, 'format' | 'sourcemap' | 'dir' | 'banner'> }</code>
 
-Options to pass to Rolldown during the dep scanning and optimization.
+在依赖扫描和优化期间传递给 Rolldown 的选项。
 
-Certain options are omitted since changing them would not be compatible with Vite's dep optimization.
+某些选项被省略，因为更改它们将与 Vite 的依赖优化不兼容。
 
-- `plugins` are merged with Vite's dep plugin
+- `plugins` 与 Vite 的依赖插件合并
 
 ## optimizeDeps.esbuildOptions <NonInheritBadge />
 
-- **Type:** <code>Omit<<a href="https://esbuild.github.io/api/#general-options">EsbuildBuildOptions</a>, 'bundle' | 'entryPoints' | 'external' | 'write' | 'watch' | 'outdir' | 'outfile' | 'outbase' | 'outExtension' | 'metafile'></code>
-- **Deprecated**
+- **类型：** <code>Omit<<a href="https://esbuild.github.io/api/#general-options">EsbuildBuildOptions</a>, 'bundle' | 'entryPoints' | 'external' | 'write' | 'watch' | 'outdir' | 'outfile' | 'outbase' | 'outExtension' | 'metafile'></code>
+- **已弃用**
 
-This option is converted to `optimizeDeps.rolldownOptions` internally. Use `optimizeDeps.rolldownOptions` instead.
+此选项在内部转换为 `optimizeDeps.rolldownOptions`。请改用 `optimizeDeps.rolldownOptions`。
 
 ## optimizeDeps.force <NonInheritBadge />
 
-- **Type:** `boolean`
+- **类型：** `boolean`
 
-Set to `true` to force dependency pre-bundling, ignoring previously cached optimized dependencies.
+设置为 `true` 以强制依赖预构建，忽略之前缓存的优化依赖。
 
 ## optimizeDeps.noDiscovery <NonInheritBadge />
 
-- **Type:** `boolean`
-- **Default:** `false`
+- **类型：** `boolean`
+- **默认值：** `false`
 
-When set to `true`, automatic dependency discovery will be disabled and only dependencies listed in `optimizeDeps.include` will be optimized. CJS-only dependencies must be present in `optimizeDeps.include` during dev.
+当设置为 `true` 时，将禁用自动依赖发现，只有 `optimizeDeps.include` 中列出的依赖会被优化。仅 CJS 的依赖在开发期间必须存在于 `optimizeDeps.include` 中。
 
 ## optimizeDeps.holdUntilCrawlEnd <NonInheritBadge />
 
-- **Experimental:** [Give Feedback](https://github.com/vitejs/vite/discussions/15834)
-- **Type:** `boolean`
-- **Default:** `true`
+- **实验性：** [提供反馈](https://github.com/vitejs/vite/discussions/15834)
+- **类型：** `boolean`
+- **默认值：** `true`
 
-When enabled, it will hold the first optimized deps results until all static imports are crawled on cold start. This avoids the need for full-page reloads when new dependencies are discovered and they trigger the generation of new common chunks. If all dependencies are found by the scanner plus the explicitly defined ones in `include`, it is better to disable this option to let the browser process more requests in parallel.
+启用时，它将保留第一次优化的依赖结果，直到冷启动期间所有静态导入都被爬取完毕。这避免了当发现新依赖并触发生成新的公共块时需要全页刷新。如果扫描器找到了所有依赖以及 `include` 中显式定义的依赖，最好禁用此选项以让浏览器并行处理更多请求。
 
 ## optimizeDeps.disabled <NonInheritBadge />
 
-- **Deprecated**
-- **Experimental:** [Give Feedback](https://github.com/vitejs/vite/discussions/13839)
-- **Type:** `boolean | 'build' | 'dev'`
-- **Default:** `'build'`
+- **已弃用**
+- **实验性：** [提供反馈](https://github.com/vitejs/vite/discussions/13839)
+- **类型：** `boolean | 'build' | 'dev'`
+- **默认值：** `'build'`
 
-This option is deprecated. As of Vite 5.1, pre-bundling of dependencies during build have been removed. Setting `optimizeDeps.disabled` to `true` or `'dev'` disables the optimizer, and configured to `false` or `'build'` leaves the optimizer during dev enabled.
+此选项已弃用。从 Vite 5.1 开始，构建期间的依赖预构建已被移除。将 `optimizeDeps.disabled` 设置为 `true` 或 `'dev'` 会禁用优化器，配置为 `false` 或 `'build'` 则保持开发期间优化器启用。
 
-To disable the optimizer completely, use `optimizeDeps.noDiscovery: true` to disallow automatic discovery of dependencies and leave `optimizeDeps.include` undefined or empty.
+要完全禁用优化器，请使用 `optimizeDeps.noDiscovery: true` 以不允许自动发现依赖，并将 `optimizeDeps.include` 留为 undefined 或空。
 
 :::warning
-Optimizing dependencies during build time was an **experimental** feature. Projects trying out this strategy also removed `@rollup/plugin-commonjs` using `build.commonjsOptions: { include: [] }`. If you did so, a warning will guide you to re-enable it to support CJS only packages while bundling.
+构建期间优化依赖是一个**实验性**功能。尝试此策略的项目还使用 `build.commonjsOptions: { include: [] }` 移除了 `@rollup/plugin-commonjs`。如果你这样做了，警告将指导你重新启用它以在打包时支持仅 CJS 的包。
 :::
 
 ## optimizeDeps.needsInterop <NonInheritBadge />
 
-- **Experimental**
-- **Type:** `string[]`
+- **实验性**
+- **类型：** `string[]`
 
-Forces ESM interop when importing these dependencies. Vite is able to properly detect when a dependency needs interop, so this option isn't generally needed. However, different combinations of dependencies could cause some of them to be prebundled differently. Adding these packages to `needsInterop` can speed up cold start by avoiding full-page reloads. You'll receive a warning if this is the case for one of your dependencies, suggesting to add the package name to this array in your config.
+导入这些依赖时强制 ESM 互操作。Vite 能够正确检测何时依赖需要互操作，因此通常不需要此选项。但是，不同的依赖组合可能导致其中一些被不同地预构建。将这些包添加到 `needsInterop` 可以通过避免全页刷新来加快冷启动速度。如果你的某个依赖属于这种情况，你将收到警告，建议在配置中将包名添加到此数组中。

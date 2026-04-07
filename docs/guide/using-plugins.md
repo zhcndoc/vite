@@ -1,12 +1,12 @@
-# Using Plugins
+# 使用插件
 
-Vite can be extended using plugins, which are based on Rollup's well-designed plugin interface with a few extra Vite-specific options. This means that Vite users can rely on the mature ecosystem of Rollup plugins, while also being able to extend the dev server and SSR functionality as needed.
+Vite 可以通过插件进行扩展，这些插件基于 Rollup 设计良好的插件接口，并添加了一些 Vite 特定的选项。这意味着 Vite 用户可以依赖成熟的 Rollup 插件生态系统，同时也可以根据需要扩展开发服务器和 SSR 功能。
 
-<ScrimbaLink href="https://scrimba.com/intro-to-vite-c03p6pbbdq/~0y4g?via=vite" title="Using Plugins in Vite">Watch an interactive lesson on Scrimba</ScrimbaLink>
+<ScrimbaLink href="https://scrimba.com/intro-to-vite-c03p6pbbdq/~0y4g?via=vite" title="在 Vite 中使用插件">在 Scrimba 上观看互动课程</ScrimbaLink>
 
-## Adding a Plugin
+## 添加插件
 
-To use a plugin, it needs to be added to the `devDependencies` of the project and included in the `plugins` array in the `vite.config.js` config file. For example, to provide support for legacy browsers, the official [@vitejs/plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy) can be used:
+要使用插件，需要将其添加到项目的 `devDependencies` 中，并包含在 `vite.config.js` 配置文件的 `plugins` 数组中。例如，为了提供对旧版浏览器的支持，可以使用官方的 [@vitejs/plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy)：
 
 ```
 $ npm add -D @vitejs/plugin-legacy
@@ -25,25 +25,25 @@ export default defineConfig({
 })
 ```
 
-`plugins` also accepts presets including several plugins as a single element. This is useful for complex features (like framework integration) that are implemented using several plugins. The array will be flattened internally.
+`plugins` 也接受预设，即将多个插件作为单个元素包含在内。这对于使用多个插件实现的复杂功能（如框架集成）很有用。数组将在内部被扁平化。
 
-Falsy plugins will be ignored, which can be used to easily activate or deactivate plugins.
+假值插件将被忽略，这可以用于轻松地激活或停用插件。
 
-## Finding Plugins
+## 寻找插件
 
-:::tip NOTE
-Vite aims to provide out-of-the-box support for common web development patterns. Before searching for a Vite or compatible Rollup plugin, check out the [Features Guide](../guide/features.md). A lot of the cases where a plugin would be needed in a Rollup project are already covered in Vite.
+:::tip 注意
+Vite 旨在为常见的 Web 开发模式提供开箱即用的支持。在搜索 Vite 或兼容的 Rollup 插件之前，请查看 [功能指南](../guide/features.md)。许多在 Rollup 项目中需要插件的情况在 Vite 中已经涵盖了。
 :::
 
-Check out the [Plugins section](../plugins/) for information about official plugins. Community plugins that are published to npm are listed in [Vite Plugin Registry](https://registry.vite.dev/plugins).
+查看 [插件部分](../plugins/) 以了解官方插件的信息。发布到 npm 的社区插件列在 [Vite 插件注册表](https://registry.vite.dev/plugins) 中。
 
-## Enforcing Plugin Ordering
+## 强制插件顺序
 
-For compatibility with some Rollup plugins, it may be needed to enforce the order of the plugin or only apply at build time. This should be an implementation detail for Vite plugins. You can enforce the position of a plugin with the `enforce` modifier:
+为了与某些 Rollup 插件兼容，可能需要强制插件的顺序或仅在构建时应用。这对于 Vite 插件来说应该是一个实现细节。你可以使用 `enforce` 修饰符来强制插件的位置：
 
-- `pre`: invoke plugin before Vite core plugins
-- default: invoke plugin after Vite core plugins
-- `post`: invoke plugin after Vite build plugins
+- `pre`：在 Vite 核心插件之前调用插件
+- default：在 Vite 核心插件之后调用插件
+- `post`：在 Vite 构建插件之后调用插件
 
 ```js twoslash [vite.config.js]
 import image from '@rollup/plugin-image'
@@ -59,11 +59,11 @@ export default defineConfig({
 })
 ```
 
-Check out [Plugins API Guide](./api-plugin.md#plugin-ordering) for detailed information.
+查看 [插件 API 指南](./api-plugin.md#plugin-ordering) 以获取详细信息。
 
-## Conditional Application
+## 条件应用
 
-By default, plugins are invoked for both serve and build. In cases where a plugin needs to be conditionally applied only during serve or build, use the `apply` property to only invoke them during `'build'` or `'serve'`:
+默认情况下，插件会在 serve 和 build 过程中都被调用。如果插件需要条件性地仅在 serve 或 build 期间应用，请使用 `apply` 属性以仅在 `'build'` 或 `'serve'` 期间调用它们：
 
 ```js twoslash [vite.config.js]
 import typescript2 from 'rollup-plugin-typescript2'
@@ -79,6 +79,6 @@ export default defineConfig({
 })
 ```
 
-## Building Plugins
+## 构建插件
 
-Check out the [Plugins API Guide](./api-plugin.md) for documentation about creating plugins.
+查看 [插件 API 指南](./api-plugin.md) 以了解创建插件的文档。

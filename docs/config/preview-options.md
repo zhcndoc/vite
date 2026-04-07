@@ -1,41 +1,41 @@
-# Preview Options
+# 预览选项
 
-Unless noted, the options in this section are only applied to preview.
+除非另有说明，本节中的选项仅适用于预览。
 
 ## preview.host
 
-- **Type:** `string | boolean`
-- **Default:** [`server.host`](./server-options#server-host)
+- **类型：** `string | boolean`
+- **默认值：** [`server.host`](./server-options#server-host)
 
-Specify which IP addresses the server should listen on.
-Set this to `0.0.0.0` or `true` to listen on all addresses, including LAN and public addresses.
+指定服务器应该监听哪些 IP 地址。
+将其设置为 `0.0.0.0` 或 `true` 以监听所有地址，包括局域网和公网地址。
 
-This can be set via the CLI using `--host 0.0.0.0` or `--host`.
+可以通过 CLI 使用 `--host 0.0.0.0` 或 `--host` 来设置。
 
-::: tip NOTE
+::: tip 注意
 
-There are cases when other servers might respond instead of Vite.
-See [`server.host`](./server-options#server-host) for more details.
+在某些情况下，可能是其他服务器响应而不是 Vite。
+详见 [`server.host`](./server-options#server-host)。
 
 :::
 
 ## preview.allowedHosts
 
-- **Type:** `string[] | true`
-- **Default:** [`server.allowedHosts`](./server-options#server-allowedhosts)
+- **类型：** `string[] | true`
+- **默认值：** [`server.allowedHosts`](./server-options#server-allowedhosts)
 
-The hostnames that Vite is allowed to respond to.
+Vite 允许响应的主机名。
 
-See [`server.allowedHosts`](./server-options#server-allowedhosts) for more details.
+详见 [`server.allowedHosts`](./server-options#server-allowedhosts)。
 
 ## preview.port
 
-- **Type:** `number`
-- **Default:** `4173`
+- **类型：** `number`
+- **默认值：** `4173`
 
-Specify server port. Note if the port is already being used, Vite will automatically try the next available port so this may not be the actual port the server ends up listening on.
+指定服务器端口。请注意，如果该端口已被占用，Vite 将自动尝试下一个可用端口，因此这可能不是服务器最终监听的实际端口。
 
-**Example:**
+**示例：**
 
 ```js
 export default defineConfig({
@@ -50,49 +50,49 @@ export default defineConfig({
 
 ## preview.strictPort
 
-- **Type:** `boolean`
-- **Default:** [`server.strictPort`](./server-options#server-strictport)
+- **类型：** `boolean`
+- **默认值：** [`server.strictPort`](./server-options#server-strictport)
 
-Set to `true` to exit if port is already in use, instead of automatically trying the next available port.
+设置为 `true` 时，如果端口已被占用则退出，而不是自动尝试下一个可用端口。
 
 ## preview.https
 
-- **Type:** `https.ServerOptions`
-- **Default:** [`server.https`](./server-options#server-https)
+- **类型：** `https.ServerOptions`
+- **默认值：** [`server.https`](./server-options#server-https)
 
-Enable TLS + HTTP/2.
+启用 TLS + HTTP/2。
 
-See [`server.https`](./server-options#server-https) for more details.
+详见 [`server.https`](./server-options#server-https)。
 
 ## preview.open
 
-- **Type:** `boolean | string`
-- **Default:** [`server.open`](./server-options#server-open)
+- **类型：** `boolean | string`
+- **默认值：** [`server.open`](./server-options#server-open)
 
-Automatically open the app in the browser on server start. When the value is a string, it will be used as the URL's pathname. If you want to open the server in a specific browser you like, you can set the env `process.env.BROWSER` (e.g. `firefox`). You can also set `process.env.BROWSER_ARGS` to pass additional arguments (e.g. `--incognito`).
+服务器启动时自动在浏览器中打开应用。当值为字符串时，它将用作 URL 的路径名。如果你想在特定的浏览器中打开服务器，可以设置环境变量 `process.env.BROWSER`（例如 `firefox`）。你也可以设置 `process.env.BROWSER_ARGS` 来传递额外参数（例如 `--incognito`）。
 
-`BROWSER` and `BROWSER_ARGS` are also special environment variables you can set in the `.env` file to configure it. See [the `open` package](https://github.com/sindresorhus/open#app) for more details.
+`BROWSER` 和 `BROWSER_ARGS` 也是你可以在 `.env` 文件中设置的特殊环境变量来进行配置。详见 [`open` 包](https://github.com/sindresorhus/open#app)。
 
 ## preview.proxy
 
-- **Type:** `Record<string, string | ProxyOptions>`
-- **Default:** [`server.proxy`](./server-options#server-proxy)
+- **类型：** `Record<string, string | ProxyOptions>`
+- **默认值：** [`server.proxy`](./server-options#server-proxy)
 
-Configure custom proxy rules for the preview server. Expects an object of `{ key: options }` pairs. If the key starts with `^`, it will be interpreted as a `RegExp`. The `configure` option can be used to access the proxy instance.
+为预览服务器配置自定义代理规则。期望是一个 `{ key: options }` 键值对的对象。如果键以 `^` 开头，它将被解释为 `RegExp`。可以使用 `configure` 选项来访问代理实例。
 
-Uses [`http-proxy-3`](https://github.com/sagemathinc/http-proxy-3). Full options [here](https://github.com/sagemathinc/http-proxy-3#options).
+使用 [`http-proxy-3`](https://github.com/sagemathinc/http-proxy-3)。完整选项见 [这里](https://github.com/sagemathinc/http-proxy-3#options)。
 
 ## preview.cors
 
-- **Type:** `boolean | CorsOptions`
-- **Default:** [`server.cors`](./server-options#server-cors)
+- **类型：** `boolean | CorsOptions`
+- **默认值：** [`server.cors`](./server-options#server-cors)
 
-Configure CORS for the preview server.
+为预览服务器配置 CORS。
 
-See [`server.cors`](./server-options#server-cors) for more details.
+详见 [`server.cors`](./server-options#server-cors)。
 
 ## preview.headers
 
-- **Type:** `OutgoingHttpHeaders`
+- **类型：** `OutgoingHttpHeaders`
 
-Specify server response headers.
+指定服务器响应头。

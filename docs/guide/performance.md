@@ -1,63 +1,63 @@
-# Performance
+# 性能
 
-While Vite is fast by default, performance issues can creep in as the project's requirements grow. This guide aims to help you identify and fix common performance issues, such as:
+虽然 Vite 默认情况下很快，但随着项目需求的增长，性能问题可能会出现。本指南旨在帮助你识别和修复常见的性能问题，例如：
 
-- Slow server starts
-- Slow page loads
-- Slow builds
+- 服务器启动缓慢
+- 页面加载缓慢
+- 构建缓慢
 
-## Review Your Browser Setup
+## 检查你的浏览器设置
 
-Some browser extensions may interfere with requests and slow down startup and reload times for large apps, especially when using browser dev tools. We recommend creating a dev-only profile without extensions, or switch to incognito mode, while using Vite's dev server in these cases. Incognito mode should also be faster than a regular profile without extensions.
+某些浏览器扩展可能会干扰请求并减慢大型应用的启动和重载时间，尤其是在使用浏览器开发工具时。我们建议在这些情况下使用 Vite 的开发服务器时，创建一个不含扩展的仅开发配置文件，或切换到无痕模式。无痕模式通常也比不含扩展的常规配置文件更快。
 
-The Vite dev server does hard caching of pre-bundled dependencies and implements fast 304 responses for source code. Disabling the cache while the Browser Dev Tools are open can have a big impact on startup and full-page reload times. Please check that "Disable Cache" isn't enabled while you work with the Vite server.
+Vite 开发服务器会对预捆绑的依赖项进行硬缓存，并为源代码实现快速的 304 响应。在打开浏览器开发工具时禁用缓存会对启动和全页面重载时间产生很大影响。请确保在使用 Vite 服务器时未启用“禁用缓存”。
 
-## Audit Configured Vite Plugins
+## 审查配置的 Vite 插件
 
-Vite's internal and official plugins are optimized to do the least amount of work possible while providing compatibility with the broader ecosystem. For example, code transformations use regex in dev, but do a complete parse in build to ensure correctness.
+Vite 的内部和官方插件经过优化，旨在提供与更广泛生态系统兼容性的同时执行最少的工作。例如，代码转换在开发模式下使用正则表达式，但在构建模式下进行完整解析以确保正确性。
 
-However, the performance of community plugins is out of Vite's control, which may affect the developer experience. Here are a few things you can look out for when using additional Vite plugins:
+然而，社区插件的性能不在 Vite 的控制范围内，这可能会影响开发体验。以下是使用额外 Vite 插件时可以注意的一些事项：
 
-1. Large dependencies that are only used in certain cases should be dynamically imported to reduce the Node.js startup time. Example refactors: [vite-plugin-react#212](https://github.com/vitejs/vite-plugin-react/pull/212) and [vite-plugin-pwa#224](https://github.com/vite-pwa/vite-plugin-pwa/pull/244).
+1. 仅在某些情况下使用的大型依赖项应动态导入，以减少 Node.js 启动时间。重构示例：[vite-plugin-react#212](https://github.com/vitejs/vite-plugin-react/pull/212) 和 [vite-plugin-pwa#224](https://github.com/vite-pwa/vite-plugin-pwa/pull/244)。
 
-2. The `buildStart`, `config`, and `configResolved` hooks should not run long and extensive operations. These hooks are awaited during dev server startup, which delays when you can access the site in the browser.
+2. `buildStart`、`config` 和 `configResolved` 钩子不应运行长时间且广泛的操作。这些钩子在开发服务器启动期间会被等待，这会延迟你在浏览器中访问网站的时间。
 
-3. The `resolveId`, `load`, and `transform` hooks may cause some files to load slower than others. While sometimes unavoidable, it's still worth checking for possible areas to optimize. For example, checking if the `code` contains a specific keyword, or the `id` matches a specific extension, before doing the full transformation.
+3. `resolveId`、`load` 和 `transform` 钩子可能导致某些文件加载比其他文件慢。虽然有时不可避免，但仍然值得检查可能的优化区域。例如，在进行完整转换之前，检查 `code` 是否包含特定关键字，或 `id` 是否匹配特定扩展名。
 
-   The longer it takes to transform a file, the more significant the request waterfall will be when loading the site in the browser.
+   转换文件所需的时间越长，在浏览器中加载网站时的请求瀑布流就越显著。
 
-   You can inspect the duration it takes to transform a file using `vite --debug plugin-transform` or [vite-plugin-inspect](https://github.com/antfu/vite-plugin-inspect). Note that as asynchronous operations tend to provide inaccurate timings, you should treat the numbers as a rough estimate, but it should still reveal the more expensive operations.
+   你可以使用 `vite --debug plugin-transform` 或 [vite-plugin-inspect](https://github.com/antfu/vite-plugin-inspect) 检查转换文件所需的时间。请注意，由于异步操作往往提供不准确的时间，你应该将这些数字视为粗略估计，但它仍然应该揭示更昂贵的操作。
 
-::: tip Profiling
-You can run `vite --profile`, visit the site, and press `p + enter` in your terminal to record a `.cpuprofile`. A tool like [speedscope](https://www.speedscope.app) can then be used to inspect the profile and identify the bottlenecks. You can also [share the profiles](https://chat.vite.dev) with the Vite team to help us identify performance issues.
+::: tip 性能分析
+你可以运行 `vite --profile`，访问网站，然后在终端中按 `p + enter` 来记录 `.cpuprofile`。然后可以使用像 [speedscope](https://www.speedscope.app) 这样的工具来检查配置文件并识别瓶颈。你也可以 [与 Vite 团队分享配置文件](https://chat.vite.dev) 以帮助我们识别性能问题。
 :::
 
-## Reduce Resolve Operations
+## 减少解析操作
 
-Resolving import paths can be an expensive operation when hitting its worst case often. For example, Vite supports "guessing" import paths with the [`resolve.extensions`](/config/shared-options.md#resolve-extensions) option, which defaults to `['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json']`.
+解析导入路径在最坏情况下经常发生时可能是一项昂贵的操作。例如，Vite 支持通过 [`resolve.extensions`](/config/shared-options.md#resolve-extensions) 选项“猜测”导入路径，默认为 `['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json']`。
 
-When you try to import `./Component.jsx` with `import './Component'`, Vite will run these steps to resolve it:
+当你尝试通过 `import './Component'` 导入 `./Component.jsx` 时，Vite 将运行以下步骤来解析它：
 
-1. Check if `./Component` exists, no.
-2. Check if `./Component.mjs` exists, no.
-3. Check if `./Component.js` exists, no.
-4. Check if `./Component.mts` exists, no.
-5. Check if `./Component.ts` exists, no.
-6. Check if `./Component.jsx` exists, yes!
+1. 检查 `./Component` 是否存在，否。
+2. 检查 `./Component.mjs` 是否存在，否。
+3. 检查 `./Component.js` 是否存在，否。
+4. 检查 `./Component.mts` 是否存在，否。
+5. 检查 `./Component.ts` 是否存在，否。
+6. 检查 `./Component.jsx` 是否存在，是！
 
-As shown, a total of 6 filesystem checks is required to resolve an import path. The more implicit imports you have, the more time it adds up to resolve the paths.
+如图所示，解析导入路径总共需要 6 次文件系统检查。你拥有的隐式导入越多，解析路径所花费的时间就越多。
 
-Hence, it's usually better to be explicit with your import paths, e.g. `import './Component.jsx'`. You can also narrow down the list for `resolve.extensions` to reduce the general filesystem checks, but you have to make sure it works for files in `node_modules` too.
+因此，通常最好明确指定导入路径，例如 `import './Component.jsx'`。你也可以缩小 `resolve.extensions` 的列表以减少常规文件系统检查，但你必须确保它也适用于 `node_modules` 中的文件。
 
-If you're a plugin author, make sure to only call [`this.resolve`](https://rollupjs.org/plugin-development/#this-resolve) when needed to reduce the number of checks above.
+如果你是插件作者，请确保仅在需要时调用 [`this.resolve`](https://rollupjs.org/plugin-development/#this-resolve) 以减少上述检查次数。
 
 ::: tip TypeScript
-If you are using TypeScript, enable `"moduleResolution": "bundler"` and `"allowImportingTsExtensions": true` in your `tsconfig.json`'s `compilerOptions` to use `.ts` and `.tsx` extensions directly in your code.
+如果你使用的是 TypeScript，请在 `tsconfig.json` 的 `compilerOptions` 中启用 `"moduleResolution": "bundler"` 和 `"allowImportingTsExtensions": true`，以便直接在代码中使用 `.ts` 和 `.tsx` 扩展名。
 :::
 
-## Avoid Barrel Files
+## 避免 Barrel 文件
 
-Barrel files are files that re-export the APIs of other files in the same directory. For example:
+Barrel 文件是重新导出同一目录中其他文件 API 的文件。例如：
 
 ```js [src/utils/index.js]
 export * from './color.js'
@@ -65,25 +65,25 @@ export * from './dom.js'
 export * from './slash.js'
 ```
 
-When you only import an individual API, e.g. `import { slash } from './utils'`, all the files in that barrel file need to be fetched and transformed as they may contain the `slash` API and may also contain side-effects that run on initialization. This means you're loading more files than required on the initial page load, resulting in a slower page load.
+当你只导入单个 API 时，例如 `import { slash } from './utils'`，该 barrel 文件中的所有文件都需要被获取和转换，因为它们可能包含 `slash` API，也可能包含在初始化时运行的副作用。这意味着你在初始页面加载时加载了比所需更多的文件，导致页面加载变慢。
 
-If possible, you should avoid barrel files and import the individual APIs directly, e.g. `import { slash } from './utils/slash.js'`. You can read [issue #8237](https://github.com/vitejs/vite/issues/8237) for more information.
+如果可能，你应该避免使用 barrel 文件并直接导入单个 API，例如 `import { slash } from './utils/slash.js'`。你可以阅读 [issue #8237](https://github.com/vitejs/vite/issues/8237) 获取更多信息。
 
-## Warm Up Frequently Used Files
+## 预热常用文件
 
-The Vite dev server only transforms files as requested by the browser, which allows it to start up quickly and only apply transformations for used files. It can also pre-transform files if it anticipates certain files will be requested shortly. However, request waterfalls may still happen if some files take longer to transform than others. For example:
+Vite 开发服务器仅转换浏览器请求的文件，这使其能够快速启动并仅对已用文件应用转换。如果它预计某些文件很快会被请求，它也可以预转换文件。然而，如果某些文件的转换时间比其他文件长，仍然可能发生请求瀑布流。例如：
 
-Given an import graph where the left file imports the right file:
+给定一个导入图，其中左侧文件导入右侧文件：
 
 ```
 main.js -> BigComponent.vue -> big-utils.js -> large-data.json
 ```
 
-The import relationship can only be known after the file is transformed. If `BigComponent.vue` takes some time to transform, `big-utils.js` has to wait for its turn, and so on. This causes an internal waterfall even with pre-transformation built-in.
+导入关系只能在文件转换后才知道。如果 `BigComponent.vue` 需要一些时间来转换，`big-utils.js` 必须等待轮到它，依此类推。即使有内置的预转换，这也会导致内部瀑布流。
 
-Vite allows you to warm up files that you know are frequently used, e.g. `big-utils.js`, using the [`server.warmup`](/config/server-options.md#server-warmup) option. This way `big-utils.js` will be ready and cached to be served immediately when requested.
+Vite 允许你预热你知道经常使用的文件，例如 `big-utils.js`，使用 [`server.warmup`](/config/server-options.md#server-warmup) 选项。这样 `big-utils.js` 将准备好并缓存，以便在请求时立即提供服务。
 
-You can find files that are frequently used by running `vite --debug transform` and inspect the logs:
+你可以通过运行 `vite --debug transform` 并检查日志来找到经常使用的文件：
 
 ```bash
 vite:transform 28.72ms /@vite/client +1ms
@@ -104,21 +104,21 @@ export default defineConfig({
 })
 ```
 
-Note that you should only warm up files that are frequently used to not overload the Vite dev server on startup. Check the [`server.warmup`](/config/server-options.md#server-warmup) option for more information.
+请注意，你应该只预热经常使用的文件，以免在启动时过载 Vite 开发服务器。查看 [`server.warmup`](/config/server-options.md#server-warmup) 选项获取更多信息。
 
-Using [`--open` or `server.open`](/config/server-options.html#server-open) also provides a performance boost, as Vite will automatically warm up the entry point of your app or the provided URL to open.
+使用 [`--open` 或 `server.open`](/config/server-options.html#server-open) 也能提供性能提升，因为 Vite 会自动预热你的应用入口点或提供的要打开的 URL。
 
-## Use Lesser or Native Tooling
+## 使用更少或原生工具
 
-Keeping Vite fast with a growing codebase is about reducing the amount of work for the source files (JS/TS/CSS).
+随着代码库的增长保持 Vite 的快速性在于减少源文件（JS/TS/CSS）的工作量。
 
-Examples of doing less work:
+减少工作的示例：
 
-- Use CSS instead of Sass/Less/Stylus when possible (nesting can be handled by PostCSS / Lightning CSS)
-- Don't transform SVGs into UI framework components (React, Vue, etc.). Import them as strings or URLs instead.
+- 尽可能使用 CSS 而不是 Sass/Less/Stylus（嵌套可以由 PostCSS / Lightning CSS 处理）
+- 不要将 SVG 转换为 UI 框架组件（React、Vue 等）。而是将它们作为字符串或 URL 导入。
 
-Examples of using native tooling:
+使用原生工具的示例：
 
-While Vite core is based on native tooling, some features still use non-native tooling by default to provide better compatibility and feature set. But it may be worth the cost for larger applications.
+虽然 Vite 核心基于原生工具，但某些功能默认仍使用非原生工具以提供更好的兼容性和功能集。但对于大型应用程序来说，这可能值得付出代价。
 
-- Try out the experimental support for [LightningCSS](https://github.com/vitejs/vite/discussions/13835)
+- 尝试实验性支持 [LightningCSS](https://github.com/vitejs/vite/discussions/13835)

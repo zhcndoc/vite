@@ -1,30 +1,31 @@
-# Worker Options
+# Worker 选项
 
-Unless noted, the options in this section are applied to all dev, build, and preview.
+除非另有说明，本节中的选项适用于所有开发、构建和预览模式。
 
 ## worker.format
 
-- **Type:** `'es' | 'iife'`
-- **Default:** `'iife'`
+- **类型：** `'es' | 'iife'`
+- **默认值：** `'iife'`
 
-Output format for worker bundle.
+Worker 打包的输出格式。
 
 ## worker.plugins
 
-- **Type:** [`() => (Plugin | Plugin[])[]`](./shared-options#plugins)
+- **类型：** [`() => (Plugin | Plugin[])[]`](./shared-options#plugins)
 
-Vite plugins that apply to the worker bundles. Note that [config.plugins](./shared-options#plugins) only applies to workers in dev, it should be configured here instead for build.
-The function should return new plugin instances as they are used in parallel rolldown worker builds. As such, modifying `config.worker` options in the `config` hook will be ignored.
+应用于 worker 打包的 Vite 插件。注意，[config.plugins](./shared-options#plugins) 仅适用于开发环境下的 worker，构建时应该在此处配置。
+
+该函数应返回新的插件实例，因为它们在并行 rolldown worker 构建中使用。因此，在 `config` 钩子中修改 `config.worker` 选项将被忽略。
 
 ## worker.rolldownOptions
 
-- **Type:** [`RolldownOptions`](https://rolldown.rs/reference/)
+- **类型：** [`RolldownOptions`](https://rolldown.rs/reference/)
 
-Rolldown options to build worker bundle.
+用于构建 worker 打包的 Rolldown 选项。
 
 ## worker.rollupOptions
 
-- **Type:** `RolldownOptions`
-- **Deprecated**
+- **类型：** `RolldownOptions`
+- **已弃用**
 
-This option is an alias of `worker.rolldownOptions` option. Use `worker.rolldownOptions` option instead.
+此选项是 `worker.rolldownOptions` 选项的别名。请改用 `worker.rolldownOptions` 选项。

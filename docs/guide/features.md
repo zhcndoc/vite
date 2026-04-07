@@ -1,111 +1,111 @@
-# Features
+# 特性
 
-At the very basic level, developing using Vite is not that different from using a static file server. However, Vite provides many enhancements over native ESM imports to support various features that are typically seen in bundler-based setups.
+在最基本的层面上，使用 Vite 进行开发与使用静态文件服务器并没有太大不同。然而，Vite 在原生 ESM 导入之上提供了许多增强功能，以支持通常在基于打包器的设置中看到的各种特性。
 
-## npm Dependency Resolving and Pre-Bundling
+## npm 依赖解析和预构建
 
-Native ES imports do not support bare module imports like the following:
+原生 ES 导入不支持如下所示的裸模块导入：
 
 ```js
 import { someMethod } from 'my-dep'
 ```
 
-The above import will throw an error in the browser. Vite will detect such bare module imports in all served source files and perform the following:
+上述导入会在浏览器中抛出错误。Vite 会在所有提供的源文件中检测此类裸模块导入，并执行以下操作：
 
-1. [Pre-bundle](./dep-pre-bundling) them to improve page loading speed and convert CommonJS / UMD modules to ESM. The pre-bundling step is performed with [Rolldown](https://rolldown.rs/) and makes Vite's cold start time significantly faster than any JavaScript-based bundler.
+1. [预构建](./dep-pre-bundling) 它们以提高页面加载速度，并将 CommonJS / UMD 模块转换为 ESM。预构建步骤使用 [Rolldown](https://rolldown.rs/) 执行，使得 Vite 的冷启动时间比任何基于 JavaScript 的打包器都快得多。
 
-2. Rewrite the imports to valid URLs like `/node_modules/.vite/deps/my-dep.js?v=f3sf2ebd` so that the browser can import them properly.
+2. 将导入重写为有效的 URL，如 `/node_modules/.vite/deps/my-dep.js?v=f3sf2ebd`，以便浏览器可以正确导入它们。
 
-**Dependencies are Strongly Cached**
+**依赖项被强缓存**
 
-Vite caches dependency requests via HTTP headers, so if you wish to locally edit/debug a dependency, follow the steps [here](./dep-pre-bundling#browser-cache).
+Vite 通过 HTTP 头缓存依赖请求，因此如果你希望在本地编辑/调试依赖项，请按照 [这里](./dep-pre-bundling#browser-cache) 的步骤操作。
 
-## Hot Module Replacement
+## 热模块替换
 
-Vite provides an [HMR API](./api-hmr) over native ESM. Frameworks with HMR capabilities can leverage the API to provide instant, precise updates without reloading the page or blowing away application state. Vite provides first-party HMR integrations for [Vue Single File Components](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue) and [React Fast Refresh](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react). There are also official integrations for Preact via [@prefresh/vite](https://github.com/JoviDeCroock/prefresh/tree/main/packages/vite).
+Vite 在原生 ESM 之上提供了 [HMR API](./api-hmr)。具有 HMR 能力的框架可以利用该 API 提供即时、精确的更新，而无需重新加载页面或清除应用状态。Vite 为 [Vue 单文件组件](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue) 和 [React 快速刷新](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react) 提供了官方 HMR 集成。还有通过 [@prefresh/vite](https://github.com/JoviDeCroock/prefresh/tree/main/packages/vite) 提供的 Preact 官方集成。
 
-Note you don't need to manually set these up - when you [create an app via `create-vite`](./), the selected templates would have these pre-configured for you already.
+请注意，你不需要手动设置这些——当你 [通过 `create-vite` 创建应用](./) 时，所选的模板已经为你预配置好了这些。
 
 ## TypeScript
 
-Vite supports importing `.ts` files out of the box.
+Vite 支持开箱即用地导入 `.ts` 文件。
 
-### Transpile Only
+### 仅转译
 
-Note that Vite only performs transpilation on `.ts` files and does **NOT** perform type checking. It assumes type checking is taken care of by your IDE and build process.
+请注意，Vite 仅对 `.ts` 文件执行转译，**不**执行类型检查。它假设类型检查由你的 IDE 和构建过程负责。
 
-The reason Vite does not perform type checking as part of the transform process is because the two jobs work fundamentally differently. Transpilation can work on a per-file basis and aligns perfectly with Vite's on-demand compile model. In comparison, type checking requires knowledge of the entire module graph. Shoe-horning type checking into Vite's transform pipeline will inevitably compromise Vite's speed benefits.
+Vite 不在转换过程中执行类型检查的原因是，这两项工作从根本上说是不同的。转译可以基于每个文件进行，并与 Vite 的按需编译模型完美契合。相比之下，类型检查需要了解整个模块图。强行将类型检查塞入 Vite 的转换管道将不可避免地损害 Vite 的速度优势。
 
-Vite's job is to get your source modules into a form that can run in the browser as fast as possible. To that end, we recommend separating static analysis checks from Vite's transform pipeline. This principle applies to other static analysis checks such as ESLint.
+Vite 的工作是尽快将你的源模块转换为可以在浏览器中运行的形式。为此，我们建议将静态分析检查与 Vite 的转换管道分开。这一原则也适用于其他静态分析检查，例如 ESLint。
 
-- For production builds, you can run `tsc --noEmit` in addition to Vite's build command.
+- 对于生产构建，你可以在 Vite 的构建命令之外运行 `tsc --noEmit`。
 
-- During development, if you need more than IDE hints, we recommend running `tsc --noEmit --watch` in a separate process, or use [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker) if you prefer having type errors directly reported in the browser.
+- 在开发期间，如果你需要比 IDE 提示更多的功能，我们建议在单独的进程中运行 `tsc --noEmit --watch`，或者如果你更喜欢直接在浏览器中报告类型错误，可以使用 [vite-plugin-checker](https://github.com/fi3ework/vite-plugin-checker)。
 
-Vite uses [Oxc Transformer](https://oxc.rs/docs/guide/usage/transformer.html) to transpile TypeScript into JavaScript which is faster than vanilla `tsc`, and HMR updates can reflect in the browser in under 50ms.
+Vite 使用 [Oxc Transformer](https://oxc.rs/docs/guide/usage/transformer.html) 将 TypeScript 转译为 JavaScript，这比原生 `tsc` 更快，HMR 更新可以在 50 毫秒内在浏览器中反映出来。
 
-Use the [Type-Only Imports and Export](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export) syntax to avoid potential problems like type-only imports being incorrectly bundled, for example:
+使用 [仅类型导入和导出](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export) 语法以避免潜在问题，例如仅类型导入被错误地打包，例如：
 
 ```ts
 import type { T } from 'only/types'
 export type { T }
 ```
 
-### TypeScript Compiler Options
+### TypeScript 编译器选项
 
-Vite respects some of the options in `tsconfig.json` and sets the corresponding Oxc Transformer options. For each file, Vite uses the `tsconfig.json` in the closest parent directory. If that `tsconfig.json` contains a [`references`](https://www.typescriptlang.org/tsconfig/#references) field, Vite will use the referenced config file that satisfies the [`include`](https://www.typescriptlang.org/tsconfig/#include) and [`exclude`](https://www.typescriptlang.org/tsconfig/#exclude) fields.
+Vite 尊重 `tsconfig.json` 中的一些选项，并设置相应的 Oxc Transformer 选项。对于每个文件，Vite 使用最近父目录中的 `tsconfig.json`。如果该 `tsconfig.json` 包含 [`references`](https://www.typescriptlang.org/tsconfig/#references) 字段，Vite 将使用满足 [`include`](https://www.typescriptlang.org/tsconfig/#include) 和 [`exclude`](https://www.typescriptlang.org/tsconfig/#exclude) 字段的引用配置文件。
 
-When the options are set in both the Vite config and the `tsconfig.json`, the value in the Vite config takes precedence.
+当选项同时在 Vite 配置和 `tsconfig.json` 中设置时，Vite 配置中的值优先。
 
-Some configuration fields under `compilerOptions` in `tsconfig.json` require special attention.
+`tsconfig.json` 中 `compilerOptions` 下的一些配置字段需要特别注意。
 
 #### `isolatedModules`
 
-- [TypeScript documentation](https://www.typescriptlang.org/tsconfig#isolatedModules)
+- [TypeScript 文档](https://www.typescriptlang.org/tsconfig#isolatedModules)
 
-Should be set to `true`.
+应设置为 `true`。
 
-It is because Oxc transformer only performs transpilation without type information, it doesn't support certain features like const enum and implicit type-only imports.
+这是因为 Oxc transformer 仅执行转译而不包含类型信息，它不支持某些功能，如 const enum 和隐式仅类型导入。
 
-You must set `"isolatedModules": true` in your `tsconfig.json` under `compilerOptions`, so that TS will warn you against the features that do not work with isolated transpilation.
+你必须在 `tsconfig.json` 的 `compilerOptions` 下设置 `"isolatedModules": true`，这样 TS 会针对不与隔离转译一起工作的功能向你发出警告。
 
-If a dependency doesn't work well with `"isolatedModules": true`, you can use `"skipLibCheck": true` to temporarily suppress the errors until it is fixed upstream.
+如果某个依赖项与 `"isolatedModules": true` 配合不佳，你可以使用 `"skipLibCheck": true` 暂时抑制错误，直到上游修复。
 
 #### `useDefineForClassFields`
 
-- [TypeScript documentation](https://www.typescriptlang.org/tsconfig#useDefineForClassFields)
+- [TypeScript 文档](https://www.typescriptlang.org/tsconfig#useDefineForClassFields)
 
-The default value will be `true` if the TypeScript target is `ES2022` or newer including `ESNext`. It is consistent with the [behavior of TypeScript 4.3.2+](https://github.com/microsoft/TypeScript/pull/42663).
-Other TypeScript targets will default to `false`.
+如果 TypeScript 目标是 `ES2022` 或更新版本（包括 `ESNext`），默认值将为 `true`。这与 [TypeScript 4.3.2+ 的行为](https://github.com/microsoft/TypeScript/pull/42663) 一致。
+其他 TypeScript 目标默认为 `false`。
 
-`true` is the standard ECMAScript runtime behavior.
+`true` 是标准的 ECMAScript 运行时行为。
 
-If you are using a library that heavily relies on class fields, please be careful about the library's intended usage of it.
-While most libraries expect `"useDefineForClassFields": true`, you can explicitly set `useDefineForClassFields` to `false` if your library doesn't support it.
+如果你使用的库严重依赖类字段，请注意该库的预期用法。
+虽然大多数库期望 `"useDefineForClassFields": true`，但如果你的库不支持它，你可以显式地将 `useDefineForClassFields` 设置为 `false`。
 
 #### `target`
 
-- [TypeScript documentation](https://www.typescriptlang.org/tsconfig#target)
+- [TypeScript 文档](https://www.typescriptlang.org/tsconfig#target)
 
-Vite ignores the `target` value in the `tsconfig.json`, following the same behavior as [esbuild](https://esbuild.github.io/).
+Vite 忽略 `tsconfig.json` 中的 `target` 值，遵循与 [esbuild](https://esbuild.github.io/) 相同的行为。
 
-To specify the target in dev, the [`oxc.target`](/config/shared-options.html#oxc) option can be used, which defaults to `esnext` for minimal transpilation. In builds, the [`build.target`](/config/build-options.html#build-target) option takes higher priority over `oxc.target` and can also be set if needed.
+要在开发中指定目标，可以使用 [`oxc.target`](/config/shared-options.html#oxc) 选项，该选项默认为 `esnext` 以实现最小化转译。在构建中，[`build.target`](/config/build-options.html#build-target) 选项优先于 `oxc.target`，如果需要也可以设置。
 
 #### `emitDecoratorMetadata`
 
-- [TypeScript documentation](https://www.typescriptlang.org/tsconfig#emitDecoratorMetadata)
+- [TypeScript 文档](https://www.typescriptlang.org/tsconfig#emitDecoratorMetadata)
 
-This option is only partially supported. Full support requires type inference by the TypeScript compiler, which is not supported. See [Oxc Transformer's documentation](https://oxc.rs/docs/guide/usage/transformer/typescript#decorators) for details.
+此选项仅部分支持。完全支持需要 TypeScript 编译器进行类型推断，目前不支持。详见 [Oxc Transformer 文档](https://oxc.rs/docs/guide/usage/transformer/typescript#decorators)。
 
 #### `paths`
 
-- [TypeScript documentation](https://www.typescriptlang.org/tsconfig/#paths)
+- [TypeScript 文档](https://www.typescriptlang.org/tsconfig/#paths)
 
-`resolve.tsconfigPaths: true` can be specified to tell Vite to use the `paths` option in `tsconfig.json` to resolve imports.
+可以指定 `resolve.tsconfigPaths: true` 来告诉 Vite 使用 `tsconfig.json` 中的 `paths` 选项来解析导入。
 
-Note that this feature has a performance cost and is [discouraged by the TypeScript team to use this option to change the behavior of the external tools](https://www.typescriptlang.org/tsconfig/#paths:~:text=Note%20that%20this%20feature%20does%20not%20change%20how%20import%20paths%20are%20emitted%20by%20tsc%2C%20so%20paths%20should%20only%20be%20used%20to%20inform%20TypeScript%20that%20another%20tool%20has%20this%20mapping%20and%20will%20use%20it%20at%20runtime%20or%20when%20bundling.).
+请注意，此功能有性能开销，并且 [TypeScript 团队不推荐使用此选项来更改外部工具的行为](https://www.typescriptlang.org/tsconfig/#paths:~:text=Note%20that%20this%20feature%20does%20not%20change%20how%20import%20paths%20are%20emitted%20by%20tsc%2C%20so%20paths%20should%20only%20be%20used%20to%20inform%20TypeScript%20that%20another%20tool%20has%20this%20mapping%20and%20will%20use%20it%20at%20runtime%20or%20when%20bundling.)。
 
-#### Other Compiler Options Affecting the Build Result
+#### 其他影响构建结果的编译器选项
 
 - [`extends`](https://www.typescriptlang.org/tsconfig#extends)
 - [`importsNotUsedAsValues`](https://www.typescriptlang.org/tsconfig#importsNotUsedAsValues)
@@ -118,12 +118,12 @@ Note that this feature has a performance cost and is [discouraged by the TypeScr
 - [`experimentalDecorators`](https://www.typescriptlang.org/tsconfig#experimentalDecorators)
 
 ::: tip `skipLibCheck`
-Vite starter templates have `"skipLibCheck": "true"` by default to avoid typechecking dependencies, as they may choose to only support specific versions and configurations of TypeScript. You can learn more at [vuejs/vue-cli#5688](https://github.com/vuejs/vue-cli/pull/5688).
+Vite starter 模板默认具有 `"skipLibCheck": "true"`，以避免对依赖项进行类型检查，因为它们可能选择仅支持特定版本和配置的 TypeScript。你可以在 [vuejs/vue-cli#5688](https://github.com/vuejs/vue-cli/pull/5688) 了解更多。
 :::
 
-### Client Types
+### 客户端类型
 
-Vite's default types are for its Node.js API. To shim the environment of client-side code in a Vite application, you can add `vite/client` to `compilerOptions.types` inside `tsconfig.json`:
+Vite 的默认类型是针对其 Node.js API 的。为了补充 Vite 应用中客户端代码的环境，你可以在 `tsconfig.json` 内的 `compilerOptions.types` 中添加 `vite/client`：
 
 ```json [tsconfig.json]
 {
@@ -133,11 +133,11 @@ Vite's default types are for its Node.js API. To shim the environment of client-
 }
 ```
 
-Note that if [`compilerOptions.types`](https://www.typescriptlang.org/tsconfig#types) is specified, only these packages will be included in the global scope (instead of all visible ”@types” packages). This is recommended since TS 5.9.
+请注意，如果指定了 [`compilerOptions.types`](https://www.typescriptlang.org/tsconfig#types)，则只有这些包将包含在全局作用域中（而不是所有可见的 "@types" 包）。自 TS 5.9 以来推荐这样做。
 
-::: details Using triple-slash directive
+::: details 使用三斜杠指令
 
-Alternatively, you can add a `d.ts` declaration file:
+或者，你可以添加一个 `d.ts` 声明文件：
 
 ```typescript [vite-env.d.ts]
 /// <reference types="vite/client" />
@@ -145,31 +145,31 @@ Alternatively, you can add a `d.ts` declaration file:
 
 :::
 
-`vite/client` provides the following type shims:
+`vite/client` 提供以下类型补充：
 
-- Asset imports (e.g. importing an `.svg` file)
-- Types for the Vite-injected [constants](./env-and-mode#env-variables) on `import.meta.env`
-- Types for the [HMR API](./api-hmr) on `import.meta.hot`
+- 资源导入（例如导入 `.svg` 文件）
+- `import.meta.env` 上 Vite 注入的 [常量](./env-and-mode#env-variables) 的类型
+- `import.meta.hot` 上 [HMR API](./api-hmr) 的类型
 
 ::: tip
-To override the default typing, add a type definition file that contains your typings. Then, add the type reference before `vite/client`.
+要覆盖默认类型，添加一个包含你的类型定义的类型定义文件。然后，在 `vite/client` 之前添加类型引用。
 
-For example, to make the default import of `*.svg` a React component:
+例如，要使 `*.svg` 的默认导入成为 React 组件：
 
-- `vite-env-override.d.ts` (the file that contains your typings):
+- `vite-env-override.d.ts`（包含你的类型定义的文件）：
   ```ts
   declare module '*.svg' {
     const content: React.FC<React.SVGProps<SVGElement>>
     export default content
   }
   ```
-- If you are using `compilerOptions.types`, ensure the file is included in `tsconfig.json`:
+- 如果你使用 `compilerOptions.types`，确保文件包含在 `tsconfig.json` 中：
   ```json [tsconfig.json]
   {
     "include": ["src", "./vite-env-override.d.ts"]
   }
   ```
-- If you are using triple-slash directives, update the file containing the reference to `vite/client` (normally `vite-env.d.ts`):
+- 如果你使用三斜杠指令，更新包含对 `vite/client` 引用的文件（通常是 `vite-env.d.ts`）：
   ```ts
   /// <reference types="./vite-env-override.d.ts" />
   /// <reference types="vite/client" />
@@ -179,31 +179,31 @@ For example, to make the default import of `*.svg` a React component:
 
 ## HTML
 
-HTML files stand [front-and-center](/guide/#index-html-and-project-root) of a Vite project, serving as the entry points for your application, making it simple to build single-page and [multi-page applications](/guide/build.html#multi-page-app).
+HTML 文件在 Vite 项目中占据 [核心位置](/guide/#index-html-and-project-root)，作为应用的入口点，使得构建单页和 [多页应用](/guide/build.html#multi-page-app) 变得简单。
 
-Any HTML files in your project root can be directly accessed by its respective directory path:
+项目根目录中的任何 HTML 文件都可以通过其各自的目录路径直接访问：
 
 - `<root>/index.html` -> `http://localhost:5173/`
 - `<root>/about.html` -> `http://localhost:5173/about.html`
 - `<root>/blog/index.html` -> `http://localhost:5173/blog/index.html`
 
-Assets referenced by HTML elements such as `<script type="module" src>` and `<link href>` are processed and bundled as part of the app. The full list of supported elements are as below:
+HTML 元素（如 `<script type="module" src>` 和 `<link href>`）引用的资源会作为应用的一部分被处理和打包。支持的元素完整列表如下：
 
 - `<audio src>`
 - `<embed src>`
-- `<img src>` and `<img srcset>`
-- `<image href>` and `<image xlink:href>`
+- `<img src>` 和 `<img srcset>`
+- `<image href>` 和 `<image xlink:href>`
 - `<input src>`
-- `<link href>` and `<link imagesrcset>`
+- `<link href>` 和 `<link imagesrcset>`
 - `<object data>`
 - `<script type="module" src>`
-- `<source src>` and `<source srcset>`
+- `<source src>` 和 `<source srcset>`
 - `<track src>`
-- `<use href>` and `<use xlink:href>`
-- `<video src>` and `<video poster>`
+- `<use href>` 和 `<use xlink:href>`
+- `<video src>` 和 `<video poster>`
 - `<meta content>`
-  - Only if `name` attribute matches `msapplication-tileimage`, `msapplication-square70x70logo`, `msapplication-square150x150logo`, `msapplication-wide310x150logo`, `msapplication-square310x310logo`, `msapplication-config`, or `twitter:image`
-  - Or only if `property` attribute matches `og:image`, `og:image:url`, `og:image:secure_url`, `og:audio`, `og:audio:secure_url`, `og:video`, or `og:video:secure_url`
+  - 仅当 `name` 属性匹配 `msapplication-tileimage`、`msapplication-square70x70logo`、`msapplication-square150x150logo`、`msapplication-wide310x150logo`、`msapplication-square310x310logo`、`msapplication-config` 或 `twitter:image`
+  - 或仅当 `property` 属性匹配 `og:image`、`og:image:url`、`og:image:secure_url`、`og:audio`、`og:audio:secure_url`、`og:video` 或 `og:video:secure_url`
 
 ```html {4-5,8-9}
 <!doctype html>
@@ -219,27 +219,27 @@ Assets referenced by HTML elements such as `<script type="module" src>` and `<li
 </html>
 ```
 
-To opt-out of HTML processing on certain elements, you can add the `vite-ignore` attribute on the element, which can be useful when referencing external assets or CDN.
+要禁用某些元素的 HTML 处理，你可以在元素上添加 `vite-ignore` 属性，这在引用外部资源或 CDN 时很有用。
 
-## Frameworks
+## 框架
 
-All modern frameworks maintain integrations with Vite. Most framework plugins are maintained by each framework team, with the exception of the official Vue and React Vite plugins that are maintained in the vite org:
+所有现代框架都维护着与 Vite 的集成。大多数框架插件由各个框架团队维护，除了由 vite 组织维护的官方 Vue 和 React Vite 插件：
 
-- Vue support via [@vitejs/plugin-vue](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue)
-- Vue JSX support via [@vitejs/plugin-vue-jsx](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue-jsx)
-- React support via [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react)
-- React using SWC support via [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react-swc)
-- [React Server Components (RSC)](https://react.dev/reference/rsc/server-components) support via [@vitejs/plugin-rsc](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-rsc)
+- 通过 [@vitejs/plugin-vue](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue) 支持 Vue
+- 通过 [@vitejs/plugin-vue-jsx](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue-jsx) 支持 Vue JSX
+- 通过 [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react) 支持 React
+- 通过 [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react-swc) 支持使用 SWC 的 React
+- 通过 [@vitejs/plugin-rsc](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-rsc) 支持 [React Server Components (RSC)](https://react.dev/reference/rsc/server-components)
 
-Check out the [Plugins Guide](/plugins/) for more information.
+查看 [插件指南](/plugins/) 以获取更多信息。
 
 ## JSX
 
-`.jsx` and `.tsx` files are also supported out of the box. JSX transpilation is also handled via [Oxc Transformer](https://oxc.rs/docs/guide/usage/transformer/).
+`.jsx` 和 `.tsx` 文件也开箱即用支持。JSX 转译也通过 [Oxc Transformer](https://oxc.rs/docs/guide/usage/transformer/) 处理。
 
-Your framework of choice will already configure JSX out of the box (for example, Vue users should use the official [@vitejs/plugin-vue-jsx](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue-jsx) plugin, which provides Vue 3 specific features including HMR, global component resolving, directives and slots).
+你选择的框架已经开箱即用地配置了 JSX（例如，Vue 用户应该使用官方的 [@vitejs/plugin-vue-jsx](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue-jsx) 插件，它提供了 Vue 3 特定功能，包括 HMR、全局组件解析、指令和插槽）。
 
-If using JSX with your own framework, custom `jsxFactory` and `jsxFragment` can be configured using the [`oxc` option](/config/shared-options.md#oxc). For example, the Preact plugin would use:
+如果在自己的框架中使用 JSX，可以使用 [`oxc` 选项](/config/shared-options.md#oxc) 配置自定义 `jsxFactory` 和 `jsxFragment`。例如，Preact 插件将使用：
 
 ```js twoslash [vite.config.js]
 import { defineConfig } from 'vite'
@@ -253,9 +253,9 @@ export default defineConfig({
 })
 ```
 
-More details in [Oxc Transformer docs](https://oxc.rs/docs/guide/usage/transformer/jsx.html).
+更多详情见 [Oxc Transformer 文档](https://oxc.rs/docs/guide/usage/transformer/jsx.html)。
 
-You can inject the JSX helpers using `jsxInject` (which is a Vite-only option) to avoid manual imports:
+你可以使用 `jsxInject`（这是 Vite 独有的选项）注入 JSX 辅助函数，以避免手动导入：
 
 ```js twoslash [vite.config.js]
 import { defineConfig } from 'vite'
@@ -269,23 +269,23 @@ export default defineConfig({
 
 ## CSS
 
-Importing `.css` files will inject its content to the page via a `<style>` tag with HMR support.
+导入 `.css` 文件会通过 `<style>` 标签将其内容注入到页面，并支持 HMR。
 
-### `@import` Inlining and Rebasing
+### `@import` 内联和重基
 
-Vite is pre-configured to support CSS `@import` inlining via `postcss-import`. Vite aliases are also respected for CSS `@import`. In addition, all CSS `url()` references, even if the imported files are in different directories, are always automatically rebased to ensure correctness.
+Vite 预配置为通过 `postcss-import` 支持 CSS `@import` 内联。CSS `@import` 也遵循 Vite 别名。此外，所有 CSS `url()` 引用，即使导入的文件位于不同的目录，也会自动重基以确保正确性。
 
-`@import` aliases and URL rebasing are also supported for Sass and Less files (see [CSS Pre-processors](#css-pre-processors)).
+Sass 和 Less 文件也支持 `@import` 别名和 URL 重基（见 [CSS 预处理器](#css-pre-processors)）。
 
 ### PostCSS
 
-If the project contains valid PostCSS config (any format supported by [postcss-load-config](https://github.com/postcss/postcss-load-config), e.g. `postcss.config.js`), it will be automatically applied to all imported CSS.
+如果项目包含有效的 PostCSS 配置（[postcss-load-config](https://github.com/postcss/postcss-load-config) 支持的任何格式，例如 `postcss.config.js`），它将自动应用于所有导入的 CSS。
 
-Note that CSS minification will run after PostCSS and will use [`build.cssTarget`](/config/build-options.md#build-csstarget) option.
+注意 CSS 最小化将在 PostCSS 之后运行，并将使用 [`build.cssTarget`](/config/build-options.md#build-csstarget) 选项。
 
 ### CSS Modules
 
-Any CSS file ending with `.module.css` is considered a [CSS modules file](https://github.com/css-modules/css-modules). Importing such a file will return the corresponding module object:
+任何以 `.module.css` 结尾的 CSS 文件都被视为 [CSS modules 文件](https://github.com/css-modules/css-modules)。导入此类文件将返回相应的模块对象：
 
 ```css [example.module.css]
 .red {
@@ -300,71 +300,71 @@ import classes from './example.module.css'
 document.getElementById('foo').className = classes.red
 ```
 
-CSS modules behavior can be configured via the [`css.modules` option](/config/shared-options.md#css-modules).
+CSS modules 行为可以通过 [`css.modules` 选项](/config/shared-options.md#css-modules) 配置。
 
-If `css.modules.localsConvention` is set to enable camelCase locals (e.g. `localsConvention: 'camelCaseOnly'`), you can also use named imports:
+如果设置了 `css.modules.localsConvention` 以启用 camelCase 本地类名（例如 `localsConvention: 'camelCaseOnly'`），你也可以使用命名导入：
 
 ```js twoslash
 import 'vite/client'
 // ---cut---
-// .apply-color -> applyColor
+// .apply-color 转换为 applyColor
 import { applyColor } from './example.module.css'
 document.getElementById('foo').className = applyColor
 ```
 
-### CSS Pre-processors
+### CSS 预处理器
 
-Because Vite targets modern browsers only, it is recommended to use native CSS variables with PostCSS plugins that implement CSSWG drafts (e.g. [postcss-nesting](https://github.com/csstools/postcss-plugins/tree/main/plugins/postcss-nesting)) and author plain, future-standards-compliant CSS.
+因为 Vite 仅针对现代浏览器，建议使用原生 CSS 变量配合实现 CSSWG 草案的 PostCSS 插件（例如 [postcss-nesting](https://github.com/csstools/postcss-plugins/tree/main/plugins/postcss-nesting)），并编写简单、符合未来标准的 CSS。
 
-That said, Vite does provide built-in support for `.scss`, `.sass`, `.less`, `.styl` and `.stylus` files. There is no need to install Vite-specific plugins for them, but the corresponding pre-processor itself must be installed:
+也就是说，Vite 确实提供了对 `.scss`、`.sass`、`.less`、`.styl` 和 `.stylus` 文件的内置支持。无需为它们安装 Vite 特定的插件，但必须安装相应的预处理器本身：
 
 ```bash
-# .scss and .sass
-npm add -D sass-embedded # or sass
+# .scss 和 .sass
+npm add -D sass-embedded # 或 sass
 
 # .less
 npm add -D less
 
-# .styl and .stylus
+# .styl 和 .stylus
 npm add -D stylus
 ```
 
-If using Vue single file components, this also automatically enables `<style lang="sass">` et al.
+如果使用 Vue 单文件组件，这也自动启用了 `<style lang="sass">` 等。
 
-Vite improves `@import` resolving for Sass and Less so that Vite aliases are also respected. In addition, relative `url()` references inside imported Sass/Less files that are in different directories from the root file are also automatically rebased to ensure correctness. Rebasing `url()` references that start with a variable or a interpolation are not supported due to its API constraints.
+Vite 改进了 Sass 和 Less 的 `@import` 解析，因此也遵循 Vite 别名。此外，导入的 Sass/Less 文件内部相对于根文件位于不同目录的相对 `url()` 引用也会自动重基以确保正确性。由于 API 限制，不支持重基以变量或插值开头的 `url()` 引用。
 
-`@import` alias and url rebasing are not supported for Stylus due to its API constraints.
+由于 API 限制，Stylus 不支持 `@import` 别名和 URL 重基。
 
-You can also use CSS modules combined with pre-processors by prepending `.module` to the file extension, for example `style.module.scss`.
+你也可以通过在文件扩展名前添加 `.module` 来结合预处理器使用 CSS modules，例如 `style.module.scss`。
 
-### Disabling CSS injection into the page
+### 禁用 CSS 注入到页面
 
-The automatic injection of CSS contents can be turned off via the `?inline` query parameter. In this case, the processed CSS string is returned as the module's default export as usual, but the styles aren't injected to the page.
+可以通过 `?inline` 查询参数关闭 CSS 内容的自动注入。在这种情况下，处理后的 CSS 字符串照常作为模块的默认导出返回，但样式不会注入到页面。
 
 ```js twoslash
 import 'vite/client'
 // ---cut---
-import './foo.css' // will be injected into the page
-import otherStyles from './bar.css?inline' // will not be injected
+import './foo.css' // 将被注入到页面
+import otherStyles from './bar.css?inline' // 将不会被注入
 ```
 
-::: tip NOTE
-Default and named imports from CSS files (e.g `import style from './foo.css'`) are removed since Vite 5. Use the `?inline` query instead.
+::: tip 注意
+自 Vite 5 起，移除了来自 CSS 文件的默认和命名导入（例如 `import style from './foo.css'`）。请改用 `?inline` 查询参数。
 :::
 
 ### Lightning CSS
 
-Vite uses [Lightning CSS](https://lightningcss.dev/) to minify CSS in production builds by default. However, PostCSS is still used for other CSS processing.
+Vite 默认使用 [Lightning CSS](https://lightningcss.dev/) 在生产构建中最小化 CSS。但是，PostCSS 仍用于其他 CSS 处理。
 
-There is experimental support for using Lightning CSS for CSS processing entirely. You can opt into it by adding [`css.transformer: 'lightningcss'`](../config/shared-options.md#css-transformer).
+实验性支持完全使用 Lightning CSS 进行 CSS 处理。你可以通过添加 [`css.transformer: 'lightningcss'`](../config/shared-options.md#css-transformer) 来选择加入。
 
-To configure it, you can pass Lightning CSS options to the [`css.lightningcss`](../config/shared-options.md#css-lightningcss) config option. To configure CSS Modules, you should use [`css.lightningcss.cssModules`](https://lightningcss.dev/css-modules.html) instead of [`css.modules`](../config/shared-options.md#css-modules) (which configures the way PostCSS handles CSS modules).
+要配置它，你可以将 Lightning CSS 选项传递给 [`css.lightningcss`](../config/shared-options.md#css-lightningcss) 配置选项。要配置 CSS Modules，你应该使用 [`css.lightningcss.cssModules`](https://lightningcss.dev/css-modules.html) 而不是 [`css.modules`](../config/shared-options.md#css-modules)（后者配置 PostCSS 处理 CSS modules 的方式）。
 
-## Static Assets
+## 静态资源
 
-<ScrimbaLink href="https://scrimba.com/intro-to-vite-c03p6pbbdq/~05pq?via=vite" title="Static Assets in Vite">Watch an interactive lesson on Scrimba</ScrimbaLink>
+<ScrimbaLink href="https://scrimba.com/intro-to-vite-c03p6pbbdq/~05pq?via=vite" title="Vite 中的静态资源">观看 Scrimba 上的互动课程</ScrimbaLink>
 
-Importing a static asset will return the resolved public URL when it is served:
+导入静态资源将在服务时返回解析后的公共 URL：
 
 ```js twoslash
 import 'vite/client'
@@ -373,54 +373,54 @@ import imgUrl from './img.png'
 document.getElementById('hero-img').src = imgUrl
 ```
 
-Special queries can modify how assets are loaded:
+特殊查询可以修改资源的加载方式：
 
 ```js twoslash
 import 'vite/client'
 // ---cut---
-// Explicitly load assets as URL (automatically inlined depending on the file size)
+// 显式地将资源加载为 URL（根据文件大小自动内联）
 import assetAsURL from './asset.js?url'
 ```
 
 ```js twoslash
 import 'vite/client'
 // ---cut---
-// Load assets as strings
+// 将资源加载为字符串
 import assetAsString from './shader.glsl?raw'
 ```
 
 ```js twoslash
 import 'vite/client'
 // ---cut---
-// Load Web Workers
+// 加载 Web Workers
 import Worker from './worker.js?worker'
 ```
 
 ```js twoslash
 import 'vite/client'
 // ---cut---
-// Web Workers inlined as base64 strings at build time
+// 构建时将 Web Workers 内联为 base64 字符串
 import InlineWorker from './worker.js?worker&inline'
 ```
 
-More details in [Static Asset Handling](./assets).
+更多详情见 [静态资源处理](./assets)。
 
 ## JSON
 
-JSON files can be directly imported - named imports are also supported:
+JSON 文件可以直接导入 - 也支持命名导入：
 
 ```js twoslash
 import 'vite/client'
 // ---cut---
-// import the entire object
+// 导入整个对象
 import json from './example.json'
-// import a root field as named exports - helps with tree-shaking!
+// 将根字段作为命名导出导入 - 有助于树摇！
 import { field } from './example.json'
 ```
 
-## Glob Import
+## Glob 导入
 
-Vite supports importing multiple modules from the file system via the special `import.meta.glob` function:
+Vite 支持通过特殊的 `import.meta.glob` 函数从文件系统导入多个模块：
 
 ```js twoslash
 import 'vite/client'
@@ -428,17 +428,17 @@ import 'vite/client'
 const modules = import.meta.glob('./dir/*.js')
 ```
 
-The above will be transformed into the following:
+上述代码将被转换为以下内容：
 
 ```js
-// code produced by vite
+// vite 生成的代码
 const modules = {
   './dir/bar.js': () => import('./dir/bar.js'),
   './dir/foo.js': () => import('./dir/foo.js'),
 }
 ```
 
-You can then iterate over the keys of the `modules` object to access the corresponding modules:
+然后你可以遍历 `modules` 对象的键来访问相应的模块：
 
 ```js
 for (const path in modules) {
@@ -448,7 +448,7 @@ for (const path in modules) {
 }
 ```
 
-Matched files are by default lazy-loaded via dynamic import and will be split into separate chunks during build. If you'd rather import all the modules directly (e.g. relying on side-effects in these modules to be applied first), you can pass `{ eager: true }` as the second argument:
+默认情况下，匹配的文件会通过动态导入进行懒加载，并在构建期间被分割成单独的代码块。如果你更想直接导入所有模块（例如，依赖这些模块中的副作用优先生效），你可以将 `{ eager: true }` 作为第二个参数传递：
 
 ```js twoslash
 import 'vite/client'
@@ -456,10 +456,10 @@ import 'vite/client'
 const modules = import.meta.glob('./dir/*.js', { eager: true })
 ```
 
-The above will be transformed into the following:
+上述代码将被转换为以下内容：
 
 ```js
-// code produced by vite
+// vite 生成的代码
 import * as __vite_glob_0_0 from './dir/bar.js'
 import * as __vite_glob_0_1 from './dir/foo.js'
 const modules = {
@@ -468,9 +468,9 @@ const modules = {
 }
 ```
 
-### Multiple Patterns
+### 多个模式
 
-The first argument can be an array of globs, for example
+第一个参数可以是 glob 数组，例如
 
 ```js twoslash
 import 'vite/client'
@@ -478,9 +478,9 @@ import 'vite/client'
 const modules = import.meta.glob(['./dir/*.js', './another/*.js'])
 ```
 
-### Negative Patterns
+### 否定模式
 
-Negative glob patterns are also supported (prefixed with `!`). To ignore some files from the result, you can add exclude glob patterns to the first argument:
+也支持否定 glob 模式（以 `!` 为前缀）。要从结果中忽略某些文件，你可以将排除的 glob 模式添加到第一个参数中：
 
 ```js twoslash
 import 'vite/client'
@@ -489,15 +489,15 @@ const modules = import.meta.glob(['./dir/*.js', '!**/bar.js'])
 ```
 
 ```js
-// code produced by vite
+// vite 生成的代码
 const modules = {
   './dir/foo.js': () => import('./dir/foo.js'),
 }
 ```
 
-#### Named Imports
+#### 命名导入
 
-It's possible to only import parts of the modules with the `import` options.
+可以通过 `import` 选项只导入模块的一部分。
 
 ```ts twoslash
 import 'vite/client'
@@ -506,14 +506,14 @@ const modules = import.meta.glob('./dir/*.js', { import: 'setup' })
 ```
 
 ```ts
-// code produced by vite
+// vite 生成的代码
 const modules = {
   './dir/bar.js': () => import('./dir/bar.js').then((m) => m.setup),
   './dir/foo.js': () => import('./dir/foo.js').then((m) => m.setup),
 }
 ```
 
-When combined with `eager` it's even possible to have tree-shaking enabled for those modules.
+当与 `eager` 结合使用时，甚至可以为这些模块启用 tree-shaking。
 
 ```ts twoslash
 import 'vite/client'
@@ -525,7 +525,7 @@ const modules = import.meta.glob('./dir/*.js', {
 ```
 
 ```ts
-// code produced by vite:
+// vite 生成的代码：
 import { setup as __vite_glob_0_0 } from './dir/bar.js'
 import { setup as __vite_glob_0_1 } from './dir/foo.js'
 const modules = {
@@ -534,7 +534,7 @@ const modules = {
 }
 ```
 
-Set `import` to `default` to import the default export.
+将 `import` 设置为 `default` 以导入默认导出。
 
 ```ts twoslash
 import 'vite/client'
@@ -546,7 +546,7 @@ const modules = import.meta.glob('./dir/*.js', {
 ```
 
 ```ts
-// code produced by vite:
+// vite 生成的代码：
 import { default as __vite_glob_0_0 } from './dir/bar.js'
 import { default as __vite_glob_0_1 } from './dir/foo.js'
 const modules = {
@@ -555,9 +555,9 @@ const modules = {
 }
 ```
 
-#### Custom Queries
+#### 自定义查询
 
-You can also use the `query` option to provide queries to imports, for example, to import assets [as a string](/guide/assets.html#importing-asset-as-string) or [as a url](/guide/assets.html#importing-asset-as-url):
+你也可以使用 `query` 选项为导入提供查询参数，例如，将资源导入 [作为字符串](/guide/assets.html#importing-asset-as-string) 或 [作为 URL](/guide/assets.html#importing-asset-as-url)：
 
 ```ts twoslash
 import 'vite/client'
@@ -573,7 +573,7 @@ const moduleUrls = import.meta.glob('./dir/*.svg', {
 ```
 
 ```ts
-// code produced by vite:
+// vite 生成的代码：
 const moduleStrings = {
   './dir/bar.svg': () => import('./dir/bar.svg?raw').then((m) => m['default']),
   './dir/foo.svg': () => import('./dir/foo.svg?raw').then((m) => m['default']),
@@ -584,7 +584,7 @@ const moduleUrls = {
 }
 ```
 
-You can also provide custom queries for other plugins to consume:
+你也可以提供自定义查询供其他插件使用：
 
 ```ts twoslash
 import 'vite/client'
@@ -594,9 +594,9 @@ const modules = import.meta.glob('./dir/*.js', {
 })
 ```
 
-#### Base Path
+#### 基础路径
 
-You can also use the `base` option to provide base path for the imports:
+你也可以使用 `base` 选项为导入提供基础路径：
 
 ```ts twoslash
 import 'vite/client'
@@ -607,50 +607,50 @@ const modulesWithBase = import.meta.glob('./**/*.js', {
 ```
 
 ```ts
-// code produced by vite:
+// vite 生成的代码：
 const modulesWithBase = {
   './dir/foo.js': () => import('./base/dir/foo.js'),
   './dir/bar.js': () => import('./base/dir/bar.js'),
 }
 ```
 
-The base option can only be a directory path relative to the importer file or absolute against the project root. Aliases and virtual modules aren't supported.
+`base` 选项只能是相对于导入器文件的目录路径，或者是相对于项目根目录的绝对路径。不支持别名和虚拟模块。
 
-Only the globs that are relative paths are interpreted as relative to the resolved base.
+只有相对路径的 globs 会被解释为相对于解析后的 base。
 
-All the resulting module keys are modified to be relative to the base if provided.
+如果提供了 base，所有生成的模块键都会被修改为相对于 base。
 
-### Glob Import Caveats
+### Glob 导入注意事项
 
-Note that:
+注意：
 
-- This is a Vite-only feature and is not a web or ES standard.
-- The glob patterns are treated like import specifiers: they must be either relative (start with `./`) or absolute (start with `/`, resolved relative to project root) or an alias path (see [`resolve.alias` option](/config/shared-options.md#resolve-alias)).
-- The glob matching is done via [`tinyglobby`](https://github.com/SuperchupuDev/tinyglobby) - check out its documentation for [supported glob patterns](https://superchupu.dev/tinyglobby/comparison).
-- You should also be aware that all the arguments in the `import.meta.glob` must be **passed as literals**. You can NOT use variables or expressions in them.
+- 这是 Vite 特有的功能，不是 Web 或 ES 标准。
+- glob 模式被视为导入说明符：它们必须是相对的（以 `./` 开头）或绝对的（以 `/` 开头，相对于项目根目录解析）或别名路径（参见 [`resolve.alias` 选项](/config/shared-options.md#resolve-alias)）。
+- glob 匹配是通过 [`tinyglobby`](https://github.com/SuperchupuDev/tinyglobby) 完成的 - 查看其文档了解 [支持的 glob 模式](https://superchupu.dev/tinyglobby/comparison)。
+- 你还应该知道，`import.meta.glob` 中的所有参数必须**作为字面量传递**。你不能在其中使用变量或表达式。
 
-## Dynamic Import
+## 动态导入
 
-Similar to [glob import](#glob-import), Vite also supports dynamic import with variables.
+与 [glob 导入](#glob-import) 类似，Vite 也支持带变量的动态导入。
 
 ```ts
 const module = await import(`./dir/${file}.js`)
 ```
 
-Note that variables only represent file names one level deep. If `file` is `'foo/bar'`, the import would fail. For more advanced usage, you can use the [glob import](#glob-import) feature.
+注意，变量仅代表一层深度的文件名。如果 `file` 是 `'foo/bar'`，导入将会失败。对于更高级的用法，你可以使用 [glob 导入](#glob-import) 功能。
 
-Also note that the dynamic import must match the following rules to be bundled:
+还要注意，动态导入必须符合以下规则才能被打包：
 
-- Imports must start with `./` or `../`: ``import(`./dir/${foo}.js`)`` is valid, but ``import(`${foo}.js`)`` is not.
-- Imports must end with a file extension: ``import(`./dir/${foo}.js`)`` is valid, but ``import(`./dir/${foo}`)`` is not.
-- Imports to the own directory must specify a file name pattern: ``import(`./prefix-${foo}.js`)`` is valid, but ``import(`./${foo}.js`)`` is not.
+- 导入必须以 `./` 或 `../` 开头：``import(`./dir/${foo}.js`)`` 是有效的，但 ``import(`${foo}.js`)`` 无效。
+- 导入必须以文件扩展名结尾：``import(`./dir/${foo}.js`)`` 是有效的，但 ``import(`./dir/${foo}`)`` 无效。
+- 导入到自身目录必须指定文件名模式：``import(`./prefix-${foo}.js`)`` 是有效的，但 ``import(`./${foo}.js`)`` 无效。
 
-These rules are enforced to prevent accidentally importing files that are not intended to be bundled. For example, without these rules, `import(foo)` would bundle everything in the file system.
+强制执行这些规则是为了防止意外导入不应打包的文件。例如，如果没有这些规则，`import(foo)` 将会打包文件系统中的所有内容。
 
 ## WebAssembly
 
-Pre-compiled `.wasm` files can be imported with `?init`.
-The default export will be an initialization function that returns a Promise of the [`WebAssembly.Instance`](https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/Instance):
+预编译的 `.wasm` 文件可以通过 `?init` 导入。
+默认导出将是一个初始化函数，返回一个 [`WebAssembly.Instance`](https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/Instance) 的 Promise：
 
 ```js twoslash
 import 'vite/client'
@@ -662,7 +662,7 @@ init().then((instance) => {
 })
 ```
 
-The init function can also take an importObject which is passed along to [`WebAssembly.instantiate`](https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/instantiate) as its second argument:
+init 函数还可以接受一个 importObject，它将作为第二个参数传递给 [`WebAssembly.instantiate`](https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/instantiate)：
 
 ```js twoslash
 import 'vite/client'
@@ -679,22 +679,22 @@ init({
 })
 ```
 
-In the production build, `.wasm` files smaller than `assetInlineLimit` will be inlined as base64 strings. Otherwise, they will be treated as a [static asset](./assets) and fetched on-demand.
+在生产构建中，小于 `assetInlineLimit` 的 `.wasm` 文件将被内联为 base64 字符串。否则，它们将被视为 [静态资源](./assets) 并按需获取。
 
-::: tip NOTE
-[ES Module Integration Proposal for WebAssembly](https://github.com/WebAssembly/esm-integration) is not currently supported.
-Use [`vite-plugin-wasm`](https://github.com/Menci/vite-plugin-wasm) or other community plugins to handle this.
+::: tip 注意
+目前不支持 [WebAssembly 的 ES 模块集成提案](https://github.com/WebAssembly/esm-integration)。
+使用 [`vite-plugin-wasm`](https://github.com/Menci/vite-plugin-wasm) 或其他社区插件来处理这个问题。
 :::
 
-::: warning For SSR build, Node.js compatible runtimes are only supported
+::: warning 对于 SSR 构建，仅支持兼容 Node.js 的运行时
 
-Due to the lack of a universal way to load a file, the internal implementation for `.wasm?init` relies on `node:fs` module. This means that this feature will only work in Node.js compatible runtimes for SSR builds.
+由于缺乏加载文件的通用方式，`.wasm?init` 的内部实现依赖于 `node:fs` 模块。这意味着该功能仅适用于 SSR 构建中兼容 Node.js 的运行时。
 
 :::
 
-### Accessing the WebAssembly Module
+### 访问 WebAssembly 模块
 
-If you need access to the `Module` object, e.g. to instantiate it multiple times, use an [explicit URL import](./assets#explicit-url-imports) to resolve the asset, and then perform the instantiation:
+如果你需要访问 `Module` 对象，例如多次实例化它，请使用 [显式 URL 导入](./assets#explicit-url-imports) 来解析资源，然后执行实例化：
 
 ```js twoslash
 import 'vite/client'
@@ -713,15 +713,15 @@ main()
 
 ## Web Workers
 
-### Import with Constructors
+### 使用构造函数导入
 
-A web worker script can be imported using [`new Worker()`](https://developer.mozilla.org/en-US/docs/Web/API/Worker/Worker) and [`new SharedWorker()`](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker/SharedWorker). Compared to the worker suffixes, this syntax leans closer to the standards and is the **recommended** way to create workers.
+可以使用 [`new Worker()`](https://developer.mozilla.org/en-US/docs/Web/API/Worker/Worker) 和 [`new SharedWorker()`](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker/SharedWorker) 导入 web worker 脚本。与 worker 后缀相比，这种语法更接近标准，是创建 worker 的**推荐**方式。
 
 ```ts
 const worker = new Worker(new URL('./worker.js', import.meta.url))
 ```
 
-The worker constructor also accepts options, which can be used to create "module" workers:
+worker 构造函数也接受选项，可用于创建 "module" worker：
 
 ```ts
 const worker = new Worker(new URL('./worker.js', import.meta.url), {
@@ -729,11 +729,11 @@ const worker = new Worker(new URL('./worker.js', import.meta.url), {
 })
 ```
 
-The worker detection will only work if the `new URL()` constructor is used directly inside the `new Worker()` declaration. Additionally, all options parameters must be static values (i.e. string literals).
+只有当 `new URL()` 构造函数直接在 `new Worker()` 声明中使用时，worker 检测才会生效。此外，所有选项参数必须是静态值（即字符串字面量）。
 
-### Import with Query Suffixes
+### 使用查询后缀导入
 
-A web worker script can be directly imported by appending `?worker` or `?sharedworker` to the import request. The default export will be a custom worker constructor:
+可以通过在导入请求后附加 `?worker` 或 `?sharedworker` 来直接导入 web worker 脚本。默认导出将是一个自定义 worker 构造函数：
 
 ```js twoslash
 import 'vite/client'
@@ -743,9 +743,9 @@ import MyWorker from './worker?worker'
 const worker = new MyWorker()
 ```
 
-The worker script can also use ESM `import` statements instead of `importScripts()`. **Note**: During development this relies on [browser native support](https://caniuse.com/?search=module%20worker), but for the production build it is compiled away.
+worker 脚本也可以使用 ESM `import` 语句而不是 `importScripts()`。**注意**：在开发期间，这依赖于 [浏览器原生支持](https://caniuse.com/?search=module%20worker)，但在生产构建中它会被编译掉。
 
-By default, the worker script will be emitted as a separate chunk in the production build. If you wish to inline the worker as base64 strings, add the `inline` query:
+默认情况下，worker 脚本将在生产构建中作为单独的代码块发出。如果你希望将 worker 内联为 base64 字符串，请添加 `inline` 查询：
 
 ```js twoslash
 import 'vite/client'
@@ -753,7 +753,7 @@ import 'vite/client'
 import MyWorker from './worker?worker&inline'
 ```
 
-If you wish to retrieve the worker as a URL, add the `url` query:
+如果你希望将 worker 作为 URL 获取，请添加 `url` 查询：
 
 ```js twoslash
 import 'vite/client'
@@ -761,33 +761,33 @@ import 'vite/client'
 import MyWorker from './worker?worker&url'
 ```
 
-See [Worker Options](/config/worker-options.md) for details on configuring the bundling of all workers.
+请参阅 [Worker 选项](/config/worker-options.md) 了解配置所有 worker 打包的详细信息。
 
-## Content Security Policy (CSP)
+## 内容安全策略 (CSP)
 
-To deploy CSP, certain directives or configs must be set due to Vite's internals.
+由于 Vite 的内部机制，部署 CSP 时必须设置某些指令或配置。
 
 ### [`'nonce-{RANDOM}'`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/Sources#nonce-base64-value)
 
-When [`html.cspNonce`](/config/shared-options#html-cspnonce) is set, Vite adds a nonce attribute with the specified value to any `<script>` and `<style>` tags, as well as `<link>` tags for stylesheets and module preloading. Additionally, when this option is set, Vite will inject a meta tag (`<meta property="csp-nonce" nonce="PLACEHOLDER" />`).
+当设置 [`html.cspNonce`](/config/shared-options#html-cspnonce) 时，Vite 会将具有指定值的 nonce 属性添加到任何 `<script>` 和 `<style>` 标签，以及用于样式表和模块预加载的 `<link>` 标签。此外，当设置此选项时，Vite 将注入一个 meta 标签（`<meta property="csp-nonce" nonce="PLACEHOLDER" />`）。
 
-The nonce value of a meta tag with `property="csp-nonce"` will be used by Vite whenever necessary during both dev and after build.
+具有 `property="csp-nonce"` 的 meta 标签的 nonce 值将在开发和构建后必要时由 Vite 使用。
 
 :::warning
-Ensure that you replace the placeholder with a unique value for each request. This is important to prevent bypassing a resource's policy, which can otherwise be easily done.
+确保你为每个请求将占位符替换为唯一值。这对于防止绕过资源的策略很重要，否则很容易做到。
 :::
 
 ### [`data:`](<https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/Sources#scheme-source:~:text=schemes%20(not%20recommended).-,data%3A,-Allows%20data%3A>)
 
-By default, during build, Vite inlines small assets as data URIs. Allowing `data:` for related directives (e.g. [`img-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/img-src), [`font-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/font-src)), or, disabling it by setting [`build.assetsInlineLimit: 0`](/config/build-options#build-assetsinlinelimit) is necessary.
+默认情况下，在构建期间，Vite 会将小资源内联为 data URIs。允许相关指令使用 `data:`（例如 [`img-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/img-src)、[`font-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/font-src)），或者通过设置 [`build.assetsInlineLimit: 0`](/config/build-options#build-assetsinlinelimit) 禁用它是必要的。
 
 :::warning
-Do not allow `data:` for [`script-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src). It will allow injection of arbitrary scripts.
+不要允许 [`script-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src) 使用 `data:`。这将允许注入任意脚本。
 :::
 
-## License
+## 许可证
 
-Vite can generate a file of all the dependencies' licenses used in the build with the [`build.license`](/config/build-options.md#build-license) option. It can be hosted to display and acknowledge the dependencies used by the app.
+Vite 可以使用 [`build.license`](/config/build-options.md#build-license) 选项生成一个包含构建中使用的所有依赖项许可证的文件。它可以被托管以显示和确认应用程序使用的依赖项。
 
 ```js twoslash [vite.config.js]
 import { defineConfig } from 'vite'
@@ -799,7 +799,7 @@ export default defineConfig({
 })
 ```
 
-This will generate a `.vite/license.md` file with an output that may look like this:
+这将生成一个 `.vite/license.md` 文件，输出可能如下所示：
 
 ```md
 # Licenses
@@ -819,41 +819,41 @@ MIT License
 ...
 ```
 
-To serve the file at a different path, you can pass `{ fileName: 'license.md' }` for example, so that it's served at `https://example.com/license.md`. See the [`build.license`](/config/build-options.md#build-license) docs for more information.
+要在不同路径提供该文件，例如你可以传递 `{ fileName: 'license.md' }`，以便在 `https://example.com/license.md` 提供。请参阅 [`build.license`](/config/build-options.md#build-license) 文档以获取更多信息。
 
-## Build Optimizations
+## 构建优化
 
-> Features listed below are automatically applied as part of the build process and there is no need for explicit configuration unless you want to disable them.
+> 下面列出的功能作为构建过程的一部分自动应用，除非你想禁用它们，否则无需显式配置。
 
-### CSS Code Splitting
+### CSS 代码分割
 
-Vite automatically extracts the CSS used by modules in an async chunk and generates a separate file for it. The CSS file is automatically loaded via a `<link>` tag when the associated async chunk is loaded, and the async chunk is guaranteed to only be evaluated after the CSS is loaded to avoid [FOUC](https://en.wikipedia.org/wiki/Flash_of_unstyled_content#:~:text=A%20flash%20of%20unstyled%20content,before%20all%20information%20is%20retrieved.).
+Vite 自动提取异步块中模块使用的 CSS 并为其生成一个单独的文件。当关联的异步块加载时，CSS 文件会通过 `<link>` 标签自动加载，并且保证异步块仅在 CSS 加载后才进行评估，以避免 [FOUC](https://en.wikipedia.org/wiki/Flash_of_unstyled_content#:~:text=A%20flash%20of%20unstyled%20content,before%20all%20information%20is%20retrieved.)。
 
-If you'd rather have all the CSS extracted into a single file, you can disable CSS code splitting by setting [`build.cssCodeSplit`](/config/build-options.md#build-csscodesplit) to `false`.
+如果你更愿意将所有 CSS 提取到一个文件中，可以通过将 [`build.cssCodeSplit`](/config/build-options.md#build-csscodesplit) 设置为 `false` 来禁用 CSS 代码分割。
 
-### Preload Directives Generation
+### 预加载指令生成
 
-Vite automatically generates `<link rel="modulepreload">` directives for entry chunks and their direct imports in the built HTML.
+Vite 自动为入口块及其在构建后的 HTML 中的直接导入生成 `<link rel="modulepreload">` 指令。
 
-### Async Chunk Loading Optimization
+### 异步块加载优化
 
-In real world applications, Rollup often generates "common" chunks - code that is shared between two or more other chunks. Combined with dynamic imports, it is quite common to have the following scenario:
+在实际应用程序中，Rollup 经常生成“公共”块——两个或多个其他块之间共享的代码。结合动态导入，以下场景非常常见：
 
 <script setup>
 import graphSvg from '../images/graph.svg?raw'
 </script>
 <svg-image :svg="graphSvg" />
 
-In the non-optimized scenarios, when async chunk `A` is imported, the browser will have to request and parse `A` before it can figure out that it also needs the common chunk `C`. This results in an extra network roundtrip:
+在未优化的场景中，当导入异步块 `A` 时，浏览器必须先请求并解析 `A`，然后才能确定它也需要公共块 `C`。这会导致额外的网络往返：
 
 ```
 Entry ---> A ---> C
 ```
 
-Vite automatically rewrites code-split dynamic import calls with a preload step so that when `A` is requested, `C` is fetched **in parallel**:
+Vite 自动重写代码分割的动态导入调用，添加预加载步骤，以便当请求 `A` 时，`C` 被 **并行** 获取：
 
 ```
 Entry ---> (A + C)
 ```
 
-It is possible for `C` to have further imports, which will result in even more roundtrips in the un-optimized scenario. Vite's optimization will trace all the direct imports to completely eliminate the roundtrips regardless of import depth.
+`C` 可能有进一步的导入，这在未优化的场景中会导致更多的往返。Vite 的优化将追踪所有直接导入，无论导入深度如何，完全消除往返。

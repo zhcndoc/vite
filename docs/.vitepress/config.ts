@@ -18,9 +18,9 @@ import { buildEnd } from './buildEnd.config'
 const viteVersion = packageJson.version
 const viteMajorVersion = +viteVersion.split('.')[0]
 
-const ogDescription = 'Next Generation Frontend Tooling'
-const ogImage = 'https://vite.dev/og-image.jpg'
-const ogTitle = 'Vite'
+const ogDescription = 'Vite 是一款极快的前端构建工具，驱动下一代 Web 应用。'
+const ogImage = 'https://vite.zhcndoc.com/og-image.jpg'
+const ogTitle = 'Vite 中文文档'
 const ogUrl = 'https://vite.dev'
 
 // netlify envs
@@ -50,24 +50,24 @@ const additionalTitle = ((): string => {
 const versionLinks = (() => {
   const links: FooterLink[] = []
 
-  if (deployType !== 'main') {
-    links.push({
-      text: 'Unreleased Docs',
-      link: 'https://main.vite.dev',
-    })
-  }
+  // if (deployType !== 'main') {
+  //   links.push({
+  //     text: '未发布文档',
+  //     link: 'https://main.vite.dev',
+  //   })
+  // }
 
   if (deployType === 'main' || deployType === 'local') {
     links.push({
-      text: `Vite ${viteMajorVersion} Docs (release)`,
-      link: 'https://vite.dev',
+      text: `Vite ${viteMajorVersion} 文档`,
+      link: 'https://vite.zhcndoc.com',
     })
   }
 
   // Create version links from v2 onwards
   for (let i = viteMajorVersion - 1; i >= 2; i--) {
     links.push({
-      text: `Vite ${i} Docs`,
+      text: `Vite ${i} 文档`,
       link: `https://v${i}.vite.dev`,
     })
   }
@@ -87,11 +87,11 @@ function inlineScript(file: string): HeadConfig {
 }
 
 const config = defineConfig({
-  title: `Vite${additionalTitle}`,
-  description: 'Next Generation Frontend Tooling',
+  title: `Vite 中文文档${additionalTitle}`,
+  description: 'Vite 是一款极快的前端构建工具，驱动下一代 Web 应用。',
   cleanUrls: true,
   sitemap: {
-    hostname: 'https://vite.dev',
+    hostname: 'https://vite.zhcndoc.com',
   },
   head: [
     [
@@ -114,26 +114,12 @@ const config = defineConfig({
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:site', content: '@vite_js' }],
     ['meta', { name: 'theme-color', content: '#646cff' }],
-    [
-      'script',
-      {
-        src: 'https://cdn.usefathom.com/script.js',
-        'data-site': 'CBDFBSLI',
-        'data-spa': 'auto',
-        defer: '',
-      },
-    ],
+    ['script', { src: 'https://www.zhcndoc.com/js/common.js', async: '' }],
   ],
 
   locales: {
-    root: { label: 'English' },
-    zh: { label: '简体中文', link: 'https://cn.vite.dev' },
-    ja: { label: '日本語', link: 'https://ja.vite.dev' },
-    es: { label: 'Español', link: 'https://es.vite.dev' },
-    pt: { label: 'Português', link: 'https://pt.vite.dev' },
-    ko: { label: '한국어', link: 'https://ko.vite.dev' },
-    de: { label: 'Deutsch', link: 'https://de.vite.dev' },
-    fa: { label: 'فارسی', link: 'https://fa.vite.dev' },
+    root: { label: '简体中文' },
+    en: { label: 'English', link: 'https://vite.dev' },
   },
 
   themeConfig: {
@@ -141,15 +127,27 @@ const config = defineConfig({
     logo: '/logo.svg',
 
     banner: {
-      id: 'viteplus-alpha',
-      text: 'Announcing Vite+ Alpha: Open source. Unified. Next-gen.',
-      url: 'https://voidzero.dev/posts/announcing-vite-plus-alpha?utm_source=vite&utm_content=top_banner',
+      id: 'rainyun',
+      text: '雨云 RainYun - 企业级云计算服务提供商：新用户注册立享五折！',
+      url: 'https://www.rainyun.com/mm_?s=zhcndoc',
     },
 
     editLink: {
-      pattern: 'https://github.com/vitejs/vite/edit/main/docs/:path',
-      text: 'Suggest changes to this page',
+      pattern: 'https://github.com/zhcndoc/vite/edit/main/docs/:path',
+      text: '在 GitHub 上编辑此页面',
     },
+
+    docFooter: {
+      prev: '上一篇',
+      next: '下一篇',
+    },
+
+    darkModeSwitchLabel: '主题',
+    lightModeSwitchTitle: '切换到浅色模式',
+    darkModeSwitchTitle: '切换到深色模式',
+    sidebarMenuLabel: '菜单',
+    returnToTopLabel: '回到顶部',
+    langMenuLabel: '切换语言',
 
     socialLinks: [
       { icon: 'bluesky', link: 'https://bsky.app/profile/vite.dev' },
@@ -172,10 +170,10 @@ const config = defineConfig({
       },
     },
 
-    carbonAds: {
-      code: 'CEBIEK3N',
-      placement: 'vitejsdev',
-    },
+    // carbonAds: {
+    //   code: 'CEBIEK3N',
+    //   placement: 'vitejsdev',
+    // },
 
     footer: {
       copyright: `© 2019-present VoidZero Inc. and Vite contributors. (${commitRef})`,
@@ -183,24 +181,24 @@ const config = defineConfig({
         {
           title: 'Vite',
           items: [
-            { text: 'Guide', link: '/guide/' },
-            { text: 'Config', link: '/config/' },
-            { text: 'Plugins', link: '/plugins/' },
+            { text: '指南', link: '/guide/' },
+            { text: '配置', link: '/config/' },
+            { text: '插件', link: '/plugins/' },
           ],
         },
         {
-          title: 'Resources',
+          title: '资源',
           items: [
-            { text: 'Team', link: '/team' },
-            { text: 'Blog', link: '/blog' },
+            { text: '团队', link: '/team' },
+            { text: '博客', link: '/blog' },
             {
-              text: 'Releases',
+              text: '发布记录',
               link: 'https://github.com/vitejs/vite/releases',
             },
           ],
         },
         {
-          title: 'Versions',
+          title: '版本',
           items: versionLinks,
         },
       ],
@@ -213,22 +211,22 @@ const config = defineConfig({
     },
 
     nav: [
-      { text: 'Guide', link: '/guide/', activeMatch: '/guide/' },
-      { text: 'Config', link: '/config/', activeMatch: '/config/' },
-      { text: 'Plugins', link: '/plugins/', activeMatch: '/plugins/' },
+      { text: '指南', link: '/guide/', activeMatch: '/guide/' },
+      { text: '配置', link: '/config/', activeMatch: '/config/' },
+      { text: '插件', link: '/plugins/', activeMatch: '/plugins/' },
       {
-        text: 'Resources',
+        text: '资源',
         items: [
-          { text: 'Team', link: '/team' },
-          { text: 'Blog', link: '/blog' },
-          { text: 'Releases', link: '/releases' },
-          { text: 'Acknowledgements', link: '/acknowledgements' },
+          { text: '团队', link: '/team' },
+          { text: '博客', link: '/blog' },
+          { text: '发布记录', link: '/releases' },
+          { text: '致谢', link: '/acknowledgements' },
           {
-            text: 'Plugin Registry',
+            text: '插件注册表',
             link: 'https://registry.vite.dev/plugins',
           },
           {
-            text: 'The Documentary',
+            text: '纪录片',
             link: 'https://www.youtube.com/watch?v=bmWQqAKLgT4',
           },
           {
@@ -246,7 +244,7 @@ const config = defineConfig({
                 link: 'https://x.com/vite_js',
               },
               {
-                text: 'Discord Chat',
+                text: 'Discord 聊天室',
                 link: 'https://chat.vite.dev',
               },
               {
@@ -258,7 +256,7 @@ const config = defineConfig({
                 link: 'https://viteconf.org',
               },
               {
-                text: 'DEV Community',
+                text: 'DEV 社区',
                 link: 'https://dev.to/t/vite',
               },
             ],
@@ -269,11 +267,11 @@ const config = defineConfig({
         text: `v${viteVersion}`,
         items: [
           {
-            text: 'Changelog',
+            text: '更新日志',
             link: 'https://github.com/vitejs/vite/blob/main/packages/vite/CHANGELOG.md',
           },
           {
-            text: 'Contributing',
+            text: '贡献指南',
             link: 'https://github.com/vitejs/vite/blob/main/CONTRIBUTING.md',
           },
           {
@@ -281,32 +279,33 @@ const config = defineConfig({
           },
         ],
       },
+      { text: '简中文档', link: 'https://www.zhcndoc.com', target: '_blank' },
     ],
 
     sidebar: {
       '/guide/': [
         {
-          text: 'Introduction',
+          text: '介绍',
           items: [
             {
-              text: 'Getting Started',
+              text: '快速开始',
               link: '/guide/',
             },
             {
-              text: 'Philosophy',
+              text: '理念',
               link: '/guide/philosophy',
             },
             {
-              text: 'Why Vite',
+              text: '为什么使用 Vite',
               link: '/guide/why',
             },
           ],
         },
         {
-          text: 'Guide',
+          text: '指南',
           items: [
             {
-              text: 'Features',
+              text: '功能',
               link: '/guide/features',
             },
             {
@@ -314,60 +313,60 @@ const config = defineConfig({
               link: '/guide/cli',
             },
             {
-              text: 'Using Plugins',
+              text: '使用插件',
               link: '/guide/using-plugins',
             },
             {
-              text: 'Dependency Pre-Bundling',
+              text: '依赖预构建',
               link: '/guide/dep-pre-bundling',
             },
             {
-              text: 'Static Asset Handling',
+              text: '静态资源处理',
               link: '/guide/assets',
             },
             {
-              text: 'Building for Production',
+              text: '构建生产版本',
               link: '/guide/build',
             },
             {
-              text: 'Deploying a Static Site',
+              text: '部署静态站点',
               link: '/guide/static-deploy',
             },
             {
-              text: 'Env Variables and Modes',
+              text: '环境变量和模式',
               link: '/guide/env-and-mode',
             },
             {
-              text: 'Server-Side Rendering (SSR)',
+              text: '服务端渲染 (SSR)',
               link: '/guide/ssr',
             },
             {
-              text: 'Backend Integration',
+              text: '后端集成',
               link: '/guide/backend-integration',
             },
             {
-              text: 'Troubleshooting',
+              text: '故障排除',
               link: '/guide/troubleshooting',
             },
             {
-              text: 'Performance',
+              text: '性能',
               link: '/guide/performance',
             },
             {
-              text: `Migration from v${viteMajorVersion - 1}`,
+              text: `从 v${viteMajorVersion - 1} 迁移`,
               link: '/guide/migration',
             },
             {
-              text: 'Breaking Changes',
+              text: '重大改动',
               link: '/changes/',
             },
           ],
         },
         {
-          text: 'APIs',
+          text: 'API',
           items: [
             {
-              text: 'Plugin API',
+              text: '插件 API',
               link: '/guide/api-plugin',
             },
             {
@@ -379,32 +378,32 @@ const config = defineConfig({
               link: '/guide/api-javascript',
             },
             {
-              text: 'Config Reference',
+              text: '配置参考',
               link: '/config/',
             },
           ],
         },
         {
-          text: 'Environment API',
+          text: '环境 API',
           items: [
             {
-              text: 'Introduction',
+              text: '介绍',
               link: '/guide/api-environment',
             },
             {
-              text: 'Environment Instances',
+              text: '环境实例',
               link: '/guide/api-environment-instances',
             },
             {
-              text: 'Plugins',
+              text: '插件',
               link: '/guide/api-environment-plugins',
             },
             {
-              text: 'Frameworks',
+              text: '框架',
               link: '/guide/api-environment-frameworks',
             },
             {
-              text: 'Runtimes',
+              text: '运行时',
               link: '/guide/api-environment-runtimes',
             },
           ],
@@ -412,38 +411,38 @@ const config = defineConfig({
       ],
       '/config/': [
         {
-          text: 'Config',
+          text: '配置',
           items: [
             {
-              text: 'Configuring Vite',
+              text: '配置 Vite',
               link: '/config/',
             },
             {
-              text: 'Shared Options',
+              text: '共享选项',
               link: '/config/shared-options',
             },
             {
-              text: 'Server Options',
+              text: '服务器选项',
               link: '/config/server-options',
             },
             {
-              text: 'Build Options',
+              text: '构建选项',
               link: '/config/build-options',
             },
             {
-              text: 'Preview Options',
+              text: '预览选项',
               link: '/config/preview-options',
             },
             {
-              text: 'Dep Optimization Options',
+              text: '依赖优化选项',
               link: '/config/dep-optimization-options',
             },
             {
-              text: 'SSR Options',
+              text: 'SSR 选项',
               link: '/config/ssr-options',
             },
             {
-              text: 'Worker Options',
+              text: 'Worker 选项',
               link: '/config/worker-options',
             },
           ],
@@ -451,15 +450,15 @@ const config = defineConfig({
       ],
       '/changes/': [
         {
-          text: 'Breaking Changes',
+          text: '重大改动',
           link: '/changes/',
         },
         {
-          text: 'Current',
+          text: '当前',
           items: [],
         },
         {
-          text: 'Future',
+          text: '未来',
           items: [
             {
               text: 'this.environment in Hooks',
@@ -484,7 +483,7 @@ const config = defineConfig({
           ],
         },
         {
-          text: 'Past',
+          text: '过去',
           items: [],
         },
       ],
@@ -492,6 +491,7 @@ const config = defineConfig({
 
     outline: {
       level: [2, 3],
+      label: '本页目录',
     },
   },
   transformHead(ctx) {
@@ -587,11 +587,11 @@ const config = defineConfig({
 
 Vite is a new breed of frontend build tooling that significantly improves the frontend development experience. It consists of two major parts:
 
-- A dev server that serves your source files over [native ES modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), with [rich built-in features](https://vite.dev/guide/features.md) and astonishingly fast [Hot Module Replacement (HMR)](https://vite.dev/guide/features.md#hot-module-replacement).
+- A dev server that serves your source files over [native ES modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), with [rich built-in features](https://vite.zhcndoc.com/guide/features.md) and astonishingly fast [Hot Module Replacement (HMR)](https://vite.zhcndoc.com/guide/features.md#hot-module-replacement).
 
-- A [build command](https://vite.dev/guide/build.md) that bundles your code with [Rollup](https://rollupjs.org), pre-configured to output highly optimized static assets for production.
+- A [build command](https://vite.zhcndoc.com/guide/build.md) that bundles your code with [Rollup](https://rollupjs.org), pre-configured to output highly optimized static assets for production.
 
-In addition, Vite is highly extensible via its [Plugin API](https://vite.dev/guide/api-plugin.md) and [JavaScript API](https://vite.dev/guide/api-javascript.md) with full typing support.`,
+In addition, Vite is highly extensible via its [Plugin API](https://vite.zhcndoc.com/guide/api-plugin.md) and [JavaScript API](https://vite.zhcndoc.com/guide/api-javascript.md) with full typing support.`,
       }),
     ],
     optimizeDeps: {

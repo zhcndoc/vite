@@ -1,27 +1,27 @@
-# Project Philosophy
+# 项目理念
 
-## Lean Extendable Core
+## 精简可扩展的核心
 
-Vite aims to support the most common patterns to build Web apps out-of-the-box, while keeping [Vite core](https://github.com/vitejs/vite) lean and maintainable long-term. We believe the best way to support diverse use cases is to provide strong primitives and APIs that plugins can build on, and we actively expand the core to make Vite more extensible. [Vite's plugin system](./api-plugin.md) is based on a superset of Rollup's plugin API, and it enables plugins like [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) and the many [well maintained plugins](https://registry.vite.dev/plugins) available to cover your needs. Vite's bundler, [Rolldown](https://rolldown.rs/), maintains compatibility with Rollup's plugin interface, so plugins can often be used across both Vite and plain Rollup projects.
+Vite 旨在开箱即用地支持构建 Web 应用的最常见模式，同时长期保持 [Vite 核心](https://github.com/vitejs/vite) 的精简和可维护性。我们相信支持多样化用例的最佳方式是提供强大的原语和 API 供插件构建，并且我们积极扩展核心以使 Vite 更具可扩展性。[Vite 的插件系统](./api-plugin.md) 基于 Rollup 插件 API 的超集，它使得像 [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) 这样的插件以及许多 [维护良好的插件](https://registry.vite.dev/plugins) 能够满足您的需求。Vite 的打包器 [Rolldown](https://rolldown.rs/) 保持与 Rollup 插件接口的兼容性，因此插件通常可以在 Vite 和纯 Rollup 项目之间通用。
 
-## Pushing the Modern Web
+## 推动现代 Web 发展
 
-Vite provides opinionated features that push writing modern code. For example:
+Vite 提供了主张鲜明的功能，以推动编写现代代码。例如：
 
-- The source code can only be written in ESM, where non-ESM dependencies need to be [pre-bundled as ESM](./dep-pre-bundling) in order to work.
-- Web workers are encouraged to be written with the [`new Worker` syntax](./features#web-workers) to follow modern standards.
-- Node.js modules cannot be used in the browser.
+- 源代码只能使用 ESM 编写，非 ESM 依赖需要 [预打包为 ESM](./dep-pre-bundling) 才能工作。
+- 鼓励使用 [`new Worker` 语法](./features#web-workers) 编写 Web workers 以遵循现代标准。
+- Node.js 模块不能在浏览器中使用。
 
-When adding new features, these patterns are followed to create a future-proof API, which may not always be compatible with other build tools.
+在添加新功能时，遵循这些模式以创建面向未来的 API，这可能并不总是与其他构建工具兼容。
 
-## A Pragmatic Approach to Performance
+## 务实的性能方法
 
-Vite has been focused on performance since its [origins](./why.md). Its dev server architecture allows HMR that stays fast as projects scale. Vite is based on native tools that include the [Oxc toolchain](https://oxc.rs/) and [Rolldown](https://rolldown.rs/) to implement intensive tasks but keeps the rest of the code in JS to balance speed with flexibility. When needed, framework plugins will tap into [Babel](https://babeljs.io/) to compile user code. Thanks to Rolldown's Rollup plugin compatibility, Vite has access to a wide ecosystem of plugins.
+Vite 自 [起源](./why.md) 以来就一直专注于性能。其开发服务器架构允许 HMR 在项目规模扩大时保持快速。Vite 基于原生工具（包括 [Oxc 工具链](https://oxc.rs/) 和 [Rolldown](https://rolldown.rs/)）来实现密集型任务，但将其余代码保留在 JS 中以平衡速度与灵活性。必要时，框架插件将利用 [Babel](https://babeljs.io/) 来编译用户代码。得益于 Rolldown 的 Rollup 插件兼容性，Vite 可以访问广泛的插件生态系统。
 
-## Building Frameworks on Top of Vite
+## 基于 Vite 构建框架
 
-Although Vite can be used by users directly, it shines as a tool to create frameworks. Vite core is framework agnostic, but there are polished plugins for each UI framework. Its [JS API](./api-javascript.md) allows App Framework authors to use Vite features to create tailored experiences for their users. Vite includes support for [SSR primitives](./ssr.md), usually present in higher-level tools but fundamental to building modern web frameworks. And Vite plugins complete the picture by offering a way to share between frameworks. Vite is also a great fit when paired with [Backend frameworks](./backend-integration.md) like [Ruby](https://vite-ruby.netlify.app/) and [Laravel](https://laravel.com/docs/vite).
+虽然用户可以直接使用 Vite，但它作为创建框架的工具更为出色。Vite 核心与框架无关，但每个 UI 框架都有完善的插件。其 [JS API](./api-javascript.md) 允许应用框架作者使用 Vite 功能为其用户创建定制化的体验。Vite 包括对 [SSR 原语](./ssr.md) 的支持，这些原语通常出现在更高级的工具中，但对于构建现代 Web 框架至关重要。Vite 插件通过提供框架间共享的方式完善了这一图景。当与 [后端框架](./backend-integration.md) 如 [Ruby](https://vite-ruby.netlify.app/) 和 [Laravel](https://laravel.com/docs/vite) 配对时，Vite 也非常合适。
 
-## An Active Ecosystem
+## 活跃的生态系统
 
-Vite evolution is a cooperation between framework and plugin maintainers, users, and the Vite team. We encourage active participation in Vite's Core development once a project adopts Vite. We work closely with the main projects in the ecosystem to minimize regressions on each release, aided by tools like [vite-ecosystem-ci](https://github.com/vitejs/vite-ecosystem-ci). It allows us to run the CI of major projects using Vite on selected PRs and gives us a clear status of how the Ecosystem would react to a release. We strive to fix regressions before they hit users and allow projects to update to the next versions as soon as they are released. If you are working with Vite, we invite you to join [Vite's Discord](https://chat.vite.dev) and get involved in the project too.
+Vite 的演进是框架和插件维护者、用户以及 Vite 团队之间的合作。我们鼓励一旦项目采用 Vite 后就积极参与 Vite 核心的开发。我们与生态系统中的主要项目密切合作，以最小化每个版本的回归，并借助 [vite-ecosystem-ci](https://github.com/vitejs/vite-ecosystem-ci) 等工具提供帮助。它允许我们在选定的 PR 上运行使用 Vite 的主要项目的 CI，并让我们清楚地了解生态系统对发布的反应状态。我们致力于在回归影响用户之前修复它们，并允许项目在发布后尽快更新到下一个版本。如果您正在使用 Vite，我们邀请您加入 [Vite 的 Discord](https://chat.vite.dev) 并参与到项目中来。
