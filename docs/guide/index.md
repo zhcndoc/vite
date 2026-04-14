@@ -106,7 +106,7 @@ $ deno init --npm vite my-vue-app --template vue
 
 :::
 
-查看 [create-vite](https://github.com/vitejs/vite/tree/main/packages/create-vite) 了解更多关于每个支持模板的详情：`vanilla`、`vanilla-ts`、`vue`、`vue-ts`、`react`、`react-ts`、`react-swc`、`react-swc-ts`、`preact`、`preact-ts`、`lit`、`lit-ts`、`svelte`、`svelte-ts`、`solid`、`solid-ts`、`qwik`、`qwik-ts`。
+See [create-vite](https://github.com/vitejs/vite/tree/main/packages/create-vite) for more details on each supported template: `vanilla`, `vanilla-ts`, `vue`, `vue-ts`, `react`, `react-ts`, `preact`, `preact-ts`, `lit`, `lit-ts`, `svelte`, `svelte-ts`, `solid`, `solid-ts`, `qwik`, `qwik-ts`.
 
 你可以使用 `.` 作为项目名称，在当前目录中搭建。
 
@@ -194,7 +194,7 @@ $ deno run -A npm:vite
 
 ## `index.html` 和项目根目录
 
-你可能注意到的一件事是，在 Vite 项目中，`index.html` 位于中心位置，而不是藏在 `public` 里面。这是有意的：在开发期间，Vite 是一个服务器，`index.html` 是你应用程序的入口点。
+你可能注意到的一件事是，在 Vite 项目中，`index.html` 位于中心位置，而不是藏在 `public` 里面。这是故意的：在开发期间，Vite 是一个服务器，`index.html` 是你应用程序的入口点。
 
 Vite 将 `index.html` 视为源代码和模块图的一部分。它解析引用你 JavaScript 源代码的 `<script type="module" src="...">`。即使是内联的 `<script type="module">` 和通过 `<link href>` 引用的 CSS 也能享受 Vite 特有的功能。此外，`index.html` 内部的 URL 会自动重新基准化，因此不需要特殊的 `%PUBLIC_URL%` 占位符。
 
@@ -205,7 +205,7 @@ Vite 还支持具有多个 `.html` 入口点的 [多页应用](./build#multi-pag
 #### 指定替代根目录
 
 运行 `vite` 会使用当前工作目录作为根目录启动开发服务器。你可以使用 `vite serve some/sub/dir` 指定替代根目录。
-请注意，Vite 还会在项目根目录内解析 [其配置文件（即 `vite.config.js`）](/config/#configuring-vite)，所以如果根目录更改，你需要移动它。
+请注意，Vite 还在项目根目录内解析 [其配置文件（即 `vite.config.js`）](/config/#configuring-vite)，所以如果根目录更改，你需要移动它。
 
 ## 命令行界面
 

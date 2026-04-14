@@ -373,7 +373,7 @@ export default defineConfig({
 })
 ```
 
-当指定 `server.fs.allow` 时，自动工作区根目录检测将被禁用。要扩展原始行为，暴露了一个工具函数 `searchForWorkspaceRoot`：
+当指定 `server.fs.allow` 时，自动工作区根目录检测将被禁用。为了扩展原始行为，暴露了一个工具函数 `searchForWorkspaceRoot`：
 
 ```js
 import { defineConfig, searchForWorkspaceRoot } from 'vite'
@@ -406,6 +406,12 @@ export default defineConfig({
 
 :::
 
+::: tip NOTE
+
+拒绝过滤器应用于模块 ID 以及去除查询参数后的 ID。由于插件可以在其加载钩子中读取任何文件（包括将符号链接解析为被拒绝路径），Vite 无法保证被拒绝的文件无法通过替代路径访问。如果你有其他替代路径，也请将其包含在拒绝列表中。
+
+:::
+
 ## server.origin
 
 - **类型：** `string`
@@ -429,7 +435,7 @@ export default defineConfig({
 
 `server.sourcemapIgnoreList` 等同于开发服务器的 [`build.rollupOptions.output.sourcemapIgnoreList`](https://rollupjs.org/configuration-options/#output-sourcemapignorelist)。这两个配置选项之间的区别在于，rollup 函数使用 `sourcePath` 的相对路径调用，而 `server.sourcemapIgnoreList` 使用绝对路径调用。在开发期间，大多数模块的 map 和源文件在同一文件夹中，因此 `sourcePath` 的相对路径就是文件名本身。在这些情况下，使用绝对路径更方便。
 
-默认情况下，它排除所有包含 `node_modules` 的路径。你可以传递 `false` 来禁用此行为，或者为了完全控制，传递一个接受源路径和 sourcemap 路径并返回是否忽略源路径的函数。
+默认情况下，它会排除所有包含 `node_modules` 的路径。你可以传递 `false` 来禁用此行为，或者为了完全控制，传递一个接受源路径和 sourcemap 路径并返回是否忽略源路径的函数。
 
 ```js
 export default defineConfig({

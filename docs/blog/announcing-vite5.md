@@ -80,20 +80,20 @@ Vite 5 还引入了 [server.warmup](/guide/performance.html#warm-up-frequently-u
 
 ## 主要变更
 
-- [Vite 现在由 Rollup 4 驱动](/guide/migration#rollup-4)
-- [CJS Node API 已弃用](/guide/migration#deprecate-cjs-node-api)
-- [重构 define 和 import.meta.env.\* 替换策略](/guide/migration#rework-define-and-import-meta-env-replacement-strategy)
-- [SSR 外部化模块的值现在与生产环境匹配](/guide/migration#ssr-externalized-modules-value-now-matches-production)
-- [`worker.plugins` 现在是一个函数](/guide/migration#worker-plugins-is-now-a-function)
-- [允许包含 `.` 的路径回退到 index.html](/guide/migration#allow-path-containing-to-fallback-to-index-html)
-- [对齐开发和预览的 HTML 服务行为](/guide/migration#align-dev-and-preview-html-serving-behaviour)
-- [清单文件现在默认生成在 `.vite` 目录中](/guide/migration#manifest-files-are-now-generated-in-vite-directory-by-default)
-- [CLI 快捷键需要额外按一次 Enter](/guide/migration#cli-shortcuts-require-an-additional-enter-press)
-- [更新 `experimentalDecorators` 和 `useDefineForClassFields` 的 TypeScript 行为](/guide/migration#update-experimentaldecorators-and-usedefineforclassfields-typescript-behaviour)
-- [移除 `--https` 标志和 `https: true`](/guide/migration#remove-https-flag-and-https-true)
-- [移除 `resolvePackageEntry` 和 `resolvePackageData` API](/guide/migration#remove-resolvepackageentry-and-resolvepackagedata-apis)
-- [移除之前已弃用的 API](/guide/migration#removed-deprecated-apis)
-- [阅读更多关于影响插件和工具作者的高级变更](/guide/migration#advanced)
+- [Vite is now powered by Rollup 4](/guide/migration#rollup-4)
+- [The CJS Node API has been deprecated](/guide/migration#deprecate-cjs-node-api)
+- [Rework `define` and `import.meta.env.*` replacement strategy](/guide/migration#rework-define-and-import-meta-env-replacement-strategy)
+- [SSR externalized modules value now matches production](/guide/migration#ssr-externalized-modules-value-now-matches-production)
+- [`worker.plugins` is now a function](/guide/migration#worker-plugins-is-now-a-function)
+- [Allow path containing `.` to fallback to index.html](/guide/migration#allow-path-containing-to-fallback-to-index-html)
+- [Align dev and preview HTML serving behavior](https://v5.vite.dev/guide/migration#align-dev-and-preview-html-serving-behaviour)
+- [Manifest files are now generated in `.vite` directory by default](/guide/migration#manifest-files-are-now-generated-in-vite-directory-by-default)
+- [CLI shortcuts require an additional `Enter` press](/guide/migration#cli-shortcuts-require-an-additional-enter-press)
+- [Update `experimentalDecorators` and `useDefineForClassFields` TypeScript behavior](https://v5.vite.dev/guide/migration#update-experimentaldecorators-and-usedefineforclassfields-typescript-behaviour)
+- [Remove `--https` flag and `https: true`](/guide/migration#remove-https-flag-and-https-true)
+- [Remove `resolvePackageEntry` and `resolvePackageData` APIs](/guide/migration#remove-resolvepackageentry-and-resolvepackagedata-apis)
+- [Removes previously deprecated APIs](/guide/migration#removed-deprecated-apis)
+- [Read more about advanced changes affecting plugin and tool authors](/guide/migration#advanced)
 
 ## 迁移到 Vite 5
 

@@ -106,7 +106,7 @@ vite optimize [root]
 
 本地预览生产构建。不要将其用作生产服务器，因为它不是为此设计的。
 
-此命令在构建目录（默认为 `dist`）中启动服务器。事先运行 `vite build` 以确保构建目录是最新的。根据项目配置的 [`appType`](/config/shared-options.html#apptype)，它会使用某些中间件。
+此命令在构建目录中启动服务器（默认：`dist`）。运行 `vite build` 以确保构建目录是最新的。根据项目配置的 [`appType`](/config/shared-options#apptype)，它会使用某些中间件。
 
 #### 用法
 

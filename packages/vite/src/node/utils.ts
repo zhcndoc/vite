@@ -925,7 +925,10 @@ export function unique<T>(arr: T[]): T[] {
 export function getLocalhostAddressIfDiffersFromDNS():
   | Promise<string | undefined>
   | undefined {
-  if (dns.getDefaultResultOrder() === 'verbatim') {
+  // dns.getDefaultResultOrder is not available in bun 1.3.11 and deno 2.7.11
+  // while this is a bug in bun and deno, since this function is commonly called,
+  // we give a workaround specially until the API is supported in a few versions
+  if (dns.getDefaultResultOrder && dns.getDefaultResultOrder() === 'verbatim') {
     return undefined
   }
   return Promise.all([
@@ -1820,4 +1823,11 @@ export function formatAndTruncateFileList(files: string[]): {
     }
   }
   return { formatted: log, truncated }
+}
+
+const hashbangRE = /^#!.*\n/
+
+// find the start of the file, after the hashbang
+export function getFileStartIndex(code: string): number {
+  return hashbangRE.exec(code)?.[0].length ?? 0
 }
