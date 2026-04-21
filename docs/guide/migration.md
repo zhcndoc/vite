@@ -367,7 +367,9 @@ const plugin = {
   - `resolveImportMeta` 钩子 ([rolldown#1010](https://github.com/rolldown/rolldown/issues/1010))
   - `renderDynamicImport` 钩子 ([rolldown#4532](https://github.com/rolldown/rolldown/issues/4532))
   - `resolveFileUrl` 钩子
-- `parseAst` / `parseAstAsync` 函数现已废弃，推荐使用功能更多的 `parseSync` / `parse` 函数。
+- `parseAst` / `parseAstAsync` 函数现已弃用，改为使用功能更丰富的 `parseSync` / `parse` 函数。
+- `renderChunk` 钩子之前会移除注释，而不是在 `renderChunk` 钩子之后移除
+- 除了 [此处](https://rolldown.rs/reference/OutputOptions.comments) 列出的注释之外，其余注释都会被移动，而 Rollup 只有在相邻代码被移除时才会移除注释
 
 ## 从 v6 迁移
 

@@ -29,7 +29,7 @@ head:
 
 _2022 年 7 月 23 日_ - 查看 [Vite 4.0 公告](./announcing-vite4.md)
 
-去年二月，[Evan You](https://twitter.com/youyuxi) 发布了 Vite 2。从那以后，它的采用率一直在不断增长，每周 npm 下载量超过 100 万。发布后迅速形成了一个庞大的生态系统。Vite 正在推动 Web 框架的创新竞赛。[Nuxt 3](https://v3.nuxtjs.org/) 默认使用 Vite。[SvelteKit](https://kit.svelte.dev/)、[Astro](https://astro.build/)、[Hydrogen](https://hydrogen.shopify.dev/) 和 [SolidStart](https://docs.solidjs.com/quick-start) 都是基于 Vite 构建的。[Laravel 现在也决定默认使用 Vite](https://laravel.com/docs/9.x/vite)。[Vite Ruby](https://vite-ruby.netlify.app/) 展示了 Vite 如何改善 Rails 开发体验。[Vitest](https://vitest.dev) 正在成为 Vite 原生的 Jest 替代品。Vite 支持 [Cypress](https://docs.cypress.io/guides/component-testing/writing-your-first-component-test) 和 [Playwright](https://playwright.dev/docs/test-components) 的新组件测试功能，Storybook 有 [Vite 作为官方构建器](https://github.com/storybookjs/builder-vite)。而且 [列表还在继续](https://patak.dev/vite/ecosystem.html)。这些项目的大多数维护者都参与了 Vite 核心本身的改进，与 Vite [团队](https://vite.zhcndoc.com/team) 和其他贡献者紧密合作。
+去年 2 月，[Evan You](https://twitter.com/youyuxi) 发布了 Vite 2。此后，它的采用率持续增长，每周 npm 下载量已超过 100 万次。发布之后，一个庞大的生态系统迅速形成。Vite 正在推动 Web 框架领域新一轮的创新竞赛。[Nuxt 3](https://v3.nuxtjs.org/) 默认使用 Vite。[SvelteKit](https://kit.svelte.dev/)、[Astro](https://astro.build/)、[Hydrogen](https://hydrogen.shopify.dev/) 和 [SolidStart](https://docs.solidjs.com/quick-start) 都是基于 Vite 构建的。[Laravel 现在也决定默认使用 Vite](https://laravel.com/docs/9.x/vite)。[Vite Ruby](https://vite-ruby.netlify.app/) 展示了 Vite 如何改进 Rails 的开发体验。[Vitest](https://vitest.dev) 作为一种原生于 Vite 的 Jest 替代方案，正在快速发展。Vite 还为 [Cypress](https://docs.cypress.io/guides/component-testing/writing-your-first-component-test) 和 [Playwright](https://playwright.dev/docs/test-components) 的新组件测试功能提供支持，Storybook 也将 [Vite 作为官方构建器](https://github.com/storybookjs/builder-vite)。还有 [更多项目](https://patak.cat/vite/ecosystem.html)。这些项目中的大多数维护者都参与了 Vite 核心本身的改进，并与 Vite [团队](https://vite.dev/team) 及其他贡献者密切合作。
 
 ![Vite 3 公告封面图](/og-image-announcing-vite3.webp)
 
@@ -229,10 +229,10 @@ Vite 关心其发布和安装占用空间；快速安装新应用是一项功能
 
 ## 兼容性说明
 
-- Vite 不再支持已达到 EOL 的 Node.js 12 / 13 / 15。现在需要 Node.js 14.18+ / 16+。
-- Vite 现在作为 ESM 发布，带有指向 ESM 入口的 CJS 代理以保持兼容性。
-- 现代浏览器基线现在针对支持 [原生 ES 模块](https://caniuse.com/es6-module)、[原生 ESM 动态导入](https://caniuse.com/es6-module-dynamic-import) 和 [`import.meta`](https://caniuse.com/mdn-javascript_operators_import_meta) 功能的浏览器。
-- SSR 和库模式中的 JS 文件扩展名现在根据其格式和包类型，为输出 JS 入口和块使用有效的扩展名（`js`、`mjs` 或 `cjs`）。
+- Vite 不再支持已达到生命周期结束（EOL）的 Node.js 12 / 13 / 15。现在需要 Node.js 14.18+ / 16+。
+- Vite 现在作为 ESM 发布，并带有指向 ESM 入口的 CJS 代理以保持兼容性。
+- 现代浏览器基线现在面向支持 [原生 ES 模块](https://caniuse.com/es6-module)、[原生 ESM 动态导入](https://caniuse.com/es6-module-dynamic-import) 和 [`import.meta`](https://caniuse.com/mdn-javascript_operators_import_meta) 功能的浏览器。
+- SSR 和库模式中的 JS 文件扩展名现在会根据其格式和包类型，为输出的 JS 入口和块使用有效的扩展名（`js`、`mjs` 或 `cjs`）。
 
 在 [迁移指南](https://v3.vite.dev/guide/migration.html) 中了解更多。
 
@@ -240,30 +240,30 @@ Vite 关心其发布和安装占用空间；快速安装新应用是一项功能
 
 在致力于 Vite 3 的同时，我们也改善了协作者对 [Vite 核心](https://github.com/vitejs/vite) 的贡献体验。
 
-- 单元和 E2E 测试已迁移到 [Vitest](https://vitest.dev)，提供了更快更稳定的 DX。此举也作为生态系统中重要基础设施项目的 dog fooding。
+- 单元测试和 E2E 测试已迁移到 [Vitest](https://vitest.dev)，提供了更快、更稳定的 DX。此举也相当于在生态系统中的重要基础设施项目上进行 dogfooding。
 - VitePress 构建现在作为 CI 的一部分进行测试。
-- Vite 升级到 [pnpm 7](https://pnpm.io/)，跟随生态系统的其余部分。
+- Vite 升级到 [pnpm 7](https://pnpm.io/)，与生态系统的其余部分保持一致。
 - Playgrounds 已从 packages 目录移动到 [`/playgrounds`](https://github.com/vitejs/vite/tree/main/playground)。
-- 包和 playgrounds 现在是 `"type": "module"`。
-- 插件现在使用 [unbuild](https://github.com/unjs/unbuild) 捆绑，[plugin-vue-jsx](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue-jsx) 和 [plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy) 已迁移到 TypeScript。
+- 包和 playgrounds 现在使用 `"type": "module"`。
+- 插件现在使用 [unbuild](https://github.com/unjs/unbuild) 进行打包，[plugin-vue-jsx](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue-jsx) 和 [plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy) 已迁移到 TypeScript。
 
 ## 生态系统已为 v3 做好准备
 
-我们与生态系统中的项目密切合作，以确保由 Vite 驱动的框架已为 Vite 3 做好准备。[vite-ecosystem-ci](https://github.com/vitejs/vite-ecosystem-ci) 允许我们在引入回归之前，针对 Vite 的主分支运行生态系统中领先玩家的 CI 并接收及时报告。今天的发布应该很快与大多数使用 Vite 的项目兼容。
+我们与生态系统中的项目密切合作，以确保由 Vite 驱动的框架已为 Vite 3 做好准备。[vite-ecosystem-ci](https://github.com/vitejs/vite-ecosystem-ci) 让我们能够在引入回归之前，针对 Vite 主分支运行生态系统中领先项目的 CI 并接收及时报告。今天的发布应该很快就能与大多数使用 Vite 的项目兼容。
 
 ## 致谢
 
-Vite 3 是 [Vite 团队](/team) 成员与生态系统项目维护者和其他 Vite 核心协作者共同努力的结果。
+Vite 3 是 [Vite 团队](/team) 成员与生态系统项目维护者以及其他 Vite 核心协作者共同努力的结果。
 
-我们要感谢所有实施功能、修复、提供反馈并参与 Vite 3 的人：
+我们要感谢所有实施功能、修复问题、提供反馈并参与 Vite 3 的人：
 
 - Vite 团队成员 [@youyuxi](https://twitter.com/youyuxi)、[@patak_dev](https://twitter.com/patak_dev)、[@antfu7](https://twitter.com/antfu7)、[@bluwyoo](https://twitter.com/bluwyoo)、[@sapphi_red](https://twitter.com/sapphi_red)、[@haoqunjiang](https://twitter.com/haoqunjiang)、[@poyoho](https://github.com/poyoho)、[@Shini_92](https://twitter.com/Shini_92) 和 [@retropragma](https://twitter.com/retropragma)。
-- [@benmccann](https://github.com/benmccann)、[@danielcroe](https://twitter.com/danielcroe)、[@brillout](https://twitter.com/brillout)、[@sheremet_va](https://twitter.com/sheremet_va)、[@userquin](https://twitter.com/userquin)、[@enzoinnocenzi](https://twitter.com/enzoinnocenzi)、[@maximomussini](https://twitter.com/maximomussini)、[@IanVanSchooten](https://twitter.com/IanVanSchooten)、[Astro 团队](https://astro.build/)，以及生态系统中帮助塑造 v3 的所有其他框架和插件维护者。
+- [@benmccann](https://github.com/benmccann)、[@danielcroe](https://twitter.com/danielcroe)、[@brillout](https://twitter.com/brillout)、[@sheremet_va](https://twitter.com/sheremet_va)、[@userquin](https://twitter.com/userquin)、[@enzoinnocenzi](https://twitter.com/enzoinnocenzi)、[@maximomussini](https://twitter.com/maximomussini)、[@IanVanSchooten](https://twitter.com/IanVanSchooten)、[Astro 团队](https://astro.build/)，以及生态系统中所有帮助塑造 v3 的其他框架和插件维护者。
 - [@dominikg](https://github.com/dominikg) 因其在 vite-ecosystem-ci 上的工作。
-- [@ZoltanKochan](https://twitter.com/ZoltanKochan) 因其在 [pnpm](https://pnpm.io/) 上的工作，以及当我们需要支持时的响应速度。
+- [@ZoltanKochan](https://twitter.com/ZoltanKochan) 因其在 [pnpm](https://pnpm.io/) 上的工作，以及在我们需要支持时的快速响应。
 - [@rixo](https://github.com/rixo) 提供 HMR 部分接受支持。
-- [@KiaKing85](https://twitter.com/KiaKing85) 为 Vite 3 发布准备主题，以及 [@\_brc_dd](https://twitter.com/_brc_dd) 致力于 VitePress 内部工作。
-- [@CodingWithCego](https://twitter.com/CodingWithCego) 提供新的西班牙语翻译，以及 [@ShenQingchuan](https://twitter.com/ShenQingchuan)、[@hiro-lapis](https://github.com/hiro-lapis) 和其他中文和日文翻译团队成员保持翻译文档最新。
+- [@KiaKing85](https://twitter.com/KiaKing85) 为 Vite 3 发布准备主题，以及 [@\_brc_dd](https://twitter.com/_brc_dd) 投入 VitePress 内部工作。
+- [@CodingWithCego](https://twitter.com/CodingWithCego) 提供新的西班牙语翻译，以及 [@ShenQingchuan](https://twitter.com/ShenQingchuan)、[@hiro-lapis](https://github.com/hiro-lapis) 和其他中文、日文翻译团队成员保持翻译文档最新。
 
 我们还要感谢赞助 Vite 团队的个人和公司，以及投资 Vite 开发的公司：[@antfu7](https://twitter.com/antfu7) 在 Vite 和生态系统上的一些工作是他在 [Nuxt Labs](https://nuxtlabs.com/) 工作的一部分，[StackBlitz](https://stackblitz.com/) 雇佣了 [@patak_dev](https://twitter.com/patak_dev) 全职从事 Vite 工作。
 
@@ -273,4 +273,4 @@ Vite 3 是 [Vite 团队](/team) 成员与生态系统项目维护者和其他 Vi
 
 Rollup 团队正在 [致力于其下一个主要版本](https://twitter.com/lukastaegert/status/1544186847399743488)，将在未来几个月内发布。一旦 Rollup 插件生态系统有时间更新，我们将随之推出新的 Vite 主要版本。这将为我们提供另一次在今年引入更多重大更改的机会，我们可以利用这个机会稳定此版本中引入的一些实验性功能。
 
-如果你有兴趣帮助改进 Vite，最好的加入方式是帮助分类问题。加入 [我们的 Discord](https://chat.vite.dev) 并查找 `#contributing` 频道。或参与我们的 `#docs`，`#help` 他人，或创建插件。我们才刚刚开始。有很多开放的想法可以继续改进 Vite 的 DX。
+如果你有兴趣帮助改进 Vite，最好的加入方式是帮助分类问题。加入 [我们的 Discord](https://chat.vite.dev) 并查找 `#contributing` 频道。或者参与 `#docs`、`#help` 帮助他人，或创建插件。我们才刚刚开始。有很多开放的想法可以继续改进 Vite 的 DX。

@@ -286,6 +286,18 @@ Vite 无法处理也不支持仅在非严格模式（松散模式）下运行的
 
 相关问题：[#10802](https://github.com/vitejs/vite/issues/10802)
 
+### 默认导入意外返回一个对象
+
+默认导入会为 CJS 模块返回 `module.exports` 对象，而你可能期望它返回 `module.exports.default` 的值。
+
+这可能会导致如下错误：
+
+> Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object.
+
+> foo is not a function
+
+有关此问题的更多详情，请参阅 Rolldown 的文档：[CJS 模块中含糊的 `default` 导入 - Bundling CJS | Rolldown](https://rolldown.rs/in-depth/bundling-cjs#ambiguous-default-import-from-cjs-modules)。
+
 <script setup lang="ts">
 // 将带有 hash 的旧链接重定向到旧版文档
 if (typeof window !== "undefined") {

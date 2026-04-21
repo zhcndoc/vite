@@ -48,30 +48,30 @@ vite build [root]
 
 #### 选项
 
-| 选项                           |                                                                                               |
-| ------------------------------ | --------------------------------------------------------------------------------------------- |
-| `--target <target>`            | 转译目标（默认：`"modules"`）(`string`)                                                       |
-| `--outDir <dir>`               | 输出目录（默认：`dist`）(`string`)                                                            |
-| `--assetsDir <dir>`            | 输出目录下放置静态资源的目录（默认：`"assets"`）(`string`)                                    |
-| `--assetsInlineLimit <number>` | 静态资源 base64 内联阈值（字节）（默认：`4096`）(`number`)                                    |
-| `--ssr [entry]`                | 构建指定的服务端渲染入口 (`string`)                                                           |
-| `--sourcemap [output]`         | 输出构建的源码映射（默认：`false`）(`boolean \| "inline" \| "hidden"`)                        |
-| `--minify [minifier]`          | 启用/禁用压缩，或指定使用的压缩器（默认：`"esbuild"`）(`boolean \| "terser" \| "esbuild"`)    |
-| `--manifest [name]`            | 生成构建清单 json (`boolean \| string`)                                                       |
-| `--ssrManifest [name]`         | 生成 ssr 清单 json (`boolean \| string`)                                                      |
-| `--emptyOutDir`                | 当 outDir 在 root 之外时强制清空 outDir (`boolean`)                                           |
-| `-w, --watch`                  | 当磁盘上的模块发生更改时重新构建 (`boolean`)                                                  |
-| `-c, --config <file>`          | 使用指定的配置文件 (`string`)                                                                 |
-| `--base <path>`                | 公共基础路径（默认：`/`）(`string`)                                                           |
-| `-l, --logLevel <level>`       | Info \| warn \| error \| silent (`string`)                                                    |
-| `--clearScreen`                | 允许/禁止日志记录时清屏 (`boolean`)                                                           |
-| `--configLoader <loader>`      | 使用 `bundle` 通过 Rolldown 打包配置文件，或使用 `runner`（实验性）即时处理（默认：`bundle`） |
-| `--profile`                    | 启动内置 Node.js 检查器（查看 [性能瓶颈](/guide/troubleshooting#performance-bottlenecks)）    |
-| `-d, --debug [feat]`           | 显示调试日志 (`string \| boolean`)                                                            |
-| `-f, --filter <filter>`        | 过滤调试日志 (`string`)                                                                       |
-| `-m, --mode <mode>`            | 设置环境变量模式 (`string`)                                                                   |
-| `-h, --help`                   | 显示可用的 CLI 选项                                                                           |
-| `--app`                        | 构建所有环境，等同于 `builder: {}` (`boolean`，实验性)                                        |
+| 选项                          |                                                                                                                          |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `--target <target>`            | 转译目标（默认：`"baseline-widely-available"`）(`string`)                                                                |
+| `--outDir <dir>`               | 输出目录（默认：`dist`）(`string`)                                                                                       |
+| `--assetsDir <dir>`            | 在 outDir 下放置资源的目录（默认：`"assets"`）(`string`)                                                                  |
+| `--assetsInlineLimit <number>` | 静态资源 base64 内联阈值（字节）（默认：`4096`）(`number`)                                                               |
+| `--ssr [entry]`                | 为服务端渲染构建指定入口 (`string`)                                                                                      |
+| `--sourcemap [output]`         | 为构建输出 source map（默认：`false`）(`boolean \| "inline" \| "hidden"`)                                               |
+| `--minify [minifier]`          | 启用/禁用压缩，或指定要使用的压缩器（默认：`"oxc"`）(`boolean \| "oxc" \| "terser" \| "esbuild"`)                       |
+| `--manifest [name]`            | 输出构建清单 json (`boolean \| string`)                                                                                  |
+| `--ssrManifest [name]`         | 输出 ssr 清单 json (`boolean \| string`)                                                                                  |
+| `--emptyOutDir`                | 当 outDir 位于 root 之外时强制清空 outDir (`boolean`)                                                                    |
+| `-w, --watch`                  | 当磁盘上的模块发生变化时重新构建 (`boolean`)                                                                             |
+| `-c, --config <file>`          | 使用指定的配置文件 (`string`)                                                                                            |
+| `--base <path>`                | 公共基础路径（默认：`/`）(`string`)                                                                                      |
+| `-l, --logLevel <level>`       | info \| warn \| error \| silent (`string`)                                                                               |
+| `--clearScreen`                | 日志输出时允许/禁用清屏 (`boolean`)                                                                                      |
+| `--configLoader <loader>`      | 使用 `bundle` 通过 Rolldown 打包配置文件，或使用 `runner`（实验性）即时处理（默认：`bundle`）                           |
+| `--profile`                    | 启动内置 Node.js 检查器（查看 [性能瓶颈](/guide/troubleshooting#performance-bottlenecks)）                               |
+| `-d, --debug [feat]`           | 显示调试日志 (`string \| boolean`)                                                                                       |
+| `-f, --filter <filter>`        | 过滤调试日志 (`string`)                                                                                                  |
+| `-m, --mode <mode>`            | 设置环境变量模式 (`string`)                                                                                              |
+| `-h, --help`                   | 显示可用的 CLI 选项                                                                                                      |
+| `--app`                        | 构建所有环境，与 `builder: {}` 相同 (`boolean`，实验性)                                                                  |
 
 ## 其他
 
@@ -94,7 +94,7 @@ vite optimize [root]
 | `--force`                 | 强制优化器忽略缓存并重新打包 (`boolean`)                                                      |
 | `-c, --config <file>`     | 使用指定的配置文件 (`string`)                                                                 |
 | `--base <path>`           | 公共基础路径（默认：`/`）(`string`)                                                           |
-| `-l, --logLevel <level>`  | Info \| warn \| error \| silent (`string`)                                                    |
+| `-l, --logLevel <level>`  | info \| warn \| error \| silent (`string`)                                                    |
 | `--clearScreen`           | 允许/禁止日志记录时清屏 (`boolean`)                                                           |
 | `--configLoader <loader>` | 使用 `bundle` 通过 Rolldown 打包配置文件，或使用 `runner`（实验性）即时处理（默认：`bundle`） |
 | `-d, --debug [feat]`      | 显示调试日志 (`string \| boolean`)                                                            |
@@ -125,7 +125,7 @@ vite preview [root]
 | `--outDir <dir>`          | 输出目录（默认：`dist`）(`string`)                                                            |
 | `-c, --config <file>`     | 使用指定的配置文件 (`string`)                                                                 |
 | `--base <path>`           | 公共基础路径（默认：`/`）(`string`)                                                           |
-| `-l, --logLevel <level>`  | Info \| warn \| error \| silent (`string`)                                                    |
+| `-l, --logLevel <level>`  | info \| warn \| error \| silent (`string`)                                                    |
 | `--clearScreen`           | 允许/禁止日志记录时清屏 (`boolean`)                                                           |
 | `--configLoader <loader>` | 使用 `bundle` 通过 Rolldown 打包配置文件，或使用 `runner`（实验性）即时处理（默认：`bundle`） |
 | `-d, --debug [feat]`      | 显示调试日志 (`string \| boolean`)                                                            |
