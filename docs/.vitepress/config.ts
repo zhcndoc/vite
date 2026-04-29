@@ -87,7 +87,7 @@ function inlineScript(file: string): HeadConfig {
 }
 
 const config = defineConfig({
-  title: `Vite 中文文档${additionalTitle}`,
+  title: `Vite 中文文档`,
   description: 'Vite 是一款极快的前端构建工具，驱动下一代 Web 应用。',
   cleanUrls: true,
   sitemap: {

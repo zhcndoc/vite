@@ -312,8 +312,10 @@ function mergeConfig(
 
 深度合并两个 Vite 配置。`isRoot` 表示正在合并的 Vite 配置中的级别。例如，如果你正在合并两个 `build` 选项，则设置为 `false`。
 
-::: tip 注意
-`mergeConfig` 仅接受对象形式的配置。如果你有回调形式的配置，你应该在传入 `mergeConfig` 之前调用它。
+注意，`overrides` 中的 `null` 和 `undefined` 值会被跳过，不会参与合并。如果你需要显式清除 `defaults` 中的某个值，请直接修改 `mergeConfig` 的结果。
+
+::: tip NOTE
+`mergeConfig` 只接受对象形式的配置。如果你有一个回调形式的配置，应当先调用它，再传入 `mergeConfig`。
 
 你可以使用 `defineConfig` 辅助函数将回调形式的配置与另一个配置合并：
 
@@ -484,4 +486,4 @@ Vite 使用的 Rolldown 版本的字符串表示（例如 `"1.0.0"`）。来自 
 
 **类型：** `string`
 
-仅为了向后兼容而保留。
+仅为向后兼容而保留。
