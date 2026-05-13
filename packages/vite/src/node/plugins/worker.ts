@@ -189,6 +189,7 @@ async function bundleWorkerEntry(
   await workerEnvironment.init()
 
   const chunkMetadataMap = new ChunkMetadataMap()
+  const workerBuildTarget = workerEnvironment.config.build.target
   const bundle = await rolldown({
     ...rollupOptions,
     input,
@@ -197,6 +198,15 @@ async function bundleWorkerEntry(
     ),
     onLog(level, log) {
       onRollupLog(level, log, workerEnvironment)
+    },
+    transform: {
+      target: workerBuildTarget === false ? undefined : workerBuildTarget,
+      ...rollupOptions.transform,
+      define: {
+        ...rollupOptions.transform?.define,
+        // disable builtin process.env.NODE_ENV replacement as it is handled by the define plugin
+        'process.env.NODE_ENV': 'process.env.NODE_ENV',
+      },
     },
     // TODO: remove this and enable rolldown's CSS support later
     moduleTypes: {
@@ -515,7 +525,7 @@ export function webWorkerPlugin(config: ResolvedConfig): Plugin {
 
     transform: {
       filter: { id: workerFileRE },
-      async handler(raw, id) {
+      handler(raw, id) {
         const workerFileMatch = workerFileRE.exec(id)
         if (workerFileMatch) {
           // if import worker by worker constructor will have query.type

@@ -21,7 +21,7 @@
      build: {
        // 在 outDir 中生成 .vite/manifest.json
        manifest: true,
-       rollupOptions: {
+       rolldownOptions: {
          // 覆盖默认的 .html 入口
          input: '/path/to/main.js',
        },
@@ -113,13 +113,13 @@
      edge [color="${#67676c|#98989f}" fontname="Arial" fontsize=9 fontcolor="${#67676c|#98989f}"]
      bgcolor="transparent"
 
-     foo [label="views/foo.js\n(entry)" fillcolor="${#e9eaff|#222541}"]
-     bar [label="views/bar.js\n(entry)" fillcolor="${#e9eaff|#222541}"]
-     shared [label="_shared-B7PI925R.js\n(common chunk)" fillcolor="${#f2ecfc|#2c273e}"]
-     baz [label="baz.js\n(dynamic import)" fillcolor="${#fcf4dc|#38301a}"]
+     foo [label="views/foo.js\n（入口）" fillcolor="${#e9eaff|#222541}"]
+     bar [label="views/bar.js\n（入口）" fillcolor="${#e9eaff|#222541}"]
+     shared [label="_shared-B7PI925R.js\n（公共块）" fillcolor="${#f2ecfc|#2c273e}"]
+     baz [label="baz.js\n（动态导入）" fillcolor="${#fcf4dc|#38301a}"]
      foocss [label="foo.css" shape=ellipse fillcolor="${#fde4e8|#3a1d27}"]
      sharedcss [label="shared.css" shape=ellipse fillcolor="${#fde4e8|#3a1d27}"]
-     logo [label="logo.svg\n(asset)" shape=ellipse fillcolor="${#def5ed|#15312d}"]
+     logo [label="logo.svg\n（资源）" shape=ellipse fillcolor="${#def5ed|#15312d}"]
 
      foo -> shared [label="imports"]
      bar -> shared [label="imports"]
@@ -178,12 +178,12 @@
    }
    ```
 
-   清单中的每个条目代表以下内容之一：
-   - **入口块**：由 [`build.rollupOptions.input`](https://rollupjs.org/configuration-options/#input) 中指定的文件生成。这些块具有 `isEntry: true`，其键是从项目根目录开始的相对 src 路径。
-   - **动态入口块**：由动态导入生成。这些块具有 `isDynamicEntry: true`，其键是从项目根目录开始的相对 src 路径。
-   - **非入口块**：其键是生成文件的基本名称，前缀为 `_`。
-   - **资源块**：由导入的资源（如图像、字体）生成。其键是从项目根目录开始的相对 src 路径。
-   - **CSS 文件**：当 [`build.cssCodeSplit`](/config/build-options.md#build-csscodesplit) 为 `false` 时，生成单个 CSS 文件，键为 `style.css`。当 `build.cssCodeSplit` 不为 `false` 时，键的生成方式类似于 JS 块（即入口块不会有 `_` 前缀，非入口块会有 `_` 前缀）。
+   清单中的每一项代表以下之一：
+   - **入口块**：由 [`build.rolldownOptions.input`](https://rollupjs.org/configuration-options/#input) 中指定的文件生成。这些块具有 `isEntry: true`，其键是相对于项目根目录的 src 路径。
+   - **动态入口块**：由动态导入生成。这些块具有 `isDynamicEntry: true`，其键是相对于项目根目录的 src 路径。
+   - **非入口块**：其键是生成文件的基础名称，并以前缀 `_` 开头。
+   - **资源块**：由导入的资源（如图像、字体）生成。其键是相对于项目根目录的 src 路径。
+   - **CSS 文件**：当 [`build.cssCodeSplit`](/config/build-options.md#build-csscodesplit) 为 `false` 时，会生成一个键为 `style.css` 的单个 CSS 文件。当 `build.cssCodeSplit` 不为 `false` 时，其键的生成方式与 JS 块类似（即入口块不会有 `_` 前缀，非入口块会有 `_` 前缀）。
 
    JS 块（除资源或 CSS 之外的块）将包含有关其静态和动态导入的信息（两者都是映射到清单中相应块的键）。块还列出它们对应的 CSS 和资源文件（如果有的话）。
 

@@ -145,7 +145,7 @@ resolve: {
 如果你的应用程序中有相同依赖项的重复副本（可能是由于提升或 monorepo 中的链接包），使用此选项强制 Vite 始终将列出的依赖项解析为同一个副本（从项目根目录）。
 
 :::warning SSR + ESM
-对于 SSR 构建，从 `build.rollupOptions.output` 配置的 ESM 构建输出不进行去重。一种解决方法是使用 CJS 构建输出，直到 ESM 具有更好的模块加载插件支持。
+对于 SSR 构建，去重在 `build.rolldownOptions.output` 中配置的 ESM 构建输出上不起作用。一个变通方法是在 ESM 对模块加载有更好的插件支持之前，使用 CJS 构建输出。
 :::
 
 ## resolve.conditions <NonInheritBadge />
@@ -404,7 +404,7 @@ import type {
 
 - **类型：** `OxcOptions | false`
 
-`OxcOptions` 扩展自 [Oxc Transformer 的选项](https://oxc.rs/docs/guide/usage/transformer)。最常见的用例是自定义 JSX：
+`OxcOptions` 扩展自 [Oxc 转换器的选项](https://oxc.rs/docs/guide/usage/transformer)。最常见的用例是自定义 JSX：
 
 ```js
 export default defineConfig({

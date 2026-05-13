@@ -502,10 +502,10 @@ export function resolveBuildEnvironmentOptions(
   return resolved
 }
 
-export async function resolveBuildPlugins(config: ResolvedConfig): Promise<{
+export function resolveBuildPlugins(config: ResolvedConfig): {
   pre: Plugin[]
   post: Plugin[]
-}> {
+} {
   const isBuild = config.command === 'build'
   return {
     pre: [
@@ -669,21 +669,21 @@ export function resolveRolldownOptions(
     // @ts-expect-error See https://github.com/vitejs/vite/issues/5812#issuecomment-984345618
     if (output.output) {
       logger.warn(
-        `You've set "rollupOptions.output.output" in your config. ` +
+        `You've set "rolldownOptions.output.output" in your config. ` +
           `This is deprecated and will override all Vite.js default output options. ` +
-          `Please use "rollupOptions.output" instead.`,
+          `Please use "rolldownOptions.output" instead.`,
       )
     }
     if (output.file) {
       throw new Error(
-        `Vite does not support "rollupOptions.output.file". ` +
-          `Please use "rollupOptions.output.dir" and "rollupOptions.output.entryFileNames" instead.`,
+        `Vite does not support "rolldownOptions.output.file". ` +
+          `Please use "rolldownOptions.output.dir" and "rolldownOptions.output.entryFileNames" instead.`,
       )
     }
     if (output.sourcemap) {
       logger.warnOnce(
         colors.yellow(
-          `Vite does not support "rollupOptions.output.sourcemap". ` +
+          `Vite does not support "rolldownOptions.output.sourcemap". ` +
             `Please use "build.sourcemap" instead.`,
         ),
       )
@@ -1037,7 +1037,7 @@ export function resolveBuildOutputs(
     if (libOptions.formats) {
       logger.warn(
         colors.yellow(
-          '"build.lib.formats" will be ignored because "build.rollupOptions.output" is already an array format.',
+          '"build.lib.formats" will be ignored because "build.rolldownOptions.output" is already an array format.',
         ),
       )
     }
@@ -1048,7 +1048,7 @@ export function resolveBuildOutputs(
         !output.name
       ) {
         throw new Error(
-          'Entries in "build.rollupOptions.output" must specify "name" when the format is "umd" or "iife".',
+          'Entries in "build.rolldownOptions.output" must specify "name" when the format is "umd" or "iife".',
         )
       }
     })
@@ -1090,7 +1090,7 @@ export function onRollupLog(
           `[vite]: Rolldown failed to resolve import "${exporter}" from "${id}".\n` +
             `This is most likely unintended because it can break your application at runtime.\n` +
             `If you do want to externalize this module explicitly add it to\n` +
-            `\`build.rollupOptions.external\``,
+            `\`build.rolldownOptions.external\``,
         )
       }
     }
@@ -1847,14 +1847,15 @@ export async function createBuilder(
       return output
     },
     async runDevTools() {
-      const devtoolsConfig = config.devtools
-      if (devtoolsConfig.enabled) {
+      if (config.devtools.enabled) {
         try {
-          const { start } = await import(`@vitejs/devtools/cli-commands`)
-          await start(devtoolsConfig.config)
+          const { runDevTools } = await import('@vitejs/devtools/integration')
+          await runDevTools(builder)
         } catch (e) {
           config.logger.error(
-            colors.red(`Failed to run Vite DevTools: ${e.message || e.stack}`),
+            colors.red(
+              `Failed to run Vite DevTools: ${e?.message || e?.stack}`,
+            ),
             { error: e },
           )
         }

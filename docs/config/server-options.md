@@ -433,7 +433,7 @@ export default defineConfig({
 
 是否忽略服务器 sourcemap 中的源文件，用于填充 [`x_google_ignoreList` 源映射扩展](https://developer.chrome.com/articles/x-google-ignore-list/)。
 
-`server.sourcemapIgnoreList` 等同于开发服务器的 [`build.rollupOptions.output.sourcemapIgnoreList`](https://rollupjs.org/configuration-options/#output-sourcemapignorelist)。这两个配置选项之间的区别在于，rollup 函数使用 `sourcePath` 的相对路径调用，而 `server.sourcemapIgnoreList` 使用绝对路径调用。在开发期间，大多数模块的 map 和源文件在同一文件夹中，因此 `sourcePath` 的相对路径就是文件名本身。在这些情况下，使用绝对路径更方便。
+`server.sourcemapIgnoreList` 是开发服务器中 [`build.rolldownOptions.output.sourcemapIgnoreList`](https://rollupjs.org/configuration-options/#output-sourcemapignorelist) 的对应项。两者之间的区别在于，rollup 函数接收的 `sourcePath` 是相对路径，而 `server.sourcemapIgnoreList` 接收的是绝对路径。在开发过程中，大多数模块的 map 和 source 都位于同一文件夹中，因此 `sourcePath` 的相对路径本身就是文件名。在这些情况下，使用绝对路径反而更方便。
 
 默认情况下，它会排除所有包含 `node_modules` 的路径。你可以传递 `false` 来禁用此行为，或者为了完全控制，传递一个接受源路径和 sourcemap 路径并返回是否忽略源路径的函数。
 
@@ -449,6 +449,6 @@ export default defineConfig({
 })
 ```
 
-::: tip 注意
-[`server.sourcemapIgnoreList`](#server-sourcemapignorelist) 和 [`build.rollupOptions.output.sourcemapIgnoreList`](https://rollupjs.org/configuration-options/#output-sourcemapignorelist) 需要独立设置。`server.sourcemapIgnoreList` 是仅服务器的配置，不会从定义的 rollup 选项获取其默认值。
+::: tip Note
+[`server.sourcemapIgnoreList`](#server-sourcemapignorelist) 和 [`build.rolldownOptions.output.sourcemapIgnoreList`](https://rollupjs.org/configuration-options/#output-sourcemapignorelist) 需要分别设置。`server.sourcemapIgnoreList` 仅用于服务器配置，其默认值不会从已定义的 rollup 选项中获取。
 :::

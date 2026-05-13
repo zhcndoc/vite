@@ -21,7 +21,7 @@
 - **类型：** `boolean | { polyfill?: boolean, resolveDependencies?: ResolveModulePreloadDependenciesFn }`
 - **默认值：** `{ polyfill: true }`
 
-默认情况下，会自动注入一个 [module preload polyfill](https://guybedford.com/es-module-preloading-integrity#modulepreload-polyfill)。该 polyfill 会自动注入到每个 `index.html` 入口的代理模块中。如果构建配置为通过 `build.rollupOptions.input` 使用非 HTML 自定义入口，则有必要在你的自定义入口中手动导入 polyfill：
+默认情况下，会自动注入 [module preload polyfill](https://guybedford.com/es-module-preloading-integrity#modulepreload-polyfill)。该 polyfill 会自动注入到每个 `index.html` 入口的代理模块中。如果构建配置为通过 `build.rolldownOptions.input` 使用非 HTML 的自定义入口，则需要在你的自定义入口中手动导入该 polyfill：
 
 ```js
 import 'vite/modulepreload-polyfill'
@@ -269,7 +269,7 @@ export default defineConfig({
 - **默认值：** `false`
 - **相关：** [服务端渲染](/guide/ssr)
 
-生成面向 SSR 的构建。值可以是字符串以直接指定 SSR 入口，或者是 `true`，这需要通过 `rollupOptions.input` 指定 SSR 入口。
+为 SSR 生成构建。该值可以是一个字符串，用于直接指定 SSR 入口；或者为 `true`，此时需要通过 `rolldownOptions.input` 指定 SSR 入口。
 
 ## build.emitAssets
 
