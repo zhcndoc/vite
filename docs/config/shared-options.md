@@ -132,7 +132,7 @@ resolve: {
 }
 ```
 
-当 `find` 是正则表达式时，`replacement` 可以使用 [替换模式](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_the_replacement)，例如 `$1`。例如，要用另一个扩展名移除扩展名，可以使用如下模式：
+当 `find` 是正则表达式时，`replacement` 可以使用 [替换模式](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_the_replacement)，例如 `$1`。例如，要用另一个扩展名替换扩展名，可以使用如下模式：
 
 ```js
 { find:/^(.*)\.js$/, replacement: '$1.alias' }
@@ -214,6 +214,48 @@ resolve: {
 
 生成脚本/样式标签时将使用的 nonce 值占位符。设置此值还将生成一个带有 nonce 值的 meta 标签。
 
+## html.additionalAssetSources
+
+- **类型：** `Record<string, HtmlAssetSource>`
+
+```ts
+interface HtmlAssetSource {
+  srcAttributes?: string[]
+  srcsetAttributes?: string[]
+  filter?: (data: {
+    key: string
+    value: string
+    attributes: Record<string, string>
+  }) => boolean
+}
+```
+
+定义要视为资源来源的附加 HTML 元素和属性。这扩展了内置列表，内置列表包括标准元素，如 `<img src>`、`<video src>`、`<link href>` 等。
+
+当使用自定义 Web 组件或引用资源的非标准属性（如 `data-*`）时，这会很有用。
+
+**示例：**
+
+```js
+export default defineConfig({
+  html: {
+    additionalAssetSources: {
+      // 自定义 Web 组件
+      'html-import': { srcAttributes: ['src'] },
+      // 为现有元素添加 data-* 属性
+      img: { srcAttributes: ['data-src-dark', 'data-src-light'] },
+      // 使用 srcset 格式
+      'my-picture': { srcsetAttributes: ['data-srcset'] },
+      // 使用过滤函数
+      'my-component': {
+        srcAttributes: ['asset'],
+        filter: ({ attributes }) => attributes.type === 'image',
+      },
+    },
+  },
+})
+```
+
 ## css.modules
 
 - **类型：**
@@ -247,7 +289,7 @@ resolve: {
   }
   ```
 
-配置 CSS 模块行为。选项传递给 [postcss-modules](https://github.com/css-modules/postcss-modules)。
+配置 CSS 模块行为。选项会传递给 [postcss-modules](https://github.com/css-modules/postcss-modules)。
 
 使用 [Lightning CSS](../guide/features.md#lightning-css) 时，此选项没有任何效果。如果启用，应改用 [`css.lightningcss.cssModules`](https://lightningcss.dev/css-modules.html)。
 
@@ -255,11 +297,11 @@ resolve: {
 
 - **类型：** `string | (postcss.ProcessOptions & { plugins?: postcss.AcceptedPlugin[] })`
 
-内联 PostCSS 配置或用于搜索 PostCSS 配置的自定义目录（默认为项目根目录）。
+内联 PostCSS 配置，或用于搜索 PostCSS 配置的自定义目录（默认为项目根目录）。
 
-对于内联 PostCSS 配置，它期望与 `postcss.config.js` 相同的格式。但对于 `plugins` 属性，只能使用 [数组格式](https://github.com/postcss/postcss-load-config/blob/main/README.md#array)。
+对于内联 PostCSS 配置，它需要与 `postcss.config.js` 相同的格式。但对于 `plugins` 属性，只能使用 [数组格式](https://github.com/postcss/postcss-load-config/blob/main/README.md#array)。
 
-搜索是使用 [postcss-load-config](https://github.com/postcss/postcss-load-config) 完成的，并且只加载支持的配置文件名。默认情况下不搜索工作区根目录（如果未找到工作区，则为 [项目根目录](/guide/#index-html-and-project-root)）之外的配置文件。如果需要，你可以指定根目录之外的自定义路径来加载特定的配置文件。
+搜索由 [postcss-load-config](https://github.com/postcss/postcss-load-config) 完成，并且只会加载受支持的配置文件名。默认情况下，不会搜索工作区根目录（如果未找到工作区，则为 [项目根目录](/guide/#index-html-and-project-root)）之外的配置文件。如果需要，你可以指定根目录之外的自定义路径来加载特定的配置文件。
 
 注意，如果提供了内联配置，Vite 将不会搜索其他 PostCSS 配置源。
 
@@ -267,10 +309,10 @@ resolve: {
 
 - **类型：** `Record<string, object>`
 
-指定传递给 CSS 预处理器的选项。文件扩展名用作选项的键。每个预处理器的支持选项可以在其各自的文档中找到：
+指定传递给 CSS 预处理器的选项。文件扩展名将用作选项的键。每个预处理器支持的选项可以在其各自的文档中找到：
 
 - `sass`/`scss`:
-  - 如果安装了 `sass-embedded` 则使用它，否则使用 `sass`。为了最佳性能，建议安装 `sass-embedded` 包。
+  - 如果安装了 `sass-embedded` 则使用它，否则使用 `sass`。为了获得最佳性能，建议安装 `sass-embedded` 包。
   - [选项](https://sass-lang.com/documentation/js-api/interfaces/stringoptions/)
 - `less`: [选项](https://lesscss.org/usage/#less-options)。
 - `styl`/`stylus`: 仅支持 [`define`](https://stylus-lang.com/docs/js.html#define-name-node)，它可以作为对象传递。
@@ -303,7 +345,7 @@ export default defineConfig({
 
 - **类型：** `string | ((source: string, filename: string) => (string | { content: string; map?: SourceMap }))`
 
-此选项可用于为每个样式内容注入额外代码。请注意，如果包含实际样式而不仅仅是变量，这些样式将在最终打包结果中重复。
+此选项可用于为每段样式内容注入额外代码。请注意，如果包含的是实际样式而不仅仅是变量，这些样式将在最终打包结果中重复。
 
 **示例：**
 
@@ -320,7 +362,7 @@ export default defineConfig({
 ```
 
 ::: tip 导入文件
-由于相同的代码被添加到不同目录的文件前面，相对路径将无法正确解析。请使用绝对路径或 [别名](#resolve-alias)。
+由于相同的代码会被添加到不同目录的文件前面，相对路径将无法被正确解析。请使用绝对路径或 [别名](#resolve-alias)。
 :::
 
 ## css.preprocessorMaxWorkers
@@ -328,7 +370,7 @@ export default defineConfig({
 - **类型：** `number | true`
 - **默认值：** `true`
 
-指定 CSS 预处理器可以使用的最大线程数。`true` 表示最多为 CPU 数量减 1。当设置为 `0` 时，Vite 不会创建任何 worker，并在主线程中运行预处理器。
+指定 CSS 预处理器可以使用的最大线程数。`true` 表示最多为 CPU 数量减 1。当设置为 `0` 时，Vite 不会创建任何 worker，并会在主线程中运行预处理器。
 
 根据预处理器选项，即使此选项未设置为 `0`，Vite 也可能在主线程上运行预处理器。
 
@@ -349,7 +391,7 @@ export default defineConfig({
 选择用于 CSS 处理的引擎。查看 [Lightning CSS](../guide/features.md#lightning-css) 获取更多信息。
 
 ::: info 重复的 `@import`
-请注意，postcss (postcss-import) 对于重复 `@import` 的行为与浏览器不同。参见 [postcss/postcss-import#462](https://github.com/postcss/postcss-import/issues/462)。
+请注意，postcss (postcss-import) 对重复 `@import` 的处理行为与浏览器不同。参见 [postcss/postcss-import#462](https://github.com/postcss/postcss-import/issues/462)。
 :::
 
 ## css.lightningcss

@@ -267,8 +267,8 @@ pnpm link # use your preferred package manager for this step
 
 要了解有关 Vite 如何以及何时发布的更多信息，请查看 [发布](../releases.md) 文档。
 
-::: tip 使用 Vite 的依赖
-要替换依赖传递使用的 Vite 版本，你应该使用 [npm overrides](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#overrides) 或 [pnpm overrides](https://pnpm.io/9.x/package_json#pnpmoverrides)。
+::: tip Dependencies using Vite
+To replace the Vite version used by dependencies transitively, you should use [npm overrides](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#overrides) or [pnpm overrides](https://pnpm.io/settings#overrides).
 :::
 
 ## 社区

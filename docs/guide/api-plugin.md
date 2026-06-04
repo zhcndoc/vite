@@ -130,7 +130,7 @@ export default function myPlugin() {
     load: {
       filter: { id: exactRegex(resolvedVirtualModuleId) },
       handler() {
-        return `export const msg = "from virtual module"`
+        return `export const msg = "来自虚拟模块"`
       },
     },
   }
@@ -524,6 +524,7 @@ function versionCheckPlugin(): Plugin {
 function outputMetadataPlugin(): Plugin {
   return {
     name: 'output-metadata-plugin',
+    enforce: 'post',
     generateBundle(_, bundle) {
       for (const output of Object.values(bundle)) {
         const css = output.viteMetadata?.importedCss
@@ -717,7 +718,7 @@ export default defineConfig({
       // ...
       configureServer(server) {
         server.ws.on('my:from-client', (data, client) => {
-          console.log('Message from client:', data.msg) // 嘿！
+          console.log('Message from client:', data.msg) // 来自客户端的消息：
           // 仅回复给客户端（如果需要）
           client.send('my:ack', { msg: 'Hi! I got your message!' })
         })

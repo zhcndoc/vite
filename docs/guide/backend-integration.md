@@ -178,12 +178,12 @@
    }
    ```
 
-   清单中的每一项代表以下之一：
-   - **入口块**：由 [`build.rolldownOptions.input`](https://rollupjs.org/configuration-options/#input) 中指定的文件生成。这些块具有 `isEntry: true`，其键是相对于项目根目录的 src 路径。
+   清单中的每个条目表示以下内容之一：
+   - **入口块**：由 [`build.rolldownOptions.input`](https://rolldown.rs/reference/InputOptions.input#input) 中指定的文件生成。这些块具有 `isEntry: true`，其键是相对于项目根目录的 src 路径。
    - **动态入口块**：由动态导入生成。这些块具有 `isDynamicEntry: true`，其键是相对于项目根目录的 src 路径。
    - **非入口块**：其键是生成文件的基础名称，并以前缀 `_` 开头。
    - **资源块**：由导入的资源（如图像、字体）生成。其键是相对于项目根目录的 src 路径。
-   - **CSS 文件**：当 [`build.cssCodeSplit`](/config/build-options.md#build-csscodesplit) 为 `false` 时，会生成一个键为 `style.css` 的单个 CSS 文件。当 `build.cssCodeSplit` 不为 `false` 时，其键的生成方式与 JS 块类似（即入口块不会有 `_` 前缀，非入口块会有 `_` 前缀）。
+   - **CSS 文件**：当 [`build.cssCodeSplit`](/config/build-options.md#build-csscodesplit) 为 `false` 时，会生成一个键为 `style.css` 的单个 CSS 文件。当 `build.cssCodeSplit` 不为 `false` 时，键的生成方式与 JS 块类似（即入口块不会有 `_` 前缀，非入口块会有 `_` 前缀）。
 
    JS 块（除资源或 CSS 之外的块）将包含有关其静态和动态导入的信息（两者都是映射到清单中相应块的键）。块还列出它们对应的 CSS 和资源文件（如果有的话）。
 
@@ -267,5 +267,3 @@
      return getImportedChunks(manifest[name])
    }
    ```
-
-   :::

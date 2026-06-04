@@ -57,7 +57,7 @@ Vite 允许响应的主机名。
 :::
 
 ::: details 通过环境变量配置
-你可以设置环境变量 `__VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS` 来添加额外的允许主机。
+你可以设置环境变量 `__VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS` 来添加额外的允许主机。使用逗号分隔多个主机（例如 `host1.example.com,host2.example.com`）。
 :::
 
 ## server.port
@@ -181,17 +181,45 @@ export default defineConfig({
 
 ## server.hmr
 
-- **类型：** `boolean | { protocol?: string, host?: string, port?: number, path?: string, timeout?: number, overlay?: boolean, clientPort?: number, server?: Server }`
+- **类型：** `boolean | { overlay?: boolean }`
 
-禁用或配置 HMR 连接（在 HMR websocket 必须使用与 http 服务器不同地址的情况下）。
+禁用或配置 HMR 行为。
 
 将 `server.hmr.overlay` 设置为 `false` 以禁用服务器错误覆盖层。
 
-`protocol` 设置用于 HMR 连接的 WebSocket 协议：`ws` (WebSocket) 或 `wss` (WebSocket Secure)。
+::: warning 已弃用的选项
 
-`clientPort` 是一个高级选项，仅覆盖客户端的端口，允许你在与客户端代码查找端口不同的端口上提供 websocket。
+与 WebSocket 相关的选项（`protocol`、`host`、`port`、`path`、`clientPort`、`timeout`、`server`）已弃用。请改用 [`server.ws`](#server-ws)。这些选项会自动同步，因此现有配置将继续生效。
 
-当定义了 `server.hmr.server` 时，Vite 将通过提供的服务器处理 HMR 连接请求。如果不在中间件模式下，Vite 将尝试通过现有服务器处理 HMR 连接请求。当你使用自签名证书或希望在单个端口上通过网络暴露 Vite 时，这很有用。
+:::
+
+## server.ws
+
+- **类型：** `false | { protocol?: string, host?: string, port?: number, path?: string, timeout?: number, clientPort?: number, server?: Server }`
+
+配置 WebSocket 连接选项。设置为 `false` 可完全禁用 WebSocket 连接。
+
+- `protocol` - WebSocket 协议（`ws` 或 `wss`）
+- `host` - WebSocket 服务器主机
+- `port` - WebSocket 服务器端口
+- `path` - WebSocket 路径
+- `clientPort` - 覆盖客户端使用的端口，使你可以让 websocket 运行在与客户端代码查找不同的端口上
+- `timeout` - 连接超时时间，单位毫秒（默认：30000）
+- `server` - 为 WebSocket 连接使用自定义 HTTP 服务器
+
+当定义了 `server.ws.server` 时，Vite 会通过提供的服务器处理 WebSocket 连接请求。如果不是中间件模式，Vite 将尝试通过现有服务器处理 WebSocket 连接请求。这在使用自签名证书或希望通过单个端口在网络上暴露 Vite 时很有帮助。
+
+```js
+export default defineConfig({
+  server: {
+    ws: {
+      protocol: 'wss',
+      host: 'localhost',
+      port: 3001,
+    },
+  },
+})
+```
 
 查看 [`vite-setup-catalogue`](https://github.com/sapphi-red/vite-setup-catalogue) 获取一些示例。
 
@@ -200,14 +228,14 @@ export default defineConfig({
 使用默认配置时，Vite 前面的反向代理应该支持代理 WebSocket。如果 Vite HMR 客户端连接 WebSocket 失败，客户端将回退到直接连接 Vite HMR 服务器，绕过反向代理：
 
 ```
-Direct websocket connection fallback. Check out https://vite.zhcndoc.com/config/server-options.html#server-hmr to remove the previous connection error.
+Direct websocket connection fallback. Check out https://vite.dev/config/server-options.html#server-ws to remove the previous connection error.
 ```
 
 当发生回退时，浏览器中出现的错误可以忽略。要通过直接绕过反向代理来避免错误，你可以：
 
-- 配置反向代理也代理 WebSocket
-- 设置 [`server.strictPort = true`](#server-strictport) 并将 `server.hmr.clientPort` 设置为与 `server.port` 相同的值
-- 将 `server.hmr.port` 设置为与 [`server.port`](#server-port) 不同的值
+- 同时配置反向代理以代理 WebSocket
+- 设置 [`server.strictPort = true`](#server-strictport) 并将 `server.ws.clientPort` 设置为与 `server.port` 相同的值
+- 将 `server.ws.port` 设置为与 [`server.port`](#server-port) 不同的值
 
 :::
 
