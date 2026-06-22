@@ -267,3 +267,12 @@
      return getImportedChunks(manifest[name])
    }
    ```
+
+   :::
+
+   :::info Chunk Import Maps Support (Experimental)
+
+   如果您正在使用实验性的 [`build.chunkImportMap`](/config/build-options#build-chunkimportmap) 选项，您还需要将导入映射注入到 HTML 中。
+
+   导入映射会输出到输出目录中的 `importmap.json`。请确保在任何 `<script type="module">` 标签或 `<link rel="modulepreload">` 标签之前注入 `<script type="importmap">` 标签。
+   :::

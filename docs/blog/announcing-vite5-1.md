@@ -54,7 +54,7 @@ Vite 5.1 添加了对新的 Vite 运行时 API 的实验性支持。它允许先
 - 它不依赖任何 node/bun/deno 内置 API，因此可以在任何环境中运行。
 - 它很容易与拥有自己代码运行机制的工具集成（例如你可以提供一个 runner 来使用 `eval` 而不是 `new AsyncFunction`）。
 
-最初的想法由 [Pooya Parsa 提出](https://github.com/nuxt/vite/pull/201)，并由 [Anthony Fu](https://github.com/antfu) 实现为 [vite-node](https://github.com/vitest-dev/vitest/tree/main/packages/vite-node#readme) 包，用于 [驱动 Nuxt 3 Dev SSR](https://antfu.me/posts/dev-ssr-on-nuxt)，后来也用作 [Vitest](https://vitest.dev) 的基础。所以 vite-node 的总体思路已经经过了一段时间的实战测试。这是由 [Vladimir Sheremet](https://github.com/sheremet-va) 进行的 API 新迭代，他已经在 Vitest 中重新实现了 vite-node，并利用这些经验使 API 在添加到 Vite Core 时更加强大和灵活。这个 PR 耗时一年完成，你可以 [在这里](https://github.com/vitejs/vite/issues/12165) 看到与生态系统维护者的演变和讨论。
+The initial idea [was proposed by Pooya Parsa](https://github.com/nuxt/vite/pull/201) and implemented by [Anthony Fu](https://github.com/antfu) as the [vite-node](https://www.npmjs.com/package/vite-node) package to [power Nuxt 3 Dev SSR](https://antfu.me/posts/dev-ssr-on-nuxt) and later also used as the base for [Vitest](https://vitest.dev). So the general idea of vite-node has been battle-tested for quite some time now. This is a new iteration of the API by [Vladimir Sheremet](https://github.com/sheremet-va), who had already re-implemented vite-node in Vitest and took the learnings to make the API even more powerful and flexible when adding it to Vite Core. The PR was one year in the makings, you can see the evolution and discussions with ecosystem maintainers [here](https://github.com/vitejs/vite/issues/12165).
 
 ::: info
 Vite 运行时 API 已演变为 Module Runner API，作为 [环境 API](/guide/api-environment) 的一部分在 Vite 6 中发布。

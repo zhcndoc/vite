@@ -1,5 +1,4 @@
 import path from 'node:path'
-import fs from 'node:fs'
 import type { HeadConfig } from 'vitepress'
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
@@ -75,17 +74,6 @@ const versionLinks = (() => {
   return links
 })()
 
-function inlineScript(file: string): HeadConfig {
-  return [
-    'script',
-    {},
-    fs.readFileSync(
-      path.resolve(import.meta.dirname, `./inlined-scripts/${file}`),
-      'utf-8',
-    ),
-  ]
-}
-
 const config = defineConfig({
   title: `Vite 中文文档`,
   description: 'Vite 是一款极快的前端构建工具，驱动下一代 Web 应用。',
@@ -103,7 +91,6 @@ const config = defineConfig({
       { rel: 'alternate', type: 'application/rss+xml', href: '/blog.rss' },
     ],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
-    inlineScript('banner.js'),
     ['link', { rel: 'me', href: 'https://m.webtoo.ls/@vite' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: ogTitle }],
@@ -124,8 +111,6 @@ const config = defineConfig({
 
   themeConfig: {
     variant: 'vite',
-    logo: '/logo.svg',
-
     banner: {
       id: 'rainyun',
       text: '雨云 RainYun - 企业级云计算服务提供商：新用户注册立享五折！',
@@ -574,6 +559,14 @@ const config = defineConfig({
     },
   },
   vite: {
+    resolve: {
+      alias: {
+        '@components/oss/TopBanner.vue': path.resolve(
+          import.meta.dirname,
+          'theme/components/TopBanner.vue',
+        ),
+      },
+    },
     plugins: [
       groupIconVitePlugin({
         customIcon: {

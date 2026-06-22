@@ -8,7 +8,7 @@
 - **默认值：** `'baseline-widely-available'`
 - **相关：** [浏览器兼容性](/guide/build#browser-compatibility)
 
-最终 bundle 的浏览器兼容性目标。默认值是一个 Vite 特殊值，`'baseline-widely-available'`，它针对的是包含在 2026-01-01 的 [Baseline](https://web-platform-dx.github.io/web-features/) 广泛可用版本中的浏览器。具体来说，它是 `['chrome111', 'edge111', 'firefox114', 'safari16.4']`。
+最终 bundle 的浏览器兼容性目标。默认值是 Vite 的一个特殊值 `'baseline-widely-available'`，它面向 [Baseline](https://web-platform-dx.github.io/web-features/) 中截至 2026-01-01 被广泛支持的浏览器。具体来说，它是 `['chrome111', 'edge111', 'firefox114', 'safari16.4', 'ios16.4']`。
 
 另一个特殊值是 `'esnext'` —— 它假设支持原生动态导入，并且只会执行最小化的转译。
 
@@ -146,6 +146,17 @@ npm add -D esbuild
 - **默认值：** `false`
 
 生成生产环境的 source map。如果为 `true`，将创建单独的 sourcemap 文件。如果为 `'inline'`，sourcemap 将作为 data URI 附加到结果输出文件中。`'hidden'` 的工作方式类似于 `true`，只是打包文件中的相应 sourcemap 注释被抑制。
+
+## build.chunkImportMap
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Experimental**
+- **Related:** [Chunk Import Map Optimization](/guide/features#chunk-import-map-optimization)
+
+是否使用 import maps 特性来优化 chunk 缓存效率。
+
+请注意，此选项需要 [`import.meta.resolve` 支持](https://caniuse.com/mdn-javascript_operators_import_meta_resolve)。如果你需要支持较旧的浏览器，请查看 [`@vitejs/plugin-legacy`](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy)。
 
 ## build.rolldownOptions
 
@@ -337,7 +348,7 @@ npm add -D terser
 - **类型：** `boolean`
 - **默认值：** `true`
 
-启用/禁用 gzip 压缩大小报告。压缩大输出文件可能很慢，因此禁用此功能可能会提高大型项目的构建性能。
+启用/禁用 gzip 压缩大小报告。压缩大型输出文件可能会很慢，因此禁用此功能可能会提高大型项目的构建性能。
 
 ## build.chunkSizeWarningLimit
 

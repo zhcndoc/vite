@@ -658,7 +658,45 @@ export default function myPlugin() {
 [`@rolldown/pluginutils`](https://www.npmjs.com/package/@rolldown/pluginutils) 导出了一些用于钩子过滤器的工具函数，如 `exactRegex` 和 `prefixRegex`。为了方便起见，这些也从 `rolldown/filter` 重新导出。
 :::
 
-## 客户端 - 服务器通信
+## Chunk 导入映射信息
+
+:::info Experimental
+
+此功能处于实验阶段，未来可能会发生变化。
+
+:::
+
+当启用 [`build.chunkImportMap`](/config/build-options#build-chunkimportmap) 选项时，生成的 chunk 中的 import 语句会为每个 chunk 使用唯一 ID，而不是文件路径。
+
+要获取从 chunk ID 到文件路径的映射，你可以在 `generateBundle` 钩子或 `writeBundle` 钩子中访问发射到 bundle 的 import map。该 import map 的名称由 [`build.rolldownOptions.experimental.chunkImportMap.fileName`](https://rolldown.rs/reference/InputOptions.experimental#chunkimportmap) 指定（默认为 `importmap.json`）。
+
+```ts
+function accessImportMap() {
+  let config: ResolvedConfig
+  return {
+    name: 'access-import-map',
+    configResolved(resolvedConfig) {
+      config = resolvedConfig
+    },
+    generateBundle(options, bundle) {
+      const chunkImportMap =
+        config.build.rolldownOptions.experimental?.chunkImportMap
+      if (chunkImportMap) {
+        const importMapFilename =
+          typeof chunkImportMap === 'object' && chunkImportMap.fileName
+            ? chunkImportMap.fileName
+            : 'importmap.json'
+        const importMap = bundle[importMapFilename]! as OutputAsset
+        const mapping = JSON.parse(importMap.source).imports
+        console.log(mapping)
+        // { "./entry.hash1.js": "./entry.hash2.js" }
+      }
+    },
+  }
+}
+```
+
+## 客户端-服务器通信
 
 自 Vite 2.9 以来，我们提供了一些工具函数来帮助插件处理与客户端的通信。
 
@@ -718,7 +756,7 @@ export default defineConfig({
       // ...
       configureServer(server) {
         server.ws.on('my:from-client', (data, client) => {
-          console.log('Message from client:', data.msg) // 来自客户端的消息：
+          console.log('来自客户端的消息：', data.msg)
           // 仅回复给客户端（如果需要）
           client.send('my:ack', { msg: 'Hi! I got your message!' })
         })

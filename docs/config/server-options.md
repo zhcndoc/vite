@@ -423,8 +423,8 @@ export default defineConfig({
 
 ## server.fs.deny
 
-- **类型：** `string[]`
-- **默认值：** `['.env', '.env.*', '*.{crt,pem}', '**/.git/**']`
+- **Type:** `string[]`
+- **Default:** `['.env', '.env.*', '*.{crt,pem,key,p12,pfx,cer,der}', '.npmrc', '.yarnrc.yml', '**/.git/**']`
 
 限制由 Vite 开发服务器提供的敏感文件的阻止列表。这将比 [`server.fs.allow`](#server-fs-allow) 具有更高的优先级。支持 [picomatch 模式](https://github.com/micromatch/picomatch#globbing-features)。
 
