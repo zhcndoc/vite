@@ -6,7 +6,7 @@
 
 ## CLI
 
-### `Error: Cannot find module 'C:\foo\bar&baz\vite\bin\vite.js'`
+### `错误：无法找到模块 'C:\foo\bar&baz\vite\bin\vite.js'`
 
 你的项目文件夹路径可能包含 `&`，这在 Windows 上与 `npm` 不兼容 ([npm/cmd-shim#45](https://github.com/npm/cmd-shim/issues/45))。
 
@@ -104,7 +104,7 @@
 
 要解决此问题，请使用受信任的 SSL 证书。
 
-请参阅：[缓存问题](https://helpx.adobe.com/mt/experience-manager/kb/cache-problems-on-chrome-with-SSL-certificate-errors.html)、[Chrome 问题](https://bugs.chromium.org/p/chromium/issues/detail?id=110649#c8)
+See: [Chrome issue](https://bugs.chromium.org/p/chromium/issues/detail?id=110649#c8)
 
 #### macOS
 
@@ -158,7 +158,7 @@ import './Foo.js' // 应该是 './foo.js'
 
 ## 构建
 
-### 构建的文件因 CORS 错误而无法工作
+### 构建后的文件因 CORS 错误而无法工作
 
 如果 HTML 文件输出是使用 `file` 协议打开的，脚本将无法运行，并出现以下错误。
 
@@ -166,7 +166,7 @@ import './Foo.js' // 应该是 './foo.js'
 
 > Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at file:///foo/bar.js. (Reason: CORS request not http).
 
-有关发生此原因的更多信息，请参阅 [原因：CORS 请求不是 HTTP - HTTP | MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSRequestNotHttp)。
+有关发生此错误原因的更多信息，请参阅 [原因：CORS 请求不是 HTTP - HTTP | MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSRequestNotHttp)。
 
 你需要使用 `http` 协议访问文件。实现此目的的最简单方法是运行 `npx vite preview`。
 

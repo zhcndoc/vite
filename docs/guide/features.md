@@ -53,7 +53,7 @@ export type { T }
 
 ### TypeScript 编译器选项
 
-Vite 尊重 `tsconfig.json` 中的一些选项，并设置相应的 Oxc Transformer 选项。对于每个文件，Vite 使用最近父目录中的 `tsconfig.json`。如果该 `tsconfig.json` 包含 [`references`](https://www.typescriptlang.org/tsconfig/#references) 字段，Vite 将使用满足 [`include`](https://www.typescriptlang.org/tsconfig/#include) 和 [`exclude`](https://www.typescriptlang.org/tsconfig/#exclude) 字段的引用配置文件。
+Vite 会尊重 `tsconfig.json` 中的一些选项，并设置相应的 Oxc Transformer 选项。对于每个文件，Vite 会使用与该文件匹配的最近父级 `tsconfig.json`，或者使用其 [`references`](https://www.typescriptlang.org/tsconfig/#references) 字段中引用的、与该文件匹配的配置。当文件满足配置中的 [`files`](https://www.typescriptlang.org/tsconfig/#files)、[`include`](https://www.typescriptlang.org/tsconfig/#include) 和 [`exclude`](https://www.typescriptlang.org/tsconfig/#exclude) 字段时，Vite 会将该配置视为与该文件匹配。
 
 当选项同时在 Vite 配置和 `tsconfig.json` 中设置时，Vite 配置中的值优先。
 
@@ -87,7 +87,7 @@ Vite 尊重 `tsconfig.json` 中的一些选项，并设置相应的 Oxc Transfor
 
 - [TypeScript 文档](https://www.typescriptlang.org/tsconfig#target)
 
-Vite 忽略 `tsconfig.json` 中的 `target` 值，遵循与 [esbuild](https://esbuild.github.io/) 相同的行为。
+Vite 会忽略 `tsconfig.json` 中的 `target` 值，遵循与 [esbuild](https://esbuild.github.io/) 相同的行为。
 
 要在开发中指定目标，可以使用 [`oxc.target`](/config/shared-options.html#oxc) 选项，该选项默认为 `esnext` 以实现最小化转译。在构建中，[`build.target`](/config/build-options.html#build-target) 选项优先于 `oxc.target`，如果需要也可以设置。
 
@@ -101,7 +101,7 @@ Vite 忽略 `tsconfig.json` 中的 `target` 值，遵循与 [esbuild](https://es
 
 - [TypeScript 文档](https://www.typescriptlang.org/tsconfig/#paths)
 
-可以指定 `resolve.tsconfigPaths: true` 来告诉 Vite 使用 `tsconfig.json` 中的 `paths` 选项来解析导入。
+[`resolve.tsconfigPaths: true`](/config/shared-options.md#resolve-tsconfigpaths) 可以指定，以告诉 Vite 使用 `tsconfig.json` 中的 `paths` 选项来解析导入。
 
 请注意，此功能有性能开销，并且 [TypeScript 团队不推荐使用此选项来更改外部工具的行为](https://www.typescriptlang.org/tsconfig/#paths:~:text=Note%20that%20this%20feature%20does%20not%20change%20how%20import%20paths%20are%20emitted%20by%20tsc%2C%20so%20paths%20should%20only%20be%20used%20to%20inform%20TypeScript%20that%20another%20tool%20has%20this%20mapping%20and%20will%20use%20it%20at%20runtime%20or%20when%20bundling.)。
 
@@ -118,7 +118,7 @@ Vite 忽略 `tsconfig.json` 中的 `target` 值，遵循与 [esbuild](https://es
 - [`experimentalDecorators`](https://www.typescriptlang.org/tsconfig#experimentalDecorators)
 
 ::: tip `skipLibCheck`
-Vite starter 模板默认具有 `"skipLibCheck": "true"`，以避免对依赖项进行类型检查，因为它们可能选择仅支持特定版本和配置的 TypeScript。你可以在 [vuejs/vue-cli#5688](https://github.com/vuejs/vue-cli/pull/5688) 了解更多。
+Vite 入门模板默认将 `"skipLibCheck": true`，以避免对依赖进行类型检查，因为它们可能只支持 TypeScript 的特定版本和配置。你可以在 [vuejs/vue-cli#5688](https://github.com/vuejs/vue-cli/pull/5688) 了解更多。
 :::
 
 ### 客户端类型
@@ -679,6 +679,16 @@ console.log(add(1, 2)) // 3
 
 这遵循 [WebAssembly/ES Module Integration 提案](https://github.com/WebAssembly/esm-integration)。由于 WebAssembly 模块是异步实例化的，直接导入的 `.wasm` 文件表现为异步模块，并且需要支持顶层 `await`。
 
+::: tip TypeScript support
+
+由于 `.wasm` 文件的类型未知，TypeScript 会报错，例如 `Module '"*.wasm"' has no exported member 'add'`。要修复此问题，请在你的 `tsconfig.json` 中启用 [`allowArbitraryExtensions`](https://www.typescriptlang.org/tsconfig/#allowArbitraryExtensions)，并在你的 `.wasm` 文件旁边创建一个声明文件。启用 `allowArbitraryExtensions` 后，TypeScript 在解析 `.wasm` 导入时会查找名为 `{filename}.d.wasm.ts` 的声明文件。例如，对于 `add.wasm`，创建 `add.d.wasm.ts`：
+
+```ts [add.d.wasm.ts]
+export function add(a: number, b: number): number
+```
+
+:::
+
 ### 手动初始化
 
 当你需要控制模块何时以及如何实例化时，请使用 `?init` 导入它。默认导出将是一个初始化函数，它返回 [`WebAssembly.Instance`](https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/Instance) 的 Promise：
@@ -714,7 +724,7 @@ init({
 
 ::: warning For SSR build, Node.js compatible runtimes are only supported
 
-Due to the lack of a universal way to load a file, the internal implementation for both direct `.wasm` imports and `.wasm?init` relies on the `node:fs` module. This means that these features will only work in Node.js compatible runtimes for SSR builds.
+由于缺少一种通用的文件加载方式，直接 `.wasm` 导入和 `.wasm?init` 的内部实现都依赖于 `node:fs` 模块。这意味着这些功能仅在 SSR 构建的 Node.js 兼容运行时中可用。
 
 :::
 
@@ -755,7 +765,7 @@ const worker = new Worker(new URL('./worker.js', import.meta.url), {
 })
 ```
 
-只有当 `new URL()` 构造函数直接在 `new Worker()` 声明中使用时，worker 检测才会生效。此外，所有选项参数必须是静态值（即字符串字面量）。
+只有当 `new URL()` 构造函数直接写在 `new Worker()` 声明内部时，worker 检测才会生效。否则，它会被当作 [静态资源 URL](./assets#new-url-url-import-meta-url) 处理。此外，所有选项参数都必须是静态值（即字符串字面量）。
 
 ### 使用查询后缀导入
 
@@ -805,7 +815,7 @@ import MyWorker from './worker?worker&url'
 
 ### [`data:`](<https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/Sources#scheme-source:~:text=schemes%20(not%20recommended).-,data%3A,-Allows%20data%3A>)
 
-默认情况下，在构建期间，Vite 会将小资源内联为 data URIs。允许相关指令使用 `data:`（例如 [`img-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/img-src)、[`font-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/font-src)），或者通过设置 [`build.assetsInlineLimit: 0`](/config/build-options#build-assetsinlinelimit) 禁用它是必要的。
+默认情况下，在构建期间，Vite 会将小资源内联为 data URI。允许相关指令使用 `data:`（例如 [`img-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/img-src)、[`font-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/font-src)），或者通过设置 [`build.assetsInlineLimit: 0`](/config/build-options#build-assetsinlinelimit) 禁用它是必要的。
 
 :::warning
 不要允许 [`script-src`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src) 使用 `data:`。这将允许注入任意脚本。
@@ -828,19 +838,19 @@ export default defineConfig({
 这将生成一个 `.vite/license.md` 文件，输出可能如下所示：
 
 ```md
-# Licenses
+# 许可证
 
 应用程序打包的依赖项包含以下许可证：
 
 ## dep-1 - 1.2.3 (CC0-1.0)
 
-CC0 1.0 Universal
+CC0 1.0 通用版
 
 ...
 
 ## dep-2 - 4.5.6 (MIT)
 
-MIT License
+MIT 许可证
 
 ...
 ```
@@ -884,7 +894,7 @@ Entry ---> (A + C)
 
 如果 `C` 还有进一步的导入，那么在未优化的场景中将导致更多的往返。Vite 的优化会追踪所有直接导入，从而不受导入深度影响，彻底消除这些往返。
 
-### Chunk Import Map Optimization
+### Chunk Import Map 优化
 
 为了提高 chunk 的缓存命中率，Vite 可以为 chunk 创建一个 import map。这可以防止级联的缓存失效问题，而这正是 ES Modules 的一个问题。
 

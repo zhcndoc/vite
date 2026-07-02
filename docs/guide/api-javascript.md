@@ -77,7 +77,7 @@ parentServer.use(vite.middlewares)
 
 ## `ResolvedConfig`
 
-`ResolvedConfig` 接口拥有与 `UserConfig` 所有相同的属性，除了大多数属性已解析且非 undefined。它还包含实用工具，如：
+`ResolvedConfig` 接口拥有与 `UserConfig` 所有相同的属性，除了大多数属性已解析且非 `undefined`。它还包含实用工具，如：
 
 - `config.assetsInclude`: 一个用于检查 `id` 是否被视为资源的函数。
 - `config.logger`: Vite 的内部日志对象。
@@ -200,7 +200,7 @@ interface ViteDevServer {
 ```ts
 async function build(
   inlineConfig?: InlineConfig,
-): Promise<RollupOutput | RollupOutput[]>
+): Promise<RolldownOutput | RolldownOutput[] | RolldownWatcher>
 ```
 
 **示例用法：**
@@ -314,7 +314,7 @@ function mergeConfig(
 
 注意，`overrides` 中的 `null` 和 `undefined` 值会被跳过，不会参与合并。如果你需要显式清除 `defaults` 中的某个值，请直接修改 `mergeConfig` 的结果。
 
-::: tip NOTE
+::: tip 注意
 `mergeConfig` 只接受对象形式的配置。如果你有一个回调形式的配置，应当先调用它，再传入 `mergeConfig`。
 
 你可以使用 `defineConfig` 辅助函数将回调形式的配置与另一个配置合并：
@@ -350,7 +350,7 @@ function searchForWorkspaceRoot(
 
 **相关：** [server.fs.allow](/config/server-options.md#server-fs-allow)
 
-搜索潜在工作空间的根目录，如果满足以下条件，否则将回退到 `root`：
+搜索潜在工作区的根目录，如果满足以下条件，否则将回退到 `root`：
 
 - 在 `package.json` 中包含 `workspaces` 字段
 - 包含以下文件之一
@@ -435,7 +435,7 @@ async function loadConfigFromFile(
 } | null>
 ```
 
-使用 esbuild 手动加载 Vite 配置文件。
+使用 Rolldown 手动加载 Vite 配置文件。
 
 ## `preprocessCSS`
 
@@ -458,9 +458,9 @@ interface PreprocessCSSResult {
 }
 ```
 
-预处理 `.css`、`.scss`、`.sass`、`.less`、`.styl` 和 `.stylus` 文件为纯 CSS，以便在浏览器中使用或被其他工具解析。与 [内置 CSS 预处理支持](/guide/features#css-pre-processors) 类似，如果使用了相应的预处理器，则必须安装它。
+将 `.css`、`.scss`、`.sass`、`.less`、`.styl` 和 `.stylus` 文件预处理为纯 CSS，以便在浏览器中使用或被其他工具解析。与 [内置 CSS 预处理支持](/guide/features#css-pre-processors) 类似，如果使用了相应的预处理器，则必须安装它。
 
-使用的预处理器是从 `filename` 扩展名推断出来的。如果 `filename` 以 `.module.{ext}` 结尾，则被推断为 [CSS module](https://github.com/css-modules/css-modules)，返回的结果将包含一个 `modules` 对象，将原始类名映射到转换后的类名。
+使用的预处理器是根据 `filename` 的扩展名推断出来的。如果 `filename` 以 `.module.{ext}` 结尾，则会被推断为 [CSS 模块](https://github.com/css-modules/css-modules)，返回的结果将包含一个 `modules` 对象，将原始类名映射为转换后的类名。
 
 注意，预处理不会解析 `url()` 或 `image-set()` 中的 URL。
 
@@ -480,7 +480,7 @@ Vite 使用的 Rolldown 版本的字符串表示（例如 `"1.0.0"`）。来自 
 
 **类型：** `string`
 
-仅为了向后兼容而保留。
+仅为向后兼容而保留。
 
 ## `rollupVersion`
 

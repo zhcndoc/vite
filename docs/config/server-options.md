@@ -103,7 +103,7 @@ export default defineConfig({
 
 - **类型：** `Record<string, string | ProxyOptions>`
 
-为开发服务器配置自定义代理规则。期望一个 `{ key: options }` 键值对对象。任何请求路径以该键开头的请求都将被代理到指定的目标。如果键以 `^` 开头，它将被解释为 `RegExp`。可以使用 `configure` 选项来访问代理实例。如果请求匹配任何配置的代理规则，该请求将不会被 Vite 转换。
+为开发服务器配置自定义代理规则。它期望一个 `{ key: options }` 键值对对象。任何请求路径以该 key 开头的请求都会被代理到指定目标。如果 key 以 `^` 开头，则会被解释为 `RegExp`。可以使用 `configure` 选项访问代理实例。如果某个请求匹配了任一已配置的代理规则，该请求就不会被 Vite 转换。
 
 注意，如果你使用的是非相对 [`base`](/config/shared-options.md#base)，你必须在每个键前加上该 `base` 前缀。
 
@@ -162,14 +162,14 @@ export default defineConfig({
 
 ## server.cors
 
-- **类型：** `boolean | CorsOptions`
-- **默认值：** `{ origin: /^https?:\/\/(?:(?:[^:]+\.)?localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/ }`（允许 localhost、`127.0.0.1` 和 `::1`）
+- **Type:** `boolean | CorsOptions`
+- **Default:** `{ origin: /^https?:\/\/(?:(?:[^:]+\.)?localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/ }` (allows localhost, `127.0.0.1`, and `::1`)
 
-为开发服务器配置 CORS。传递一个 [选项对象](https://github.com/expressjs/cors#configuration-options) 来微调行为，或传递 `true` 以允许任何源。
+Configure CORS for the development server. Pass an [options object](https://github.com/expressjs/cors#configuration-options) to fine-tune behavior, or pass `true` to allow any origin.
 
 ::: danger
 
-将 `server.cors` 设置为 `true` 允许任何网站向你的开发服务器发送请求并下载你的源代码和内容。我们建议始终使用明确的允许源列表。
+Setting `server.cors` to `true` allows any website to send requests to your development server and download your source code and content. We recommend always using an explicit allowlist of origins.
 
 :::
 
@@ -266,7 +266,7 @@ export default defineConfig({
 当转发未处理的错误时，它们会以增强的格式记录在服务器终端中，例如：
 
 ```log
-1:18:38 AM [vite] (client) [Unhandled error] Error: this is test error
+1:18:38 AM [vite] (client) [未处理的错误] Error: this is test error
  > testError src/main.ts:20:8
      18|
      19| function testError() {
@@ -282,11 +282,11 @@ export default defineConfig({
 - **类型：** `{ clientFiles?: string[], ssrFiles?: string[] }`
 - **相关：** [预热常用文件](/guide/performance.html#warm-up-frequently-used-files)
 
-预热文件以提前转换并缓存结果。这改善了服务器启动期间的初始页面加载，并防止转换瀑布流。
+预热文件以提前转换并缓存结果。这可以改善服务器启动期间的初始页面加载，并防止转换瀑布流。
 
 `clientFiles` 是仅在客户端使用的文件，而 `ssrFiles` 是仅在 SSR 中使用的文件。它们接受相对于 `root` 的文件路径数组或 [`tinyglobby` 模式](https://superchupu.dev/tinyglobby/comparison)。
 
-确保只添加经常使用的文件，以免在启动时使 Vite 开发服务器过载。
+请确保只添加经常使用的文件，以免在启动时使 Vite 开发服务器过载。
 
 ```js
 export default defineConfig({

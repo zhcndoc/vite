@@ -17,7 +17,7 @@
 
 2. **性能：** Vite 将具有许多内部模块的 ESM 依赖转换为单个模块，以提高后续页面加载性能。
 
-   有些包将其 ES 模块构建发布为许多相互导入的单独文件。例如，[`lodash-es` 有超过 600 个内部模块](https://unpkg.com/browse/lodash-es/)！当我们执行 `import { debounce } from 'lodash-es'` 时，浏览器会同时发起 600 多个 HTTP 请求！即使服务器处理它们没有问题，大量的请求也会在浏览器端造成网络拥塞，导致页面加载明显变慢。
+   一些包会将其 ES 模块构建产物作为许多相互导入的独立文件发布。例如，[`lodash-es` 有超过 600 个内部模块](https://unpkg.com/browse/lodash-es/)! 当我们执行 `import { debounce } from 'lodash-es'` 时，浏览器会同时发起 600 多个 HTTP 请求！尽管服务器处理这些请求没有问题，但大量请求会在浏览器端造成网络拥塞，导致页面加载明显变慢。
 
    通过将 `lodash-es` 预构建为单个模块，我们现在只需要一个 HTTP 请求！
 
@@ -27,7 +27,7 @@
 
 ## 自动依赖发现
 
-如果未找到现有缓存，Vite 将抓取你的源代码并自动发现依赖导入（即期望从 `node_modules` 解析的“裸导入”），并将这些找到的导入用作预构建的入口点。预构建是使用 [Rolldown](https://rolldown.rs/) 执行的，因此通常非常快。
+如果未找到现有缓存，Vite 将遍历你的源代码并自动发现依赖导入（即期望从 `node_modules` 中解析的“裸导入”），并将这些找到的导入作为预打包的入口点。预打包由 [Rolldown](https://rolldown.rs/) 执行，因此通常非常快。
 
 服务器启动后，如果遇到缓存中尚未存在的新依赖导入，Vite 将重新运行依赖构建过程，并在需要时重新加载页面。
 
@@ -49,15 +49,15 @@ export default defineConfig({
 
 当更改链接依赖时，使用 `--force` 命令行选项重启开发服务器以使更改生效。
 
-## 自定义行为
+## Custom Behavior
 
-默认的依赖发现启发式方法可能并不总是理想的。在你想要显式包含/排除依赖列表中的依赖的情况下，请使用 [`optimizeDeps` 配置选项](/config/dep-optimization-options.md)。
+The default dependency discovery heuristics may not always be ideal. In cases where you want to explicitly include/exclude dependencies in the dependency list, use the [`optimizeDeps` configuration option](/config/dep-optimization-options.md).
 
-`optimizeDeps.include` 或 `optimizeDeps.exclude` 的一个典型用例是当你有一个无法在源代码中直接发现的导入时。例如，导入可能是插件转换的结果。这意味着 Vite 无法在初始扫描时发现该导入——它只能在文件被浏览器请求并转换后发现。这将导致服务器在启动后立即重新构建。
+A typical use case for `optimizeDeps.include` or `optimizeDeps.exclude` is when you have an import that cannot be directly discovered in source code. For example, the import may be the result of a plugin transform. This means Vite cannot discover that import during the initial scan — it can only discover it after the file is requested and transformed by the browser. This will cause the server to rebuild immediately after startup.
 
-`include` 和 `exclude` 都可用于处理这种情况。如果依赖很大（具有许多内部模块）或者是 CommonJS，则你应该包含它；如果依赖很小且已经是有效的 ESM，你可以排除它并让浏览器直接加载它。
+Both `include` and `exclude` can be used to handle this situation. If the dependency is large (with many internal modules) or is CommonJS, you should include it; if the dependency is small and already valid ESM, you can exclude it and let the browser load it directly.
 
-你还可以使用 [`optimizeDeps.rolldownOptions` 选项](/config/dep-optimization-options.md#optimizedeps-rolldownoptions) 进一步自定义 Rolldown。例如，添加一个 Rolldown 插件来处理依赖中的特殊文件或更改 [构建 `target`](https://rolldown.rs/reference/InputOptions.transform#target)。
+You can also use the [`optimizeDeps.rolldownOptions` option](/config/dep-optimization-options.md#optimizedeps-rolldownoptions) to further customize Rolldown. For example, add a Rolldown plugin to handle special files in dependencies or change the [build `target`](https://rolldown.rs/reference/InputOptions.transform#target).
 
 ## 缓存
 

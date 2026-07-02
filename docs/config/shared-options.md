@@ -65,7 +65,7 @@ declare const __APP_VERSION__: string
 
 :::
 
-## plugins
+## 插件
 
 - **类型：** `(Plugin | Plugin[] | Promise<Plugin | Plugin[]>)[]`
 
@@ -76,7 +76,7 @@ declare const __APP_VERSION__: string
 - **类型：** `string | false`
 - **默认值：** `"public"`
 
-用作纯静态资源的目录。此目录中的文件在开发期间服务于 `/`，并在构建期间复制到 `outDir` 的根目录，并且总是原样服务或复制而不进行转换。该值可以是绝对文件系统路径或相对于项目根目录的路径。
+用作纯静态资源的目录。此目录中的文件在开发期间服务于 `/`，在构建期间复制到 `outDir` 的根目录，并且总是原样服务或复制而不进行转换。该值可以是绝对文件系统路径或相对于项目根目录的路径。
 
 将 `publicDir` 定义为 `false` 可禁用此功能。
 
@@ -142,10 +142,10 @@ resolve: {
 
 - **类型：** `string[]`
 
-如果你的应用程序中有相同依赖项的重复副本（可能是由于提升或 monorepo 中的链接包），使用此选项强制 Vite 始终将列出的依赖项解析为同一个副本（从项目根目录）。
+如果你的应用程序中存在同一依赖项的多个副本（可能是由于提升或 monorepo 中的链接包导致），使用此选项可强制 Vite 始终将列出的依赖项解析为同一个副本（从项目根目录）。
 
 :::warning SSR + ESM
-对于 SSR 构建，去重在 `build.rolldownOptions.output` 中配置的 ESM 构建输出上不起作用。一个变通方法是在 ESM 对模块加载有更好的插件支持之前，使用 CJS 构建输出。
+对于 SSR 构建，去重在 `build.rolldownOptions.output` 中配置的 ESM 构建输出上不起作用。一个变通方法是在 ESM 对模块加载具有更好的插件支持之前，使用 CJS 构建输出。
 :::
 
 ## resolve.conditions <NonInheritBadge />
@@ -192,12 +192,12 @@ resolve: {
 
 ## resolve.preserveSymlinks
 
-- **类型：** `boolean`
-- **默认值：** `false`
+- **Type:** `boolean`
+- **Default:** `false`
 
-启用此设置会导致 vite 通过原始文件路径（即不跟随符号链接的路径）而不是真实文件路径（即跟随符号链接后的路径）来确定文件身份。
+Enabling this option will cause vite to determine file identity using the original file path (that is, the path without following symlinks) rather than the real file path (that is, the path after following symlinks).
 
-- **相关：** [esbuild#preserve-symlinks](https://esbuild.github.io/api/#preserve-symlinks), [webpack#resolve.symlinks
+- **Related:** [esbuild#preserve-symlinks](https://esbuild.github.io/api/#preserve-symlinks), [webpack#resolve.symlinks
   ](https://webpack.js.org/configuration/resolve/#resolvesymlinks)
 
 ## resolve.tsconfigPaths
@@ -206,6 +206,18 @@ resolve: {
 - **默认值：** `false`
 
 启用 tsconfig 路径解析功能。`tsconfig.json` 中的 `paths` 选项将用于解析导入。有关更多详细信息，请参阅 [功能](/guide/features.md#paths)。
+
+`paths` 仅适用于通过 `files` 或 `include` 被 `tsconfig.json` 匹配到的文件。非 JS 扩展名文件应显式列在其中，因为仅写 `"src"` 或 `"**/*"` 的 `include` 只会匹配 TS/JS 扩展名，这与 TypeScript 的行为一致。例如，要在 CSS 文件中使用 `paths` 别名（例如 `@import '@/foo.css'`），请将这些文件列入 `files`，或为 `include` 添加显式扩展名：
+
+```json [tsconfig.json]
+{
+  "include": ["src", "src/**/*.css", "src/**/*.scss"]
+}
+```
+
+::: warning 不支持 Less
+`resolve.tsconfigPaths` 不适用于 `.less` 文件内部。Less 只会将导入文件的目录传给 Vite，而不会传递文件本身，因此 Vite 无法找到与之匹配的 `tsconfig.json`。请在 Less 中的 `@import` 使用相对路径或 [`resolve.alias`](#resolve-alias)。
+:::
 
 ## html.cspNonce
 
@@ -307,17 +319,17 @@ export default defineConfig({
 
 ## css.preprocessorOptions
 
-- **类型：** `Record<string, object>`
+- **Type:** `Record<string, object>`
 
-指定传递给 CSS 预处理器的选项。文件扩展名将用作选项的键。每个预处理器支持的选项可以在其各自的文档中找到：
+Specify options to pass to CSS preprocessors. The file extension will be used as the key for the options. Supported options for each preprocessor can be found in their respective documentation:
 
 - `sass`/`scss`:
-  - 如果安装了 `sass-embedded` 则使用它，否则使用 `sass`。为了获得最佳性能，建议安装 `sass-embedded` 包。
-  - [选项](https://sass-lang.com/documentation/js-api/interfaces/stringoptions/)
-- `less`: [选项](https://lesscss.org/usage/#less-options)。
-- `styl`/`stylus`: 仅支持 [`define`](https://stylus-lang.com/docs/js.html#define-name-node)，它可以作为对象传递。
+  - If `sass-embedded` is installed, it will be used; otherwise, `sass` will be used. For best performance, it is recommended to install the `sass-embedded` package.
+  - [Options](https://sass-lang.com/documentation/js-api/interfaces/stringoptions/)
+- `less`: [Options](https://lesscss.org/usage/#less-options).
+- `styl`/`stylus`: Only [`define`](https://stylus-lang.com/docs/js.html#define-name-node) is supported, and it can be passed as an object.
 
-**示例：**
+**Example:**
 
 ```js
 export default defineConfig({
@@ -343,11 +355,11 @@ export default defineConfig({
 
 ### css.preprocessorOptions[extension].additionalData
 
-- **类型：** `string | ((source: string, filename: string) => (string | { content: string; map?: SourceMap }))`
+- **Type:** `string | ((source: string, filename: string) => (string | { content: string; map?: SourceMap }))`
 
-此选项可用于为每段样式内容注入额外代码。请注意，如果包含的是实际样式而不仅仅是变量，这些样式将在最终打包结果中重复。
+This option can be used to inject extra code into each style content. Note that if actual styles are included instead of just variables, these styles will be duplicated in the final bundle.
 
-**示例：**
+**Example:**
 
 ```js
 export default defineConfig({
@@ -361,8 +373,8 @@ export default defineConfig({
 })
 ```
 
-::: tip 导入文件
-由于相同的代码会被添加到不同目录的文件前面，相对路径将无法被正确解析。请使用绝对路径或 [别名](#resolve-alias)。
+::: tip Importing Files
+Since the same code will be prepended to files in different directories, relative paths cannot be resolved correctly. Please use absolute paths or [aliases](#resolve-alias).
 :::
 
 ## css.preprocessorMaxWorkers
@@ -388,10 +400,10 @@ export default defineConfig({
 - **类型：** `'postcss' | 'lightningcss'`
 - **默认值：** `'postcss'`
 
-选择用于 CSS 处理的引擎。查看 [Lightning CSS](../guide/features.md#lightning-css) 获取更多信息。
+选择用于 CSS 处理的引擎。查看更多信息请参见 [Lightning CSS](../guide/features.md#lightning-css)。
 
 ::: info 重复的 `@import`
-请注意，postcss (postcss-import) 对重复 `@import` 的处理行为与浏览器不同。参见 [postcss/postcss-import#462](https://github.com/postcss/postcss-import/issues/462)。
+请注意，postcss（postcss-import）对重复 `@import` 的处理行为与浏览器不同。参见 [postcss/postcss-import#462](https://github.com/postcss/postcss-import/issues/462)。
 :::
 
 ## css.lightningcss
