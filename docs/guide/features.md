@@ -331,7 +331,7 @@ npm add -D stylus
 
 如果使用 Vue 单文件组件，这也自动启用了 `<style lang="sass">` 等。
 
-Vite 改进了 Sass 和 Less 的 `@import` 解析，因此也遵循 Vite 别名。此外，导入的 Sass/Less 文件内部相对于根文件位于不同目录的相对 `url()` 引用也会自动重基以确保正确性。由于 API 限制，不支持重基以变量或插值开头的 `url()` 引用。
+Vite 改进了 Sass 和 Less 的 `@import` 解析，因此也会遵循 Vite 别名。此外，位于不同目录中的导入 Sass/Less 文件内的相对 `url()` 引用，也会自动重基以确保正确性。由于 API 限制，不支持对以变量或插值开头的 `url()` 引用进行重基。
 
 由于 API 限制，Stylus 不支持 `@import` 别名和 URL 重基。
 

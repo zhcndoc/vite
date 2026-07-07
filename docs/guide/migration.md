@@ -56,7 +56,7 @@ Rolldown 现在用于依赖优化，而不是 esbuild。Vite 仍然支持 [`opti
 const plugin = {
   name: 'log-config',
   configResolved(config) {
-    console.log('options', config.optimizeDeps.rolldownOptions)
+    console.log('选项', config.optimizeDeps.rolldownOptions)
   },
 },
 ```
@@ -284,7 +284,7 @@ export default defineConfig({
 
 `import.meta.url` 不再在 UMD / IIFE 输出格式中进行 polyfill。默认情况下它将替换为 `undefined`。如果你更喜欢之前的行为，可以使用 [`define`](/config/shared-options#define) 选项配合 [`build.rolldownOptions.output.intro`](https://rolldown.rs/reference/OutputOptions.intro) 选项。有关更多详细信息，请参阅 Rolldown 的文档：[众所周知的 `import.meta` 属性 - 非 ESM 输出格式 | Rolldown](https://rolldown.rs/in-depth/non-esm-output-formats#well-known-import-meta-properties)。
 
-### 移除了 `build.rollupOptions.watch.chokidar` 选项
+### 已移除 `build.rollupOptions.watch.chokidar` 选项
 
 `build.rollupOptions.watch.chokidar` 选项已被移除。请迁移到 [`build.rolldownOptions.watch.watcher`](https://rolldown.rs/reference/InputOptions.watch#watcher) 选项。
 
@@ -343,29 +343,29 @@ const plugin = {
 
 ## 已移除的废弃功能 [<Badge text="NRV" type="warning" />](#migration-from-v7)
 
-- 不再支持将 URL 传递给 `import.meta.hot.accept`。请改为传递一个 id。 ([#21382](https://github.com/vitejs/vite/pull/21382))
+- 向 `import.meta.hot.accept` 传递 URL 已不再支持。请改为传递 id。([#21382](https://github.com/vitejs/vite/pull/21382))
 
 ## 高级
 
 这些破坏性变更预计只会影响少数用例：
 
-- [Extglobs](https://github.com/micromatch/picomatch/blob/master/README.md#extglobs) 尚不支持 ([rolldown-vite#365](https://github.com/vitejs/rolldown-vite/issues/365))
-- TypeScript legacy namespace 仅部分支持。请参阅 [Oxc Transformer 的相关文档](https://oxc.rs/docs/guide/usage/transformer/typescript.html#partial-namespace-support) 以获取更多详情。
-- `define` 不为对象共享引用：当你将一个对象作为值传递给 `define` 时，每个变量都将拥有该对象的一个独立副本。请参阅 [Oxc Transformer 的相关文档](https://oxc.rs/docs/guide/usage/transformer/global-variable-replacement#define) 以获取更多详情。
-- `bundle` 对象变更（`bundle` 是在 `generateBundle` / `writeBundle` 钩子中传递的对象，由 `build` 函数返回）：
-  - 不支持赋值给 `bundle[foo]`。Rollup 也不鼓励这样做。请改用 `this.emitFile()`。
-  - 引用在各钩子之间不共享 ([rolldown-vite#410](https://github.com/vitejs/rolldown-vite/issues/410))
-  - `structuredClone(bundle)` 会报错 `DataCloneError: #<Object> could not be cloned`。不再支持此操作。请使用 `structuredClone({ ...bundle })` 进行克隆。 ([rolldown-vite#128](https://github.com/vitejs/rolldown-vite/issues/128))
-- Rollup 中的所有并行钩子现在作为顺序钩子工作。请参阅 [Rolldown 的文档](https://rolldown.rs/apis/plugin-api#sequential-hook-execution) 以获取更多详情。
-- `"use strict";` 有时不会被注入。请参阅 [Rolldown 的文档](https://rolldown.rs/in-depth/directives) 以获取更多详情。
-- 不支持使用 plugin-legacy 转换到 ES5 及以下版本 ([rolldown-vite#452](https://github.com/vitejs/rolldown-vite/issues/452))
-- 将同一浏览器的多个版本传递给 `build.target` 选项现在会报错：esbuild 会选择该浏览器的最新版本，这可能不是你的本意。
-- Rolldown 缺少支持：以下功能不受 Rolldown 支持，Vite 也不再支持。
-  - `build.rollupOptions.output.format: 'system'` ([rolldown#2387](https://github.com/rolldown/rolldown/issues/2387))
-  - `build.rollupOptions.output.format: 'amd'` ([rolldown#2387](https://github.com/rolldown/rolldown/issues/2528))
-  - `shouldTransformCachedModule` 钩子 ([rolldown#4389](https://github.com/rolldown/rolldown/issues/4389))
-  - `resolveImportMeta` 钩子 ([rolldown#1010](https://github.com/rolldown/rolldown/issues/1010))
-  - `renderDynamicImport` 钩子 ([rolldown#4532](https://github.com/rolldown/rolldown/issues/4532))
+- [Extglobs](https://github.com/micromatch/picomatch/blob/master/README.md#extglobs) 尚不支持（[rolldown-vite#365](https://github.com/vitejs/rolldown-vite/issues/365)）
+- TypeScript 旧式命名空间仅部分支持。有关更多详情，请参阅 [Oxc Transformer 的相关文档](https://oxc.rs/docs/guide/usage/transformer/typescript.html#partial-namespace-support)。
+- `define` 不会为对象共享引用：当你将一个对象作为值传递给 `define` 时，每个变量都会拥有该对象的独立副本。有关更多详情，请参阅 [Oxc Transformer 的相关文档](https://oxc.rs/docs/guide/usage/transformer/global-variable-replacement#define)。
+- `bundle` 对象变更（`bundle` 是在 `generateBundle` / `writeBundle` 钩子中传入、由 `build` 函数返回的对象）：
+  - 不支持对 `bundle[foo]` 赋值。Rollup 也不建议这样做。请改用 `this.emitFile()`。
+  - 该引用不会在各个钩子之间共享（[rolldown-vite#410](https://github.com/vitejs/rolldown-vite/issues/410)）
+  - `structuredClone(bundle)` 会报错 `DataCloneError: #<Object> could not be cloned`。这不再受支持。请改用 `structuredClone({ ...bundle })` 进行克隆。（[rolldown-vite#128](https://github.com/vitejs/rolldown-vite/issues/128)）
+- Rollup 中所有并行钩子都会按顺序钩子执行。有关更多详情，请参阅 [Rolldown 的文档](https://rolldown.rs/apis/plugin-api#sequential-hook-execution)。
+- `"use strict";` 有时不会被注入。有关更多详情，请参阅 [Rolldown 的文档](https://rolldown.rs/in-depth/directives)。
+- 不支持通过 plugin-legacy 转换为 ES5 及以下版本（[rolldown-vite#452](https://github.com/vitejs/rolldown-vite/issues/452)）
+- 现在，如果在 `build.target` 选项中传入同一浏览器的多个版本会报错：esbuild 会选择其中最新的版本，而这很可能不是你想要的结果。
+- Rolldown 不支持的内容：以下功能不受 Rolldown 支持，并且已不再受 Vite 支持。
+  - `build.rollupOptions.output.format: 'system'`（[rolldown#2387](https://github.com/rolldown/rolldown/issues/2387)）
+  - `build.rollupOptions.output.format: 'amd'`（[rolldown#2387](https://github.com/rolldown/rolldown/issues/2528)）
+  - `shouldTransformCachedModule` 钩子（[rolldown#4389](https://github.com/rolldown/rolldown/issues/4389)）
+  - `resolveImportMeta` 钩子（[rolldown#1010](https://github.com/rolldown/rolldown/issues/1010)）
+  - `renderDynamicImport` 钩子（[rolldown#4532](https://github.com/rolldown/rolldown/issues/4532)）
   - `resolveFileUrl` 钩子
 - `parseAst` / `parseAstAsync` 函数现已弃用，改为使用功能更丰富的 `parseSync` / `parse` 函数。
 - `renderChunk` 钩子之前会移除注释，而不是在 `renderChunk` 钩子之后移除
