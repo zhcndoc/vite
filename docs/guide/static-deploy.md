@@ -93,7 +93,7 @@ $ npm run preview
 
    这是一个示例工作流，它使用 npm 安装依赖，构建站点，并在你推送更改到 `main` 分支时部署它：
 
-   <<< ./static-deploy-github-pages.yaml#content [.github/workflows/deploy.yml]。
+   <<< ./static-deploy-github-pages.yaml#content [.github/workflows/deploy.yml]
 
 ## GitLab Pages 和 GitLab CI
 
