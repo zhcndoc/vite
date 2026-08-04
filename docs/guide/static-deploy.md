@@ -93,7 +93,7 @@ $ npm run preview
 
    这是一个示例工作流，它使用 npm 安装依赖，构建站点，并在你推送更改到 `main` 分支时部署它：
 
-   <<< ./static-deploy-github-pages.yaml#content [.github/workflows/deploy.yml]
+   <<< ./static-deploy-github-pages.yaml#content [.github/workflows/deploy.yml]。
 
 ## GitLab Pages 和 GitLab CI
 
@@ -162,7 +162,7 @@ Netlify CLI 会与你分享一个预览 URL 以供检查。当你准备好进入
 3. Vercel 将检测到你正在使用 Vite，并为你的部署启用正确的设置。
 4. 你的应用已部署！（例如 [vite-vue-template.vercel.app](https://vite-vue-template.vercel.app/)）
 
-导入并部署项目后，所有后续推送到分支的操作都将生成 [预览部署](https://vercel.com/docs/concepts/deployments/environments#preview)，而对生产分支（通常是"main"）所做的所有更改都将导致 [生产部署](https://vercel.com/docs/concepts/deployments/environments#production)。
+项目导入并部署后，之后向各分支推送代码都会生成[预览部署](https://vercel.com/docs/deployments/environments#preview-environment-pre-production)，而对生产分支（通常为“main”）所做的所有更改都会生成[生产部署](https://vercel.com/docs/deployments/environments#production-environment)。
 
 了解更多关于 Vercel 的 [Git 集成](https://vercel.com/docs/concepts/git)。
 
@@ -211,9 +211,9 @@ Cloudflare Pages 提供了一种直接部署到 Cloudflare 而无需管理 Wrang
 6. 然后保存并部署！
 7. 你的应用已部署！（例如 `https://<PROJECTNAME>.pages.dev/`）
 
-导入并部署项目后，所有后续推送到分支的操作都将生成 [预览部署](https://developers.cloudflare.com/pages/platform/preview-deployments/)，除非在 [分支构建控制](https://developers.cloudflare.com/pages/platform/branch-build-controls/) 中指定不生成。对生产分支（通常是"main"）的所有更改都将导致生产部署。
+导入并部署项目后，所有后续推送到分支的操作都将生成 [预览部署](https://developers.cloudflare.com/pages/platform/preview-deployments/)，除非在 [分支构建控制](https://developers.cloudflare.com/pages/platform/branch-build-controls/) 中指定不生成。对生产分支（通常是“main”）的所有更改都将导致生产部署。
 
-你还可以在 Pages 上添加自定义域名和处理自定义构建设置。了解更多关于 [Cloudflare Pages Git 集成](https://developers.cloudflare.com/pages/get-started/#manage-your-site)。
+你还可以在 Pages 上添加自定义域名并处理自定义构建设置。详细了解 [Cloudflare Pages Git 集成](https://developers.cloudflare.com/pages/configuration/git-integration/)。
 
 ## Google Firebase
 
@@ -266,11 +266,11 @@ Cloudflare Pages 提供了一种直接部署到 Cloudflare 而无需管理 Wrang
 - 你的应用代码已推送到 [GitHub](https://github.com)。
 - [Visual Studio Code](https://code.visualstudio.com) 中的 [SWA 扩展](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurestaticwebapps)。
 
-在 VS Code 中安装扩展并导航到你的应用根目录。打开 Static Web Apps 扩展，登录 Azure，然后点击 '+' 符号创建一个新的 Static Web App。系统将提示你指定使用哪个订阅密钥。
+在 VS Code 中安装扩展并导航到你的应用根目录。打开 Static Web Apps 扩展，登录 Azure，然后点击“+”符号创建一个新的 Static Web App。系统将提示你指定使用哪个订阅密钥。
 
-跟随扩展启动的向导为你的应用命名，选择框架预设，并指定应用根目录（通常为 `/`）和构建文件位置 `/dist`。向导将运行并在你的仓库的 `.github` 文件夹中创建一个 GitHub action。
+按照扩展启动的向导为你的应用命名，选择框架预设，并指定应用根目录（通常为 `/`）和构建文件位置 `/dist`。向导将运行并在你的仓库的 `.github` 文件夹中创建一个 GitHub action。
 
-该 action 将部署你的应用（在仓库的 Actions 标签页中查看进度），当成功完成后，你可以通过点击 GitHub action 运行后出现的 'Browse Website' 按钮，在扩展进度窗口中提供的地址查看你的应用。
+该 action 将部署你的应用（在仓库的 Actions 标签页中查看进度）。成功完成后，你可以点击 GitHub action 运行后出现的“Browse Website”按钮，在扩展进度窗口中提供的地址查看你的应用。
 
 ## Render
 
@@ -278,31 +278,27 @@ Cloudflare Pages 提供了一种直接部署到 Cloudflare 而无需管理 Wrang
 
 1. 创建一个 [Render 账户](https://dashboard.render.com/register)。
 
-2. 在 [Dashboard](https://dashboard.render.com/) 中，点击 **New** 按钮并选择 **Static Site**。
+2. 在 [控制面板](https://dashboard.render.com/) 中，点击 **新建** 按钮并选择 **静态站点**。
 
 3. 连接你的 GitHub/GitLab 账户或使用公共仓库。
 
 4. 指定项目名称和分支。
-   - **Build Command**: `npm install && npm run build`
-   - **Publish Directory**: `dist`
+   - **构建命令**: `npm install && npm run build`
+   - **发布目录**: `dist`
 
-5. 点击 **Create Static Site**。你的应用应该部署在 `https://<PROJECTNAME>.onrender.com/`。
+5. 点击 **创建静态站点**。你的应用应该部署在 `https://<PROJECTNAME>.onrender.com/`。
 
-默认情况下，任何推送到指定分支的新提交都会自动触发新的部署。[自动部署](https://render.com/docs/deploys#toggling-auto-deploy-for-a-service) 可以在项目设置中配置。
+默认情况下，推送到指定分支的任何新提交都会自动触发新的部署。可以在项目设置中配置[自动部署](https://render.com/docs/deploys#configuring-auto-deploys)。
 
-你也可以为你的项目添加 [自定义域名](https://render.com/docs/custom-domains)。
+你也可以为你的项目添加[自定义域名](https://render.com/docs/custom-domains)。
 
 ## Flightcontrol
 
 通过遵循这些 [说明](https://www.flightcontrol.dev/docs/reference/examples/vite?ref=docs-vite)，使用 [Flightcontrol](https://www.flightcontrol.dev/?ref=docs-vite) 部署你的静态站点。
 
-## Kinsta Static Site Hosting
+## xmit 静态网站托管
 
-通过遵循这些 [说明](https://kinsta.com/docs/static-site-hosting/static-site-quick-start/react-static-site-examples/#react-with-vite)，使用 [Kinsta](https://kinsta.com/static-site-hosting/) 部署你的静态站点。
-
-## xmit Static Site Hosting
-
-通过遵循此 [指南](https://xmit.dev/posts/vite-quickstart/)，使用 [xmit](https://xmit.co) 部署你的静态站点。
+按照此[指南](https://xmit.dev/guides/vite-quickstart/)，使用 [xmit](https://xmit.co) 部署您的静态网站。
 
 ## Zephyr Cloud
 

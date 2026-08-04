@@ -1,7 +1,7 @@
 ---
 title: Vite 8.1 发布了！
 author:
-  name: The Vite Team
+  name: Vite 团队
 date: 2026-06-23
 sidebar: false
 head:
@@ -164,7 +164,7 @@ export default defineConfig({
   html: {
     additionalAssetSources: {
       'html-import': {
-        srcAttributes: 'src',
+        srcAttributes: ['src'],
       },
       img: {
         srcAttributes: ['data-src-dark', 'data-src-light'],

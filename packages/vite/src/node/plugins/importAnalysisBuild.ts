@@ -6,7 +6,12 @@ import type { SourceMap } from 'rolldown'
 import { viteBuildImportAnalysisPlugin as nativeBuildImportAnalysisPlugin } from 'rolldown/experimental'
 import type { RawSourceMap } from '@jridgewell/remapping'
 import convertSourceMap from 'convert-source-map'
-import { combineSourcemaps, generateCodeFrame, numberToPos } from '../utils'
+import {
+  combineSourcemaps,
+  generateCodeFrame,
+  getFileStartIndex,
+  numberToPos,
+} from '../utils'
 import { type Plugin, perEnvironmentPlugin } from '../plugin'
 import type { ResolvedConfig } from '../config'
 import { toOutputFilePathInJS } from '../build'
@@ -242,7 +247,9 @@ function getPreloadCode(
       : // If the base isn't relative, then the deps are relative to the projects `outDir` and the base
         // is appended inside __vitePreload too.
         `function(dep) { return ${JSON.stringify(environment.config.base)}+dep }`
-  const preloadCode = `const scriptRel = ${scriptRel};const assetsURL = ${assetsURL};const seen = {};export const ${preloadMethod} = ${preload.toString()}`
+  // replace `import` as a workaround for stackblitz: https://stackblitz.com/edit/node-vqfvv8dy?file=index.js
+  const preloadMethodCode = preload.toString().replaceAll('𝐢𝐦𝐩𝐨𝐫𝐭', 'import')
+  const preloadCode = `const scriptRel = ${scriptRel};const assetsURL = ${assetsURL};const seen = {};export const ${preloadMethod} = ${preloadMethodCode}`
   return preloadCode
 }
 
@@ -568,7 +575,7 @@ export function buildImportAnalysisPlugin(config: ResolvedConfig): Plugin[] {
 
             // inject extra code at the top or next line of hashbang
             if (code.startsWith('#!')) {
-              s.prependLeft(code.indexOf('\n') + 1, mapDepsCode)
+              s.prependLeft(getFileStartIndex(code), mapDepsCode)
             } else {
               s.prepend(mapDepsCode)
             }

@@ -14,7 +14,7 @@ export default {
 }
 ```
 
-注意，即使项目没有使用原生 Node ESM（例如 `package.json` 中的 `"type": "module"`），Vite 也支持在配置文件中使用 ES 模块语法。在这种情况下，配置文件在加载前会自动进行预处理。
+注意，要在配置文件中使用 ES 模块语法，该文件应被 Node.js 识别为 ESM，例如使用 `.mjs` 扩展名，或在最近的 `package.json` 中将 `"type": "module"`。
 
 你也可以通过 `--config` CLI 选项显式指定要使用的配置文件（相对于 `cwd` 解析）：
 
@@ -25,9 +25,7 @@ vite --config my-config.js
 <ScrimbaLink href="https://scrimba.com/intro-to-vite-c03p6pbbdq/~05jg?via=vite" title="配置 Vite">在 Scrimba 上观看互动课程</ScrimbaLink>
 
 ::: tip 配置加载
-默认情况下，Vite 使用 [Rolldown](https://rolldown.rs/) 将配置打包到一个临时文件中并加载它。这在单体仓库（monorepo）中导入 TypeScript 文件时可能会导致问题。如果你遇到此方法的问题，可以指定 `--configLoader runner` 来使用 [模块运行器](/guide/api-environment-runtimes.html#modulerunner)，它不会创建临时配置，而是即时转换任何文件。注意，模块运行器不支持配置文件中的 CJS，但外部 CJS 包应该照常工作。
-
-或者，如果你使用的环境支持 TypeScript（例如 `node --experimental-strip-types`），或者你只编写纯 JavaScript，你可以指定 `--configLoader native` 使用环境的原生运行时来加载配置文件。注意，配置文件导入的模块的更新不会被检测到，因此不会自动重启 Vite 服务器。
+默认情况下，Vite 使用 [Rolldown](https://rolldown.rs/) 将配置打包到临时文件中并加载。如果你使用的环境支持 TypeScript（例如 Node 22.18+），或者你只编写普通 JavaScript，则可以指定 `--configLoader native`，以使用环境的原生运行时加载配置文件。计划在未来的主要版本中将 `configLoader: 'native'` 设为默认值。
 :::
 
 ## 配置智能提示
@@ -130,9 +128,17 @@ export default defineConfig(({ mode }) => {
 })
 ```
 
-## 在 VS Code 上调试配置文件
+## 在 VS Code 中调试配置文件
 
-使用默认的 `--configLoader bundle` 行为时，Vite 会将生成的临时配置文件写入 `node_modules/.vite-temp` 文件夹，并且在设置断点调试 Vite 配置文件时会发生文件未找到错误。要解决此问题，请将以下配置添加到 `.vscode/settings.json`：
+为了获得最可靠的调试体验，请在启动 Vite 时使用原生配置加载器：
+
+```bash
+vite --configLoader native
+```
+
+原生加载器会直接执行原始配置文件，因此配置文件中的断点以及插件钩子（如 `transform`）中的断点都会映射到原始源代码。它要求运行时支持配置文件所使用的语法，例如 TypeScript 文件需要 Node.js 22.18+。
+
+使用 `--configLoader bundle` 时（目前的默认选项，不过计划在未来的主版本中将 `native` 设为默认选项），Vite 会生成内联 source map，并在加载配置之前将打包后的配置写入 `node_modules/.vite-temp`。如果需要使用打包加载器，请在 `.vscode/settings.json` 中为 JavaScript 调试终端添加临时目录：
 
 ```json
 {
@@ -143,5 +149,29 @@ export default defineConfig(({ mode }) => {
       "**/node_modules/.vite-temp/**"
     ]
   }
+}
+```
+
+此设置仅适用于 JavaScript 调试终端，不会影响从“运行和调试”视图启动的启动配置。若要让“运行和调试”视图支持此功能，请在 `.vscode/launch.json` 中添加临时目录：
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Vite",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["exec", "vite", "--configLoader", "bundle"],
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**",
+        "**/node_modules/.vite-temp/**"
+      ]
+    }
+  ]
 }
 ```

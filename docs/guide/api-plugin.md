@@ -36,7 +36,7 @@ Vite 致力于开箱即用地提供成熟的模式，所以在创建新插件之
 - React 插件使用 `vite-plugin-react-` 前缀
 - Svelte 插件使用 `vite-plugin-svelte-` 前缀
 
-另见 [虚拟模块约定](#virtual-modules-convention)。
+另请参阅 [虚拟模块约定](https://rolldown.rs/apis/plugin-api#virtual-modules)。
 
 ## 插件配置
 
@@ -56,7 +56,7 @@ export default defineConfig({
 `plugins` 也接受预设，包括将几个插件作为单个元素。这对于使用多个插件实现的复杂功能（如框架集成）很有用。数组将在内部被扁平化。
 
 ```js
-// framework-plugin
+// 框架插件
 import frameworkRefresh from 'vite-plugin-framework-refresh'
 import frameworkDevtools from 'vite-plugin-framework-devtools'
 
@@ -106,11 +106,7 @@ export default function myPlugin() {
 
 ### 导入虚拟文件
 
-参见 [下一节](#virtual-modules-convention) 中的示例。
-
-## 虚拟模块约定
-
-虚拟模块是一种有用的方案，允许你使用正常的 ESM 导入语法将构建时信息传递给源文件。
+虚拟模块允许你使用常规的 ESM 导入语法，将构建时信息传递给源文件。有关完整约定，请参阅[虚拟模块约定](https://rolldown.rs/apis/plugin-api#virtual-modules)。
 
 ```js
 import { exactRegex } from '@rolldown/pluginutils'
@@ -145,13 +141,13 @@ import { msg } from 'virtual:my-module'
 console.log(msg)
 ```
 
-Vite（以及 Rolldown / Rollup）中的虚拟模块按约定以 `virtual:` 为前缀作为面向用户的路径。如果可能，插件名称应用作命名空间以避免与生态系统中的其他插件冲突。例如，`vite-plugin-posts` 可以要求用户导入 `virtual:posts` 或 `virtual:posts/helpers` 虚拟模块以获取构建时信息。在内部，使用虚拟模块的插件在解析 id 时应以 `\0` 为前缀模块 ID，这是来自 rollup 生态系统的约定。这可以防止其他插件尝试处理该 id（如 node 解析），并且源代码映射等核心功能可以使用此信息来区分虚拟模块和常规文件。`\0` 不是导入 URL 中允许的字符，因此我们必须在导入分析期间替换它们。`\0{id}` 虚拟 id 在浏览器开发期间最终编码为 `/@id/__x00__{id}`。在进入插件管道之前，id 将被解码回来，因此插件钩子代码看不到这一点。
+在 Vite 中，由于 `\0` 不是导入 URL 中允许使用的字符，` \0{id}` 虚拟 ID 在开发期间会在浏览器中被编码为 `/@id/__x00__{id}`。在进入插件流水线之前，该 ID 会被解码回来，因此插件钩子代码不会看到这种形式。
 
-注意，直接源自真实文件的模块，如单文件组件中的脚本模块（如 .vue 或 .svelte SFC），不需要遵循此约定。SFC 在处理时通常会生成一组子模块，但这些模块中的代码可以映射回文件系统。对这些子模块使用 `\0` 将阻止源代码映射正常工作。
-
-## 通用钩子
+## Rolldown 钩子
 
 在开发期间，Vite 开发服务器创建一个插件容器，以与 Rolldown 相同的方式调用 [Rolldown 构建钩子](https://rolldown.rs/apis/plugin-api#build-hooks)。
+
+所有 Rolldown 钩子都是[环境级钩子](/guide/api-environment-plugins#per-environment-hooks-and-global-hooks)。
 
 以下钩子在服务器启动时调用一次：
 
@@ -173,7 +169,7 @@ Vite（以及 Rolldown / Rollup）中的虚拟模块按约定以 `virtual:` 为�
 - [`buildEnd`](https://rolldown.rs/reference/Interface.Plugin#buildend)
 - [`closeBundle`](https://rolldown.rs/reference/Interface.Plugin#closebundle)
 
-注意 [`moduleParsed`](https://rolldown.rs/reference/Interface.Plugin#moduleparsed) 钩子在开发期间**不**被调用，因为 Vite 为了避免完整的 AST 解析以获得更好的性能。
+注意 [`moduleParsed`](https://rolldown.rs/reference/Interface.Plugin#moduleparsed) 钩子在开发期间**不**被调用，因为 Vite 为了获得更好的性能，会避免进行完整的 AST 解析。
 
 [输出生成钩子](https://rolldown.rs/apis/plugin-api#output-generation-hooks)（`closeBundle` 除外）在开发期间**不**被调用。
 
@@ -185,6 +181,7 @@ Vite 插件还可以提供服务于 Vite 特定目的的钩子。这些钩子被
 
 - **Type:** `(config: UserConfig, env: { mode: 'build' | 'serve', command: string, isSsrBuild?: boolean, isPreview?: boolean }) => UserConfig | null | void`
 - **Kind:** `async`, `sequential`
+- **Scope:** [Global](/guide/api-environment-plugins#per-environment-hooks-and-global-hooks)
 
   在 Vite 配置被解析之前修改它。该钩子接收原始用户配置（CLI 选项与配置文件合并）和当前配置环境，其中暴露了正在使用的 `mode` 和 `command`。它可以返回一个部分配置对象，该对象将被深度合并到现有配置中，或者直接修改配置（如果默认合并无法达到预期结果）。
 
@@ -220,8 +217,9 @@ Vite 插件还可以提供服务于 Vite 特定目的的钩子。这些钩子被
 
 ### `configResolved`
 
-- **类型:** `(config: ResolvedConfig) => void | Promise<void>`
-- **种类:** `async`, `parallel`
+- **Type:** `(config: ResolvedConfig) => void | Promise<void>`
+- **Kind:** `async`, `parallel`
+- **Scope:** [Global](/guide/api-environment-plugins#per-environment-hooks-and-global-hooks)
 
   在 Vite 配置被解析后调用。使用此钩子读取和存储最终解析的配置。当插件需要根据运行的命令执行不同操作时，这也很有用。
 
@@ -255,9 +253,10 @@ Vite 插件还可以提供服务于 Vite 特定目的的钩子。这些钩子被
 
 ### `configureServer`
 
-- **类型:** `(server: ViteDevServer) => (() => void) | void | Promise<(() => void) | void>`
-- **种类:** `async`, `sequential`
-- **另见:** [ViteDevServer](./api-javascript#vitedevserver)
+- **Type:** `(server: ViteDevServer) => (() => void) | void | Promise<(() => void) | void>`
+- **Kind:** `async`, `sequential`
+- **See also:** [ViteDevServer](./api-javascript#vitedevserver)
+- **Scope:** [Global](/guide/api-environment-plugins#per-environment-hooks-and-global-hooks)
 
   用于配置开发服务器的钩子。最常见的用例是向内部 [connect](https://github.com/senchalabs/connect) 应用添加自定义中间件：
 
@@ -315,9 +314,10 @@ Vite 插件还可以提供服务于 Vite 特定目的的钩子。这些钩子被
 
 ### `configurePreviewServer`
 
-- **类型:** `(server: PreviewServer) => (() => void) | void | Promise<(() => void) | void>`
-- **种类:** `async`, `sequential`
-- **另见:** [PreviewServer](./api-javascript#previewserver)
+- **Type:** `(server: PreviewServer) => (() => void) | void | Promise<(() => void) | void>`
+- **Kind:** `async`, `sequential`
+- **See also:** [PreviewServer](./api-javascript#previewserver)
+- **Scope:** [Global](/guide/api-environment-plugins#per-environment-hooks-and-global-hooks)
 
   与 [`configureServer`](/guide/api-plugin.html#configureserver) 相同，但用于预览服务器。与 `configureServer` 类似，`configurePreviewServer` 钩子在其他中间件安装之前调用。如果你想 **在** 其他中间件 **之后** 注入中间件，你可以从 `configurePreviewServer` 返回一个函数，该函数将在内部中间件安装后调用：
 
@@ -337,8 +337,9 @@ Vite 插件还可以提供服务于 Vite 特定目的的钩子。这些钩子被
 
 ### `transformIndexHtml`
 
-- **类型:** `IndexHtmlTransformHook | { order?: 'pre' | 'post', handler: IndexHtmlTransformHook }`
-- **种类:** `async`, `sequential`
+- **Type:** `IndexHtmlTransformHook | { order?: 'pre' | 'post', handler: IndexHtmlTransformHook }`
+- **Kind:** `async`, `sequential`
+- **Scope:** [Per-environment](/guide/api-environment-plugins#per-environment-hooks-and-global-hooks)
 
   用于转换 HTML 入口文件（如 `index.html`）的专用钩子。该钩子接收当前 HTML 字符串和转换上下文。上下文在开发期间暴露 [`ViteDevServer`](./api-javascript#vitedevserver) 实例，在构建期间暴露 Rollup 输出包。
 
@@ -379,9 +380,7 @@ Vite 插件还可以提供服务于 Vite 特定目的的钩子。这些钩子被
       originalUrl?: string
     },
   ) =>
-    | IndexHtmlTransformResult
-    | void
-    | Promise<IndexHtmlTransformResult | void>
+    IndexHtmlTransformResult | void | Promise<IndexHtmlTransformResult | void>
 
   type IndexHtmlTransformResult =
     | string
@@ -411,9 +410,10 @@ Vite 插件还可以提供服务于 Vite 特定目的的钩子。这些钩子被
 
 ### `handleHotUpdate`
 
-- **类型:** `(ctx: HmrContext) => Array<ModuleNode> | void | Promise<Array<ModuleNode> | void>`
-- **种类:** `async`, `sequential`
-- **另见:** [HMR API](./api-hmr)
+- **Type:** `(ctx: HmrContext) => Array<ModuleNode> | void | Promise<Array<ModuleNode> | void>`
+- **Kind:** `async`, `sequential`
+- **See also:** [HMR API](./api-hmr)
+- **Scope:** [Per-environment](/guide/api-environment-plugins#per-environment-hooks-and-global-hooks)
 
   执行自定义 HMR 更新处理。该钩子接收具有以下签名的上下文对象：
 
@@ -661,7 +661,7 @@ export default function myPlugin() {
 
 ## Chunk 导入映射信息
 
-:::info Experimental
+:::info 实验性
 
 此功能处于实验阶段，未来可能会发生变化。
 
@@ -721,7 +721,7 @@ export default defineConfig({
 ```
 
 ::: tip 注意
-我们建议**始终前缀化**你的事件名称，以避免与其他插件冲突。
+我们建议**始终为事件名称添加前缀**，以避免与其他插件冲突。
 :::
 
 在客户端，使用 [`hot.on`](/guide/api-hmr.html#hot-on-event-cb) 来监听事件：
@@ -769,10 +769,10 @@ export default defineConfig({
 
 ### 自定义事件的 TypeScript
 
-在内部，vite 从 `CustomEventMap` 接口推断 payload 的类型，可以通过扩展该接口来类型化自定义事件：
+在内部，Vite 从 `CustomEventMap` 接口推断 payload 的类型，可以通过扩展该接口来为自定义事件添加类型：
 
 :::tip 注意
-指定 TypeScript 声明文件时，请确保包含 `.d.ts` 扩展名。否则，Typescript 可能不知道模块试图扩展哪个文件。
+指定 TypeScript 声明文件时，请确保包含 `.d.ts` 扩展名。否则，TypeScript 可能不知道模块试图扩展哪个文件。
 :::
 
 ```ts [events.d.ts]

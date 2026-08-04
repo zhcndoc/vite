@@ -12,6 +12,8 @@
    import { defineConfig } from 'vite'
    // ---cut---
    export default defineConfig({
+     // 覆盖默认的 .html 入口
+     input: '/path/to/main.js',
      server: {
        cors: {
          // 您将通过浏览器访问的源
@@ -21,10 +23,6 @@
      build: {
        // 在 outDir 中生成 .vite/manifest.json
        manifest: true,
-       rolldownOptions: {
-         // 覆盖默认的 .html 入口
-         input: '/path/to/main.js',
-       },
      },
    })
    ```
@@ -270,7 +268,7 @@
 
    :::
 
-   :::info Chunk Import Maps Support (Experimental)
+   :::info Chunk 导入映射支持（实验性）
 
    如果您正在使用实验性的 [`build.chunkImportMap`](/config/build-options#build-chunkimportmap) 选项，您还需要将导入映射注入到 HTML 中。
 

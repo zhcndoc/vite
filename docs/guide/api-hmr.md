@@ -187,7 +187,9 @@ if (import.meta.hot) {
 
 ## `hot.data`
 
-`import.meta.hot.data` 对象在同一更新模块的不同实例之间持久存在。它可用于将信息从模块的先前版本传递到下一个版本。
+Vite 会为每个模块路径创建一个 `import.meta.hot.data` 对象。在 HMR 期间，同一模块的连续实例之间会持久化该对象。在模块执行期间进行的修改，或通过传递给 `hot.dispose` 的 `data` 参数进行的修改，都可以被该模块的下一个实例看到。
+
+当一个模块被清除时，其 `hot.dispose` 和 `hot.prune` 回调会接收到当前的 data 对象。Vite 会在这些回调执行完毕后清除 data。如果之后再次导入该模块，它会接收到一个新的空 data 对象。
 
 注意，不支持重新赋值 `data` 本身。相反，你应该修改 `data` 对象的属性，以便保留从其他处理程序添加的信息。
 
@@ -255,4 +257,4 @@ Vite 自动分发以下 HMR 事件：
 
 如果你想了解更多关于如何使用 HMR API 以及它在底层如何工作的信息。请查看这些资源：
 
-- [热模块替换很简单](https://bjornlu.com/blog/hot-module-replacement-is-easy)
+- [热模块替换很简单](https://bjornlu.com/blog/hot-module-replacement-is-easy)。

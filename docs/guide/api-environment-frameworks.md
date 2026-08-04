@@ -1,14 +1,14 @@
 # 框架的环境 API
 
 :::info 发布候选
-Environment API 通常处于发布候选阶段。我们将在主要版本之间保持 API 的稳定性，以便生态系统可以进行实验并在此基础上构建。但是，请注意 [某些特定 API](/changes/#considering) 仍被视为实验性的。
+环境 API 通常处于发布候选阶段。我们将在主要版本之间保持 API 的稳定性，以便生态系统可以进行实验并在此基础上构建。但是，请注意 [某些特定 API](/changes/#considering) 仍被视为实验性的。
 
 我们计划在下一次主要版本中稳定这些新 API（可能会有破坏性更改），一旦下游项目有时间实验新功能并验证它们。
 
 资源：
 
 - [反馈讨论](https://github.com/vitejs/vite/discussions/16358) 我们正在收集关于新 API 的反馈。
-- [Environment API PR](https://github.com/vitejs/vite/pull/16471) 新 API 在此处实现和审查。
+- [环境 API PR](https://github.com/vitejs/vite/pull/16471) 新 API 在此处实现和审查。
 
 请与我们分享您的反馈。
 :::
@@ -336,7 +336,11 @@ export default defineConfig({
 
 ### `buildApp` 插件钩子
 
-除了 `builder.buildApp` 配置项之外，插件还可以定义 `buildApp` 钩子来参与应用构建。配置项和插件钩子按照既定顺序运行：顺序为 `'pre'` 或 `null` 的钩子最先运行，然后是配置的 `builder.buildApp`，最后是顺序为 `'post'` 的钩子。在钩子内部，`environment.isBuilt` 会告诉你某个环境是否已经构建过，这样插件就可以避免重复构建。
+- **类型:** `(this: MinimalPluginContextWithoutEnvironment, builder: ViteBuilder) => Promise<void>`
+- **种类:** `async`, `sequential`
+- **作用域:** [全局](/guide/api-environment-plugins#per-environment-hooks-and-global-hooks)
+
+除了 `builder.buildApp` 配置选项之外，插件还可以定义 `buildApp` 钩子来参与应用构建。配置选项和插件钩子会按照规定的顺序运行：顺序为 `'pre'` 或 `null` 的钩子首先运行，然后运行配置的 `builder.buildApp`，最后运行顺序为 `'post'` 的钩子。在钩子内部，`environment.isBuilt` 可以告知你某个环境是否已经构建，这使插件能够避免重复构建该环境。
 
 ### 使用 `createBuilder` 以编程方式构建
 

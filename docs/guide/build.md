@@ -112,29 +112,25 @@ export default defineConfig({
     └── nested.js
 ```
 
-在开发期间，只需导航或链接到 `/nested/` - 它按预期工作，就像普通的静态文件服务器一样。
+在开发期间，只需导航或链接到 `/nested/`——它会按预期工作，就像普通的静态文件服务器一样。
 
 在构建期间，你只需指定多个 `.html` 文件作为入口点：
 
 ```js twoslash [vite.config.js]
-import { dirname, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  build: {
-    rolldownOptions: {
-      input: {
-        main: resolve(import.meta.dirname, 'index.html'),
-        nested: resolve(import.meta.dirname, 'nested/index.html'),
-      },
-    },
+  input: {
+    main: resolve(import.meta.dirname, 'index.html'),
+    nested: resolve(import.meta.dirname, 'nested/index.html'),
   },
 })
 ```
 
-如果你指定了不同的 root，请记住在解析输入路径时，`import.meta.dirname` 仍然是你的 `vite.config.js` 文件所在的文件夹。因此，你需要将你的 `root` 条目添加到 `resolve` 的参数中。
+如果你指定了不同的 root，请记住，在解析输入路径时，`import.meta.dirname` 仍然是你的 `vite.config.js` 文件所在的文件夹。因此，你需要将你的 `root` 条目添加到 `resolve` 的参数中。
 
-请注意，对于 HTML 文件，Vite 会忽略 `rolldownOptions.input` 对象中给入口指定的名称，而是在 dist 文件夹中生成 HTML 资源时尊重文件的解析 id。这确保了与开发服务器工作方式一致的结构。
+请注意，对于 HTML 文件，Vite 会忽略 `rolldownOptions.input` 对象中为入口指定的名称，而是在 dist 文件夹中生成 HTML 资源时使用文件的解析 ID。这确保了与开发服务器工作方式一致的结构。
 
 ## 库模式
 
@@ -144,8 +140,8 @@ export default defineConfig({
 
 ::: code-group
 
-```js twoslash [vite.config.js (单入口)]
-import { dirname, resolve } from 'node:path'
+```js twoslash [vite.config.js (single entry)]
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
@@ -172,8 +168,8 @@ export default defineConfig({
 })
 ```
 
-```js twoslash [vite.config.js (多入口)]
-import { dirname, resolve } from 'node:path'
+```js twoslash [vite.config.js (multiple entries)]
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
@@ -225,7 +221,7 @@ dist/my-lib.js      0.08 kB / gzip: 0.07 kB
 dist/my-lib.umd.cjs 0.30 kB / gzip: 0.16 kB
 ```
 
-recommended 的库 `package.json`：
+推荐的库 `package.json`：
 
 ::: code-group
 

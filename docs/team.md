@@ -11,7 +11,7 @@ import {
   VPTeamPageSection,
   VPTeamMembers
 } from '@voidzero-dev/vitepress-theme'
-import { core, emeriti } from './_data/team'
+import { core, advisors, emeriti } from './_data/team'
 </script>
 
 <VPTeamPage>
@@ -23,6 +23,16 @@ import { core, emeriti } from './_data/team'
     </template>
   </VPTeamPageTitle>
   <VPTeamMembers :members="core" />
+  <VPTeamPageSection>
+    <template #title>顾问</template>
+    <template #lead>
+      顾问从生态系统的角度协助指导 Vite，分享他们的
+      经验，以塑造环境 API 以及未来 API 的设计。
+    </template>
+    <template #members>
+      <VPTeamMembers size="small" :members="advisors" />
+    </template>
+  </VPTeamPageSection>
   <VPTeamPageSection>
     <template #title>荣誉成员</template>
     <template #lead>

@@ -4,14 +4,14 @@
 
 ## 默认浏览器目标变更 [<Badge text="NRV" type="warning" />](#migration-from-v7)
 
-`build.target` 的默认浏览器值以及 `'baseline-widely-available'` 已更新为更新的浏览器版本：
+`build.target` 和 `'baseline-widely-available'` 的默认浏览器版本更新为较新的版本：
 
 - Chrome 107 → 111
 - Edge 107 → 111
 - Firefox 104 → 114
 - Safari 16.0 → 16.4
 
-这些浏览器版本与截至 2026-01-01 的 [Baseline Widely Available](https://web-platform-dx.github.io/web-features/) 功能集保持一致。换句话说，它们都是在大约两年前发布的。
+这些浏览器版本与截至 2026-01-01 的 [基线广泛可用](https://web-platform-dx.github.io/web-features/) 功能集保持一致。换句话说，它们都是在大约两年前发布的。
 
 ## Rolldown
 
@@ -232,22 +232,22 @@ Lightning CSS 支持更好的语法降级，你的 CSS 打包大小可能会略�
 
 如果满足以下条件之一，`default` 导入是被导入者 CJS 模块的 `module.exports` 值。否则，`default` 导入是被导入者 CJS 模块的 `module.exports.default` 值：
 
-- 导入者是 `.mjs` 或 `.mts`。
-- 导入者最近的 `package.json` 的 `type` 字段设置为 `module`。
-- 被导入者 CJS 模块的 `module.exports.__esModule` 值未设置为 true。
+- 导入方是 `.mjs` 或 `.mts`。
+- 导入方最近的 `package.json` 将 `type` 字段设置为 `module`。
+- 被导入的 CJS 模块的 `module.exports.__esModule` 值未设置为 `true`。
 
 ::: details 之前的行为
 
 在开发环境中，如果满足以下条件之一，`default` 导入是被导入者 CJS 模块的 `module.exports` 值。否则，`default` 导入是被导入者 CJS 模块的 `module.exports.default` 值：
 
-- _导入者包含在依赖优化中_ 且为 `.mjs` 或 `.mts`。
-- _导入者包含在依赖优化中_ 且导入者最近的 `package.json` 的 `type` 字段设置为 `module`。
-- 被导入者 CJS 模块的 `module.exports.__esModule` 值未设置为 true。
+- _导入方包含在依赖优化中_，并且是 `.mjs` 或 `.mts`。
+- _导入方包含在依赖优化中_，并且导入方最近的 `package.json` 将 `type` 字段设置为 `module`。
+- 被导入的 CJS 模块的 `module.exports.__esModule` 值未设置为 `true`。
 
 在生产构建中，条件是：
 
-- 被导入者 CJS 模块的 `module.exports.__esModule` 值未设置为 true。
-- _`module.exports` 的 `default` 属性不存在_。
+- 被导入的 CJS 模块的 `module.exports.__esModule` 值未设置为 `true`。
+- _`module.exports` 不存在 `default` 属性_。
 
 （假设 [`build.commonjsOptions.defaultIsModuleExports`](https://github.com/rollup/plugins/tree/master/packages/commonjs#defaultismoduleexports) 未从默认值 `'auto'` 更改）
 
@@ -339,7 +339,7 @@ const plugin = {
 - `worker.rollupOptions`：重命名为 `worker.rolldownOptions`
 - `build.commonjsOptions`：现在是无操作
 - `build.dynamicImportVarsOptions.warnOnError`：现在是无操作
-- `resolve.alias[].customResolver`：改用带有 `resolveId` 钩子和 `enforce: 'pre'` 的自定义插件
+- `resolve.alias[].customResolver`：改用带有 `resolveId` 钩子和 `enforce: 'pre'` 的自定义插件。
 
 ## 已移除的废弃功能 [<Badge text="NRV" type="warning" />](#migration-from-v7)
 
@@ -349,27 +349,27 @@ const plugin = {
 
 这些破坏性变更预计只会影响少数用例：
 
-- [Extglobs](https://github.com/micromatch/picomatch/blob/master/README.md#extglobs) 尚不支持（[rolldown-vite#365](https://github.com/vitejs/rolldown-vite/issues/365)）
-- TypeScript 旧式命名空间仅部分支持。有关更多详情，请参阅 [Oxc Transformer 的相关文档](https://oxc.rs/docs/guide/usage/transformer/typescript.html#partial-namespace-support)。
-- `define` 不会为对象共享引用：当你将一个对象作为值传递给 `define` 时，每个变量都会拥有该对象的独立副本。有关更多详情，请参阅 [Oxc Transformer 的相关文档](https://oxc.rs/docs/guide/usage/transformer/global-variable-replacement#define)。
-- `bundle` 对象变更（`bundle` 是在 `generateBundle` / `writeBundle` 钩子中传入、由 `build` 函数返回的对象）：
-  - 不支持对 `bundle[foo]` 赋值。Rollup 也不建议这样做。请改用 `this.emitFile()`。
-  - 该引用不会在各个钩子之间共享（[rolldown-vite#410](https://github.com/vitejs/rolldown-vite/issues/410)）
-  - `structuredClone(bundle)` 会报错 `DataCloneError: #<Object> could not be cloned`。这不再受支持。请改用 `structuredClone({ ...bundle })` 进行克隆。（[rolldown-vite#128](https://github.com/vitejs/rolldown-vite/issues/128)）
-- Rollup 中所有并行钩子都会按顺序钩子执行。有关更多详情，请参阅 [Rolldown 的文档](https://rolldown.rs/apis/plugin-api#sequential-hook-execution)。
-- `"use strict";` 有时不会被注入。有关更多详情，请参阅 [Rolldown 的文档](https://rolldown.rs/in-depth/directives)。
-- 不支持通过 plugin-legacy 转换为 ES5 及以下版本（[rolldown-vite#452](https://github.com/vitejs/rolldown-vite/issues/452)）
-- 现在，如果在 `build.target` 选项中传入同一浏览器的多个版本会报错：esbuild 会选择其中最新的版本，而这很可能不是你想要的结果。
-- Rolldown 不支持的内容：以下功能不受 Rolldown 支持，并且已不再受 Vite 支持。
-  - `build.rollupOptions.output.format: 'system'`（[rolldown#2387](https://github.com/rolldown/rolldown/issues/2387)）
-  - `build.rollupOptions.output.format: 'amd'`（[rolldown#2387](https://github.com/rolldown/rolldown/issues/2528)）
-  - `shouldTransformCachedModule` 钩子（[rolldown#4389](https://github.com/rolldown/rolldown/issues/4389)）
-  - `resolveImportMeta` 钩子（[rolldown#1010](https://github.com/rolldown/rolldown/issues/1010)）
-  - `renderDynamicImport` 钩子（[rolldown#4532](https://github.com/rolldown/rolldown/issues/4532)）
+- [Extglobs](https://github.com/micromatch/picomatch/blob/master/README.md#extglobs) 尚不支持 ([rolldown-vite#365](https://github.com/vitejs/rolldown-vite/issues/365))
+- TypeScript 传统命名空间仅提供部分支持。更多详情请参阅 [Oxc Transformer 的相关文档](https://oxc.rs/docs/guide/usage/transformer/typescript.html#partial-namespace-support)。
+- `define` 不会为对象共享引用：当你将对象作为值传递给 `define` 时，每个变量都会拥有该对象的独立副本。更多详情请参阅 [Oxc Transformer 的相关文档](https://oxc.rs/docs/guide/usage/transformer/global-variable-replacement#define)。
+- `bundle` 对象变更（`bundle` 是传入 `generateBundle` / `writeBundle` 钩子的对象，由 `build` 函数返回）：
+  - 不支持为 `bundle[foo]` 赋值。Rollup 也不建议这样做。请改用 `this.emitFile()`。
+  - 各钩子之间不共享引用 ([rolldown-vite#410](https://github.com/vitejs/rolldown-vite/issues/410))
+  - `structuredClone(bundle)` 会报错：`DataCloneError: #<Object> could not be cloned`。现在不再支持这种用法。请使用 `structuredClone({ ...bundle })` 进行克隆。([rolldown-vite#128](https://github.com/vitejs/rolldown-vite/issues/128))
+- Rollup 中所有并行钩子都会作为顺序钩子运行。更多详情请参阅 [Rolldown 的文档](https://rolldown.rs/apis/plugin-api#sequential-hook-execution)。
+- 有时不会注入 `"use strict";`。更多详情请参阅 [Rolldown 的文档](https://rolldown.rs/in-depth/directives)。
+- 不支持使用 plugin-legacy 转换为 ES5 及更低版本 ([rolldown-vite#452](https://github.com/vitejs/rolldown-vite/issues/452))
+- 现在，在 `build.target` 选项中为同一浏览器传入多个版本会报错：esbuild 会选择该浏览器的最新版本，而这可能并非你的本意。
+- Rolldown 尚不支持的功能：以下功能不受 Rolldown 支持，因此 Vite 也不再支持。
+  - `build.rollupOptions.output.format: 'system'` ([rolldown#2387](https://github.com/rolldown/rolldown/issues/2387))
+  - `build.rollupOptions.output.format: 'amd'` ([rolldown#2528](https://github.com/rolldown/rolldown/issues/2528))
+  - `shouldTransformCachedModule` 钩子 ([rolldown#4389](https://github.com/rolldown/rolldown/issues/4389))
+  - `resolveImportMeta` 钩子 ([rolldown#1010](https://github.com/rolldown/rolldown/issues/1010))
+  - `renderDynamicImport` 钩子 ([rolldown#4532](https://github.com/rolldown/rolldown/issues/4532))
   - `resolveFileUrl` 钩子
-- `parseAst` / `parseAstAsync` 函数现已弃用，改为使用功能更丰富的 `parseSync` / `parse` 函数。
-- `renderChunk` 钩子之前会移除注释，而不是在 `renderChunk` 钩子之后移除
-- 除了 [此处](https://rolldown.rs/reference/OutputOptions.comments) 列出的注释之外，其余注释都会被移动，而 Rollup 只有在相邻代码被移除时才会移除注释
+- 现在不推荐使用 `parseAst` / `parseAstAsync` 函数，建议改用功能更丰富的 `parseSync` / `parse` 函数。
+- 注释会在 `renderChunk` 钩子之前移除，而不是在 `renderChunk` 钩子之后移除
+- 除了[此处](https://rolldown.rs/reference/OutputOptions.comments)列出的注释之外的其他注释会被移动，而 Rollup 仅在相邻代码被移除时才会移除注释
 
 ## 从 v6 迁移
 

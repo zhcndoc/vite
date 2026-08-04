@@ -13,7 +13,7 @@
 你需要：
 
 - 切换到另一个包管理器（例如 `pnpm`、`yarn`）
-- 从项目路径中移除 `&`
+- 从项目路径中移除 `&`。
 
 ## 配置
 
@@ -71,13 +71,13 @@
 
 请注意，这些设置会持久存在，但**需要重启**。
 
-或者，如果服务器在 VS Code devcontainer 内部运行，请求可能看起来停滞了。要解决此问题，请参阅 [Dev Containers / VS Code 端口转发](#dev-containers-vs-code-port-forwarding)。
+或者，如果服务器在 VS Code 开发容器内部运行，请求可能看起来停滞了。要解决此问题，请参阅 [开发容器 / VS Code 端口转发](#dev-containers-vs-code-port-forwarding)。
 
 ### Vite 因 ENOSPC 错误崩溃
 
 如果你在 Linux 上看到如下错误：
 
-> Error: ENOSPC: System limit for number of file watchers reached
+> 错误：ENOSPC：已达到系统文件监视器数量限制
 
 当你的项目目录中有太多文件（例如，许多图片或资源）并超出系统的文件监视器限制时，会发生这种情况。Linux 的默认限制约为 8,192-10,000 个文件监视器。
 
@@ -104,7 +104,7 @@
 
 要解决此问题，请使用受信任的 SSL 证书。
 
-See: [Chrome issue](https://bugs.chromium.org/p/chromium/issues/detail?id=110649#c8)
+参见：[Chrome issue](https://bugs.chromium.org/p/chromium/issues/detail?id=110649#c8)
 
 #### macOS
 
@@ -120,15 +120,15 @@ security add-trusted-cert -d -r trustRoot -k ~/Library/Keychains/login.keychain-
 
 当服务器 / WebSocket 服务器收到较大的 HTTP 头时，请求将被丢弃，并显示以下警告。
 
-> Server responded with status code 431. See https://vite.zhcndoc.com/guide/troubleshooting.html#_431-request-header-fields-too-large.
+> 服务器返回了状态码 431。参见 https://vite.zhcndoc.com/guide/troubleshooting.html#_431-request-header-fields-too-large。
 
 这是因为 Node.js 限制了请求头大小以减轻 [CVE-2018-12121](https://www.cve.org/CVERecord?id=CVE-2018-12121)。
 
 要避免这种情况，请尝试减小请求头大小。例如，如果 cookie 很长，请删除它。或者你可以使用 [`--max-http-header-size`](https://nodejs.org/api/cli.html#--max-http-header-sizesize) 来更改最大头大小。
 
-### Dev Containers / VS Code 端口转发
+### 开发容器 / VS Code 端口转发
 
-如果你在 VS Code 中使用 Dev Container 或端口转发功能，可能需要在配置中将 [`server.host`](/config/server-options.md#server-host) 选项设置为 `127.0.0.1` 才能使其工作。
+如果你在 VS Code 中使用开发容器或端口转发功能，可能需要在配置中将 [`server.host`](/config/server-options.md#server-host) 选项设置为 `127.0.0.1` 才能使其工作。
 
 这是因为 [VS Code 中的端口转发功能不支持 IPv6](https://github.com/microsoft/vscode-remote-release/issues/7029)。
 
@@ -217,11 +217,11 @@ import './Foo.js' // 应该是 './foo.js'
 
 ### 链接到本地包时预捆绑的依赖项过时
 
-用于使优化的依赖项失效的 hash 键取决于包锁定文件的内容、应用于依赖项的补丁以及影响 node 模块捆绑的 Vite 配置文件中的选项。这意味着当使用诸如 [npm overrides](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#overrides) 之类的功能覆盖依赖项时，Vite 会检测到，并在下次服务器启动时重新捆绑你的依赖项。当你使用诸如 [npm link](https://docs.npmjs.com/cli/v9/commands/npm-link) 之类的功能时，Vite 不会使依赖项失效。如果你链接或取消链接了一个依赖项，你需要通过使用 `vite --force` 在下一次服务器启动时强制重新优化。我们建议改用 overrides，现在每个包管理器都支持它（另见 [pnpm overrides](https://pnpm.io/9.x/package_json#pnpmoverrides) 和 [yarn resolutions](https://yarnpkg.com/configuration/manifest/#resolutions)）。
+用于使优化的依赖项失效的哈希键取决于包锁定文件的内容、应用于依赖项的补丁，以及 Vite 配置文件中影响 Node 模块捆绑的选项。这意味着，当你使用类似 [npm overrides](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#overrides) 的功能覆盖依赖项时，Vite 会检测到这一变化，并在下次启动服务器时重新捆绑你的依赖项。当你使用类似 [npm link](https://docs.npmjs.com/cli/v9/commands/npm-link) 的功能时，Vite 不会使依赖项失效。如果你链接或取消链接了依赖项，则需要在下次启动服务器时使用 `vite --force` 强制重新优化。我们建议改用 overrides，现在所有包管理器都支持该功能（另请参阅 [pnpm overrides](https://pnpm.io/settings#overrides) 和 [yarn resolutions](https://yarnpkg.com/configuration/manifest/#resolutions)）。
 
 ## 性能瓶颈
 
-如果你遇到任何导致加载时间缓慢的应用程序性能瓶颈，你可以随 Vite 开发服务器一起启动内置的 Node.js inspector，或在构建应用程序时启动它以创建 CPU 配置文件：
+如果你遇到任何导致加载时间缓慢的应用程序性能瓶颈，你可以随 Vite 开发服务器一起启动内置的 Node.js 检查器，或在构建应用程序时启动它以创建 CPU 配置文件：
 
 ::: code-group
 
@@ -236,12 +236,12 @@ vite build --profile
 :::
 
 ::: tip Vite 开发服务器
-一旦你的应用程序在浏览器中打开，只需等待加载完成，然后回到终端并按 `p` 键（将停止 Node.js inspector），然后按 `q` 键停止开发服务器。
+一旦你的应用程序在浏览器中打开，只需等待加载完成，然后回到终端并按 `p` 键（这将停止 Node.js 检查器），再按 `q` 键停止开发服务器。
 :::
 
-Node.js inspector 将在根文件夹中生成 `vite-profile-0.cpuprofile`，前往 https://www.speedscope.app/，并使用 `BROWSE` 按钮上传 CPU 配置文件以检查结果。
+Node.js 检查器将在根文件夹中生成 `vite-profile-0.cpuprofile`。前往 https://www.speedscope.app/，并使用 `BROWSE` 按钮上传 CPU 配置文件以检查结果。
 
-你可以安装 [vite-plugin-inspect](https://github.com/antfu/vite-plugin-inspect)，它允许你检查 Vite 插件的中间状态，也可以帮助你识别哪些插件或中间件是应用程序中的瓶颈。该插件可在开发和构建模式下使用。查看 readme 文件了解更多详情。
+你可以安装 [vite-plugin-inspect](https://github.com/antfu/vite-plugin-inspect)，它允许你检查 Vite 插件的中间状态，也可以帮助你识别哪些插件或中间件是应用程序中的瓶颈。该插件可在开发和构建模式下使用。查看 README 文件了解更多详情。
 
 ## 其他
 
@@ -263,7 +263,7 @@ Vite 无法处理也不支持仅在非严格模式（松散模式）下运行的
 
 > [错误] 由于严格模式，不能在使用 "esm" 输出格式时使用 With 语句
 
-> TypeError: 无法在布尔值 'false' 上创建属性 'foo'
+> 类型错误：无法在布尔值 'false' 上创建属性 'foo'
 
 如果这些代码在依赖项内部使用，你可以使用 [`patch-package`](https://github.com/ds300/patch-package)（或 [`yarn patch`](https://yarnpkg.com/cli/patch) 或 [`pnpm patch`](https://pnpm.io/cli/patch)）作为权宜之计。
 
@@ -271,7 +271,7 @@ Vite 无法处理也不支持仅在非严格模式（松散模式）下运行的
 
 某些浏览器扩展（如广告拦截器）可能会阻止 Vite 客户端向 Vite 开发服务器发送请求。在这种情况下，你可能会看到白屏而没有记录错误。你也可能会看到以下错误：
 
-> TypeError: 获取动态导入的模块失败
+> 类型错误：获取动态导入的模块失败
 
 如果你有这个问题，尝试禁用扩展。
 
@@ -292,11 +292,11 @@ Vite 无法处理也不支持仅在非严格模式（松散模式）下运行的
 
 这可能会导致如下错误：
 
-> Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object.
+> 元素类型无效：预期应为字符串（对于内置组件）或类/函数（对于复合组件），但得到的是对象。
 
-> foo is not a function
+> foo 不是一个函数
 
-有关此问题的更多详情，请参阅 Rolldown 的文档：[CJS 模块中含糊的 `default` 导入 - Bundling CJS | Rolldown](https://rolldown.rs/in-depth/bundling-cjs#ambiguous-default-import-from-cjs-modules)。
+有关此问题的更多详情，请参阅 Rolldown 的文档：[CJS 模块中含糊的 `default` 导入 - 打包 CJS | Rolldown](https://rolldown.rs/in-depth/bundling-cjs#ambiguous-default-import-from-cjs-modules)。
 
 <script setup lang="ts">
 // 将带有 hash 的旧链接重定向到旧版文档

@@ -187,7 +187,7 @@ HTML 文件在 Vite 项目中占据 [核心位置](/guide/#index-html-and-projec
 - `<root>/about.html` -> `http://localhost:5173/about.html`
 - `<root>/blog/index.html` -> `http://localhost:5173/blog/index.html`
 
-HTML 元素（如 `<script type="module" src>` 和 `<link href>`）引用的资源会作为应用的一部分被处理和打包。支持的元素完整列表如下：
+HTML 元素（例如 `<script type="module" src>` 和 `<link href>`）所引用的资源会作为应用的一部分进行处理和打包。支持的元素完整列表如下：
 
 - `<audio src>`
 - `<embed src>`
@@ -213,7 +213,7 @@ HTML 元素（如 `<script type="module" src>` 和 `<link href>`）引用的资�
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <img src="/src/images/logo.svg" alt="logo" />
+    <img src="/src/images/logo.svg" alt="徽标" />
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
@@ -223,21 +223,21 @@ HTML 元素（如 `<script type="module" src>` 和 `<link href>`）引用的资�
 
 ## 框架
 
-所有现代框架都维护着与 Vite 的集成。大多数框架插件由各个框架团队维护，除了由 vite 组织维护的官方 Vue 和 React Vite 插件：
+所有现代框架都维护着与 Vite 的集成。大多数框架插件由各自的框架团队维护，除了由 vite 组织维护的官方 Vue 和 React Vite 插件：
 
 - 通过 [@vitejs/plugin-vue](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue) 支持 Vue
 - 通过 [@vitejs/plugin-vue-jsx](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue-jsx) 支持 Vue JSX
 - 通过 [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react) 支持 React
 - 通过 [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react-swc) 支持使用 SWC 的 React
-- 通过 [@vitejs/plugin-rsc](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-rsc) 支持 [React Server Components (RSC)](https://react.dev/reference/rsc/server-components)
+- 通过 [@vitejs/plugin-rsc](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-rsc) 支持 [React 服务端组件（RSC）](https://react.dev/reference/rsc/server-components)
 
-查看 [插件指南](/plugins/) 以获取更多信息。
+查看[插件指南](/plugins/)以获取更多信息。
 
 ## JSX
 
 `.jsx` 和 `.tsx` 文件也开箱即用地受支持。JSX 转译同样通过 [Oxc Transformer](https://oxc.rs/docs/guide/usage/transformer.html) 处理。
 
-你选择的框架已经开箱即用地配置了 JSX（例如，Vue 用户应该使用官方的 [@vitejs/plugin-vue-jsx](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue-jsx) 插件，它提供了 Vue 3 特定功能，包括 HMR、全局组件解析、指令和插槽）。
+你选择的框架已经开箱即用地配置了 JSX（例如，Vue 用户应该使用官方的 [@vitejs/plugin-vue-jsx](https://github.com/vitejs/vite/tree/main/packages/plugin-vue-jsx) 插件，它提供了 Vue 3 特定功能，包括 HMR、全局组件解析、指令和插槽）。
 
 如果在自己的框架中使用 JSX，可以使用 [`oxc` 选项](/config/shared-options.md#oxc) 配置自定义 `jsxFactory` 和 `jsxFragment`。例如，Preact 插件将使用：
 
@@ -679,7 +679,7 @@ console.log(add(1, 2)) // 3
 
 这遵循 [WebAssembly/ES Module Integration 提案](https://github.com/WebAssembly/esm-integration)。由于 WebAssembly 模块是异步实例化的，直接导入的 `.wasm` 文件表现为异步模块，并且需要支持顶层 `await`。
 
-::: tip TypeScript support
+::: tip TypeScript 支持
 
 由于 `.wasm` 文件的类型未知，TypeScript 会报错，例如 `Module '"*.wasm"' has no exported member 'add'`。要修复此问题，请在你的 `tsconfig.json` 中启用 [`allowArbitraryExtensions`](https://www.typescriptlang.org/tsconfig/#allowArbitraryExtensions)，并在你的 `.wasm` 文件旁边创建一个声明文件。启用 `allowArbitraryExtensions` 后，TypeScript 在解析 `.wasm` 导入时会查找名为 `{filename}.d.wasm.ts` 的声明文件。例如，对于 `add.wasm`，创建 `add.d.wasm.ts`：
 
@@ -720,9 +720,9 @@ init({
 })
 ```
 
-在生产构建中，小于 `assetInlineLimit` 的 `.wasm` 文件将被内联为 base64 字符串。否则，它们将被视为 [静态资源](./assets) 并按需获取。
+在生产构建中，小于 `assetsInlineLimit` 的 `.wasm` 文件将以内联 base64 字符串的形式包含。否则，它们将被视为[静态资源](./assets)，并按需获取。
 
-::: warning For SSR build, Node.js compatible runtimes are only supported
+::: warning 对于 SSR 构建，仅支持兼容 Node.js 的运行时
 
 由于缺少一种通用的文件加载方式，直接 `.wasm` 导入和 `.wasm?init` 的内部实现都依赖于 `node:fs` 模块。这意味着这些功能仅在 SSR 构建的 Node.js 兼容运行时中可用。
 
@@ -747,17 +747,17 @@ const main = async () => {
 main()
 ```
 
-## Web Workers
+## Web Worker
 
 ### 使用构造函数导入
 
-可以使用 [`new Worker()`](https://developer.mozilla.org/en-US/docs/Web/API/Worker/Worker) 和 [`new SharedWorker()`](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker/SharedWorker) 导入 web worker 脚本。与 worker 后缀相比，这种语法更接近标准，是创建 worker 的**推荐**方式。
+可以使用 [`new Worker()`](https://developer.mozilla.org/en-US/docs/Web/API/Worker/Worker) 和 [`new SharedWorker()`](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker/SharedWorker) 导入 Web Worker 脚本。与 Worker 查询后缀相比，这种语法更接近标准，是创建 Worker 的**推荐**方式。
 
 ```ts
 const worker = new Worker(new URL('./worker.js', import.meta.url))
 ```
 
-worker 构造函数也接受选项，可用于创建 "module" worker：
+Worker 构造函数也接受选项，可用于创建 `module` Worker：
 
 ```ts
 const worker = new Worker(new URL('./worker.js', import.meta.url), {
@@ -765,11 +765,11 @@ const worker = new Worker(new URL('./worker.js', import.meta.url), {
 })
 ```
 
-只有当 `new URL()` 构造函数直接写在 `new Worker()` 声明内部时，worker 检测才会生效。否则，它会被当作 [静态资源 URL](./assets#new-url-url-import-meta-url) 处理。此外，所有选项参数都必须是静态值（即字符串字面量）。
+只有当 `new URL()` 构造函数直接写在 `new Worker()` 声明内部时，Worker 检测才会生效。否则，它会被当作 [静态资源 URL](./assets#new-url-url-import-meta-url) 处理。此外，所有选项参数都必须是静态值（即字符串字面量）。
 
 ### 使用查询后缀导入
 
-可以通过在导入请求后附加 `?worker` 或 `?sharedworker` 来直接导入 web worker 脚本。默认导出将是一个自定义 worker 构造函数：
+可以通过在导入请求后附加 `?worker` 或 `?sharedworker` 来直接导入 Web Worker 脚本。默认导出将是一个自定义 Worker 构造函数：
 
 ```js twoslash
 import 'vite/client'
@@ -779,9 +779,9 @@ import MyWorker from './worker?worker'
 const worker = new MyWorker()
 ```
 
-worker 脚本也可以使用 ESM `import` 语句而不是 `importScripts()`。**注意**：在开发期间，这依赖于 [浏览器原生支持](https://caniuse.com/?search=module%20worker)，但在生产构建中它会被编译掉。
+Worker 脚本也可以使用 ESM `import` 语句而不是 `importScripts()`。**注意**：在开发期间，这依赖于 [浏览器原生支持](https://caniuse.com/?search=module%20worker)，但在生产构建中它会被编译掉。
 
-默认情况下，worker 脚本将在生产构建中作为单独的代码块发出。如果你希望将 worker 内联为 base64 字符串，请添加 `inline` 查询：
+默认情况下，Worker 脚本将在生产构建中作为单独的代码块发出。如果你希望将 Worker 内联为 base64 字符串，请添加 `inline` 查询：
 
 ```js twoslash
 import 'vite/client'
@@ -789,7 +789,7 @@ import 'vite/client'
 import MyWorker from './worker?worker&inline'
 ```
 
-如果你希望将 worker 作为 URL 获取，请添加 `url` 查询：
+如果你希望将 Worker 作为 URL 获取，请添加 `url` 查询：
 
 ```js twoslash
 import 'vite/client'
@@ -797,7 +797,7 @@ import 'vite/client'
 import MyWorker from './worker?worker&url'
 ```
 
-请参阅 [Worker 选项](/config/worker-options.md) 了解配置所有 worker 打包的详细信息。
+请参阅 [Worker 选项](/config/worker-options.md) 了解配置所有 Worker 打包的详细信息。
 
 ## 内容安全策略 (CSP)
 
@@ -859,7 +859,7 @@ MIT 许可证
 
 ## 构建优化
 
-> 下列功能会在构建过程中自动应用（实验性的 chunk importmap 功能除外），除非你希望禁用它们，否则无需显式配置。
+> 以下列出的功能会在构建过程中自动应用（实验性的 chunk import map 功能除外），除非你想禁用它们，否则无需进行显式配置。
 
 ### CSS 代码分割
 
@@ -896,7 +896,7 @@ Entry ---> (A + C)
 
 ### Chunk Import Map 优化
 
-为了提高 chunk 的缓存命中率，Vite 可以为 chunk 创建一个 import map。这可以防止级联的缓存失效问题，而这正是 ES Modules 的一个问题。
+为了提高 chunk 的缓存命中率，Vite 可以为 chunk 创建一个导入映射。这可以防止级联的缓存失效问题，而这正是 ES Modules 的一个问题。
 
 例如，考虑以下场景：
 
@@ -906,7 +906,7 @@ Entry --> A ---> C
 
 如果 `C` 被更新，本质上只需要失效的 chunk 是 `C`。然而，如果 `A` 通过静态导入中的普通 URL 引用 `C`（即 `C` 的 hash 包含在 URL 中），`A` 的内容会发生变化，因此 `A` 也需要失效。`Entry` 也是如此。
 
-通过使用 import maps 功能，可以避免这个问题。启用此优化后，Vite 会创建一个 import map，将每个 chunk 的 ID 映射到其 URL，并在 import 语句中使用 chunk ID 而不是 URL。这样，当某个 chunk 更新时，只有更新的 chunk 需要失效，而引用它的 chunk 不会失效。
+通过使用导入映射功能，可以避免这个问题。启用此优化后，Vite 会创建一个导入映射，将每个 chunk 的 ID 映射到其 URL，并在 import 语句中使用 chunk ID 而不是 URL。这样，当某个 chunk 更新时，只有更新的 chunk 需要失效，而引用它的 chunk 不会失效。
 
 请注意，此优化目前不适用于 CSS 和资源。如果你更新了某个资源，引用它的 chunk 将会失效。不过，失效不会级联，导入该失效 chunk 的 chunk 不会失效。
 

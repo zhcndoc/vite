@@ -4,7 +4,7 @@
 
 - 服务器启动缓慢
 - 页面加载缓慢
-- 构建缓慢
+- 构建缓慢。
 
 ## 检查你的浏览器设置
 
@@ -18,7 +18,7 @@ Vite 的内部和官方插件经过优化，旨在提供与更广泛生态系统
 
 然而，社区插件的性能不在 Vite 的控制范围内，这可能会影响开发体验。以下是使用额外 Vite 插件时可以注意的一些事项：
 
-1. 仅在某些情况下使用的大型依赖项应动态导入，以减少 Node.js 启动时间。重构示例：[vite-plugin-react#212](https://github.com/vitejs/vite-plugin-react/pull/212) 和 [vite-plugin-pwa#224](https://github.com/vite-pwa/vite-plugin-pwa/pull/244)。
+1. 仅在某些情况下使用的大型依赖项应进行动态导入，以减少 Node.js 的启动时间。重构示例：[vite-plugin-react#212](https://github.com/vitejs/vite-plugin-react/pull/212) 和 [vite-plugin-pwa#244](https://github.com/vite-pwa/vite-plugin-pwa/pull/244)。
 
 2. `buildStart`、`config` 和 `configResolved` 钩子不应运行长时间且广泛的操作。这些钩子在开发服务器启动期间会被等待，这会延迟你在浏览器中访问网站的时间。
 
@@ -121,4 +121,4 @@ export default defineConfig({
 
 虽然 Vite 核心基于原生工具，但某些功能默认仍使用非原生工具以提供更好的兼容性和功能集。但对于大型应用程序来说，这可能值得付出代价。
 
-- 尝试实验性支持 [LightningCSS](https://github.com/vitejs/vite/discussions/13835)
+- 尝试实验性支持 [LightningCSS](https://github.com/vitejs/vite/discussions/13835)。

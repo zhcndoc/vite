@@ -49,15 +49,15 @@ export default defineConfig({
 
 当更改链接依赖时，使用 `--force` 命令行选项重启开发服务器以使更改生效。
 
-## Custom Behavior
+## 自定义行为
 
-The default dependency discovery heuristics may not always be ideal. In cases where you want to explicitly include/exclude dependencies in the dependency list, use the [`optimizeDeps` configuration option](/config/dep-optimization-options.md).
+默认的依赖发现启发式规则不一定总是理想。在需要显式将依赖包含在依赖列表中或从依赖列表中排除时，请使用 [`optimizeDeps` 配置选项](/config/dep-optimization-options.md)。
 
-A typical use case for `optimizeDeps.include` or `optimizeDeps.exclude` is when you have an import that cannot be directly discovered in source code. For example, the import may be the result of a plugin transform. This means Vite cannot discover that import during the initial scan — it can only discover it after the file is requested and transformed by the browser. This will cause the server to rebuild immediately after startup.
+`optimizeDeps.include` 或 `optimizeDeps.exclude` 的典型使用场景是：存在无法直接从源代码中发现的导入。例如，该导入可能是插件转换的结果。这意味着 Vite 无法在初始扫描期间发现该导入——只有在浏览器请求并转换文件后才能发现它。这会导致服务器在启动后立即重新构建。
 
-Both `include` and `exclude` can be used to handle this situation. If the dependency is large (with many internal modules) or is CommonJS, you should include it; if the dependency is small and already valid ESM, you can exclude it and let the browser load it directly.
+`include` 和 `exclude` 都可以用来处理这种情况。如果依赖较大（包含许多内部模块）或是 CommonJS 依赖，则应将其包含在内；如果依赖较小且已经是有效的 ESM，则可以将其排除，并让浏览器直接加载它。
 
-You can also use the [`optimizeDeps.rolldownOptions` option](/config/dep-optimization-options.md#optimizedeps-rolldownoptions) to further customize Rolldown. For example, add a Rolldown plugin to handle special files in dependencies or change the [build `target`](https://rolldown.rs/reference/InputOptions.transform#target).
+你还可以使用 [`optimizeDeps.rolldownOptions` 选项](/config/dep-optimization-options.md#optimizedeps-rolldownoptions)进一步自定义 Rolldown。例如，添加 Rolldown 插件来处理依赖中的特殊文件，或更改[构建 `target`](https://rolldown.rs/reference/InputOptions.transform#target)。
 
 ## 缓存
 
@@ -65,10 +65,10 @@ You can also use the [`optimizeDeps.rolldownOptions` option](/config/dep-optimiz
 
 Vite 将预构建的依赖缓存到 `node_modules/.vite` 中。它根据以下几个来源确定是否需要重新运行预构建步骤：
 
-- 包管理器锁文件内容，例如 `package-lock.json`、`yarn.lock`、`pnpm-lock.yaml` 或 `bun.lock`。
-- Patches 文件夹修改时间。
+- 包管理器锁文件内容，例如 `package-lock.json`、`yarn.lock`、`pnpm-lock.yaml`、`bun.lock`、`aube-lock.yaml` 或 `nub.lock`。
+- 补丁文件夹的修改时间。
 - `vite.config.js` 中的相关字段（如果存在）。
-- `NODE_ENV` 值。
+- `NODE_ENV` 的值。
 
 只有当上述之一发生变化时，才需要重新运行预构建步骤。
 

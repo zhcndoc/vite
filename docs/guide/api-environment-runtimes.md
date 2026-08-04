@@ -1,14 +1,14 @@
 # 运行时环境 API
 
 :::info 发布候选
-Environment API 目前大致处于发布候选阶段。我们将在主要版本之间保持 API 的稳定性，以便生态系统可以进行实验并基于它们进行构建。但是，请注意 [某些特定 API](/changes/#considering) 仍被视为实验性的。
+环境 API 目前大致处于发布候选阶段。我们将在主要版本之间保持 API 的稳定性，以便生态系统可以进行实验并基于它们进行构建。但是，请注意 [某些特定 API](/changes/#considering) 仍被视为实验性的。
 
 我们计划在未来的一次主要版本中稳定这些新 API（可能会有破坏性变更），一旦下游项目有时间实验新功能并验证它们。
 
 资源：
 
 - [反馈讨论](https://github.com/vitejs/vite/discussions/16358) 我们在此收集关于新 API 的反馈。
-- [Environment API PR](https://github.com/vitejs/vite/pull/16471) 新 API 在此实现和审查。
+- [环境 API PR](https://github.com/vitejs/vite/pull/16471) 新 API 在此实现和审查。
 
 请与我们分享您的反馈。
 :::
@@ -26,9 +26,7 @@ function createWorkerdEnvironment(
   return mergeConfig(
     {
       resolve: {
-        conditions: [
-          /*...*/
-        ],
+        conditions: [/*...*/],
       },
       dev: {
         createEnvironment(name, config) {
@@ -250,10 +248,7 @@ interface ModuleRunnerOptions {
    * 您可以提供一个对象来配置未由 Vite 处理的文件的文件内容和源映射如何解析。
    */
   sourcemapInterceptor?:
-    | false
-    | 'node'
-    | 'prepareStackTrace'
-    | InterceptorOptions
+    false | 'node' | 'prepareStackTrace' | InterceptorOptions
   /**
    * 禁用 HMR 或配置 HMR 选项。
    *
@@ -359,7 +354,7 @@ const runner = new ModuleRunner(
 
 ```js [server.js]
 import { BroadcastChannel } from 'node:worker_threads'
-import { createServer, RemoteEnvironmentTransport, DevEnvironment } from 'vite'
+import { createServer, DevEnvironment } from 'vite'
 
 function createWorkerEnvironment(name, config, context) {
   const worker = new Worker('./worker.js')

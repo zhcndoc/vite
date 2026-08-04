@@ -13,15 +13,23 @@
 请与我们分享你的反馈。
 :::
 
+## 每个环境的钩子和全局钩子
+
+插件运行在共享管道上，但根据钩子是为整个服务器运行一次，还是为每个环境运行一次，它们分为两类。
+
+全局钩子只调用一次，与配置的环境无关。它们处理整个应用范围内的事项，例如解析配置或设置开发服务器和预览服务器，因此 `this.environment` 对它们没有意义。与配置解析相关的钩子和与服务器相关的钩子都是全局钩子。
+
+每个环境的钩子会为每个环境调用一次，并通过其上下文中的 `this.environment` 提供当前环境。所有[通用钩子](/guide/api-plugin#universal-hooks)都是每个环境的钩子，其他用于处理模块的 Vite 特定钩子也是如此。不过请注意，`buildStart` 和 `buildEnd` 只会为客户端环境调用，除非启用了[`perEnvironmentStartEndDuringDev: true` 标志](##per-environment-state-in-plugins)。
+
 ## 在 Hook 中访问当前环境
 
-鉴于直到 Vite 6 只有两个环境（`client` 和 `ssr`），一个 `ssr` 布尔值足以在 Vite API 中识别当前环境。插件 Hook 在最后一个选项参数中接收一个 `ssr` 布尔值，并且几个 API 期望一个可选的最后 `ssr` 参数以正确地将模块关联到正确的环境（例如 `server.moduleGraph.getModuleByUrl(url, { ssr })`）。
+鉴于直到 Vite 6 只有两个环境（`client` 和 `ssr`），一个 `ssr` 布尔值足以在 Vite API 中识别当前环境。插件 Hook 在最后一个选项参数中接收一个 `ssr` 布尔值，并且几个 API 期望一个可选的最后 `ssr` 参数，以便正确地将模块关联到正确的环境（例如 `server.moduleGraph.getModuleByUrl(url, { ssr })`）。
 
-随着可配置环境的出现，我们现在有一种统一的方式来在插件中访问它们的选项和实例。插件 Hook 现在在其上下文中暴露 `this.environment`，并且以前期望 `ssr` 布尔值的 API 现在被限定到适当的环境（例如 `environment.moduleGraph.getModuleByUrl(url)`）。
+随着可配置环境的出现，我们现在有一种统一的方式来在插件中访问它们的选项和实例。插件 Hook 现在在其上下文中暴露 `this.environment`，而以前期望 `ssr` 布尔值的 API 现在被限定到适当的环境（例如 `environment.moduleGraph.getModuleByUrl(url)`）。
 
-Vite 服务器有一个共享的插件管道，但当处理模块时，它总是在给定环境的上下文中完成。`environment` 实例在插件上下文中可用。
+Vite 服务器有一个共享的插件管道，但在处理模块时，总是在给定环境的上下文中完成。`environment` 实例在插件上下文中可用。
 
-插件可以使用 `environment` 实例来根据环境的配置（可以使用 `environment.config` 访问）改变模块的处理方式。
+插件可以使用 `environment` 实例，根据环境的配置（可通过 `environment.config` 访问）改变模块的处理方式。
 
 ```ts
   transform(code, id) {
@@ -49,7 +57,11 @@ Vite 服务器有一个共享的插件管道，但当处理模块时，它总是
 
 一个空对象足以注册环境，使用根级别环境配置的默认值。
 
-## 使用 Hook 配置环境
+## 使用 `configEnvironment` Hook 配置环境
+
+- **类型：** `(name: string, config: EnvironmentOptions, env: { mode: string, command: 'build' | 'serve', isSsrBuild?: boolean, isPreview?: boolean, isSsrTargetWebworker?: boolean }) => EnvironmentOptions | null | void`
+- **种类：** `async`、`sequential`
+- **范围：** [每个环境](#per-environment-hooks-and-global-hooks)
 
 虽然 `config` Hook 正在运行，但完整的环境列表尚未知，并且环境可能受到根级别环境配置的默认值或通过 `config.environments` 记录显式影响。
 插件应该使用 `config` Hook 设置默认值。要配置每个环境，他们可以使用新的 `configEnvironment` Hook。此 Hook 为每个环境调用，包含其部分解析的配置，包括最终默认值的解析。
@@ -67,13 +79,14 @@ Vite 服务器有一个共享的插件管道，但当处理模块时，它总是
   }
 ```
 
-## `hotUpdate` Hook
+## `hotUpdate` 钩子
 
 - **类型：** `(this: { environment: DevEnvironment }, options: HotUpdateOptions) => Array<EnvironmentModuleNode> | void | Promise<Array<EnvironmentModuleNode> | void>`
-- **种类：** `async`, `sequential`
-- **另见：** [HMR API](./api-hmr)
+- **类型：** `async`、`sequential`
+- **作用域：** [每个环境](#per-environment-hooks-and-global-hooks)
+- **另请参阅：** [HMR API](./api-hmr)
 
-`hotUpdate` Hook 允许插件为给定环境执行自定义 HMR 更新处理。当文件更改时，HMR 算法根据 `server.environments` 中的顺序依次为每个环境运行，因此 `hotUpdate` Hook 将被调用多次。该 Hook 接收一个具有以下签名的上下文对象：
+`hotUpdate` 钩子允许插件为给定环境执行自定义 HMR 更新处理。当文件更改时，HMR 算法根据 `server.environments` 中的顺序依次为每个环境运行，因此 `hotUpdate` 钩子将被调用多次。该钩子接收一个具有以下签名的上下文对象：
 
 ```ts
 interface HotUpdateOptions {
@@ -88,7 +101,7 @@ interface HotUpdateOptions {
 
 - `this.environment` 是当前正在处理文件更新的模块执行环境。
 
-- `modules` 是此环境中受更改文件影响的模块数组。它是一个数组，因为单个文件可能映射到多个服务模块（例如 Vue SFC）。
+- `modules` 是此环境中受更改文件影响的模块数组。它是一个数组，因为单个文件可能映射到多个服务模块（例如 Vue 单文件组件）。
 
 - `read` 是一个异步读取函数，返回文件的内容。提供此函数是因为，在某些系统上，文件更改回调可能在编辑器完成更新文件之前触发得太快，直接的 `fs.readFile` 将返回空内容。传入的读取函数标准化了此行为。
 
@@ -118,7 +131,7 @@ interface HotUpdateOptions {
   }
   ```
 
-- 返回一个空数组并通过向客户端发送自定义事件来执行完整的自定义 HMR 处理：
+- 返回一个空数组，并通过向客户端发送自定义事件来执行完整的自定义 HMR 处理：
 
   ```js
   hotUpdate() {
@@ -134,7 +147,7 @@ interface HotUpdateOptions {
   }
   ```
 
-  客户端代码应使用 [HMR API](./api-hmr) 注册相应的处理程序（这可以由同一插件的 `transform` Hook 注入）：
+  客户端代码应使用 [HMR API](./api-hmr) 注册相应的处理程序（这可以由同一插件的 `transform` 钩子注入）：
 
   ```js
   if (import.meta.hot) {
@@ -167,7 +180,11 @@ function PerEnvironmentCountTransformedModulesPlugin() {
 }
 ```
 
-## 每环境插件
+## 使用 `applyToEnvironment` 钩子的每环境插件
+
+- **类型：** `(environment: PartialEnvironment) => boolean | PluginOption | Promise<boolean>`
+- **种类：** `async`、`sequential`
+- **范围：** [每环境](#per-environment-hooks-and-global-hooks)
 
 插件可以使用 `applyToEnvironment` 函数定义它应该应用于哪些环境。
 
@@ -180,21 +197,21 @@ const UnoCssPlugin = () => {
       // 使用 this.environment
     },
     configureServer() {
-      // 正常使用全局 Hook
+      // 正常使用全局钩子
     },
     applyToEnvironment(environment) {
       // 如果此插件应在此环境中激活，则返回 true，
       // 或者返回一个新插件来替换它。
-      // 如果未使用此 Hook，插件将在所有环境中激活
+      // 如果未使用此钩子，插件将在所有环境中激活
     },
     resolveId(id, importer) {
-      // 仅针对此插件应用的环境调用
+      // 仅针对该插件应用的环境调用
     },
   }
 }
 ```
 
-如果插件不了解环境并且具有未基于当前环境键控的状态，`applyToEnvironment` Hook 允许轻松地使其成为每环境的。
+如果插件不了解环境并且具有未基于当前环境键控的状态，`applyToEnvironment` 钩子允许轻松地使其成为每环境的。
 
 ```js
 import { nonShareablePlugin } from 'non-shareable-plugin'
@@ -211,7 +228,7 @@ export default defineConfig({
 })
 ```
 
-Vite 导出一个 `perEnvironmentPlugin` 辅助函数来简化这些不需要其他 Hook 的情况：
+Vite 导出一个 `perEnvironmentPlugin` 辅助函数来简化这些不需要其他钩子的情况：
 
 ```js
 import { nonShareablePlugin } from 'non-shareable-plugin'
@@ -225,7 +242,7 @@ export default defineConfig({
 })
 ```
 
-`applyToEnvironment` Hook 在配置时调用，目前在 `configResolved` 之后，因为生态系统中的项目在其中修改插件。环境插件解析可能会在未来移到 `configResolved` 之前。
+`applyToEnvironment` 钩子在配置时调用，目前在 `configResolved` 之后，因为生态系统中的项目会在其中修改插件。环境插件解析可能会在未来移到 `configResolved` 之前。
 
 ## 应用 - 插件通信
 
@@ -280,7 +297,7 @@ configureServer(server) {
 
 在未来的主要版本中，我们可以实现完全一致：
 
-- **开发和构建期间：** 插件是共享的，带有 [按环境过滤](#per-environment-plugins)
+- **开发和构建期间：** 插件都是共享的，并支持[按环境筛选](#per-environment-plugins-using-the-applytoenvironment-hook)
 
 构建期间还将共享一个 `ResolvedConfig` 实例，允许在整个应用构建过程级别进行缓存，就像我们在开发期间使用 `WeakMap<ResolvedConfig, CachedData>` 所做的那样。
 

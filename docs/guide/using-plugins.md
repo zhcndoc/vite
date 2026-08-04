@@ -8,7 +8,7 @@ Vite 可以通过插件进行扩展，这些插件基于 Rollup 设计良好的�
 
 要使用插件，需要将其添加到项目的 `devDependencies` 中，并包含在 `vite.config.js` 配置文件的 `plugins` 数组中。例如，为了提供对旧版浏览器的支持，可以使用官方的 [@vitejs/plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy)：
 
-```
+```bash
 $ npm add -D @vitejs/plugin-legacy
 ```
 
@@ -42,7 +42,7 @@ Vite 旨在为常见的 Web 开发模式提供开箱即用的支持。在搜索 
 为了与某些 Rollup 插件兼容，可能需要强制插件的顺序或仅在构建时应用。这对于 Vite 插件来说应该是一个实现细节。你可以使用 `enforce` 修饰符来强制插件的位置：
 
 - `pre`：在 Vite 核心插件之前调用插件
-- default：在 Vite 核心插件之后调用插件
+- 默认：在 Vite 核心插件之后调用插件
 - `post`：在 Vite 构建插件之后调用插件
 
 ```js twoslash [vite.config.js]

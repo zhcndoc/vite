@@ -18,7 +18,7 @@ Vite 还可通过其 [插件 API](./api-plugin) 和 [JavaScript API](./api-javas
 
 你可以在 [为什么选择 Vite](./why) 部分了解更多关于项目背后的理由。
 
-<ScrimbaLink href="https://scrimba.com/intro-to-vite-c03p6pbbdq?via=vite" title="Scrimba 上的免费 Vite 课程">通过 Scrimba 上的互动教程学习 Vite</ScrimbaLink>
+<ScrimbaLink href="https://scrimba.com/intro-to-vite-c03p6pbbdq?via=vite" title="Scrimba 上的免费 Vite 课程">通过 Scrimba 上的互动教程学习 Vite</ScrimbaLink>。
 
 ## 浏览器支持
 
@@ -106,7 +106,7 @@ $ deno init --npm vite my-vue-app --template vue
 
 :::
 
-See [create-vite](https://github.com/vitejs/vite/tree/main/packages/create-vite) for more details on each supported template: `vanilla`, `vanilla-ts`, `vue`, `vue-ts`, `react`, `react-ts`, `preact`, `preact-ts`, `lit`, `lit-ts`, `svelte`, `svelte-ts`, `solid`, `solid-ts`, `qwik`, `qwik-ts`.
+有关每个受支持模板的更多详细信息，请参阅 [create-vite](https://github.com/vitejs/vite/tree/main/packages/create-vite)：`vanilla`、`vanilla-ts`、`vue`、`vue-ts`、`react`、`react-compiler`、`react-ts`、`react-compiler-ts`、`preact`、`preact-ts`、`lit`、`lit-ts`、`svelte`、`svelte-ts`、`solid`、`solid-ts`、`qwik`、`qwik-ts`。
 
 你可以使用 `.` 作为项目名称，在当前目录中搭建。
 
@@ -161,7 +161,7 @@ $ deno add -D npm:vite
 并创建一个如下所示的 `index.html` 文件：
 
 ```html
-<p>Hello Vite!</p>
+<p>你好 Vite！</p>
 ```
 
 然后在终端中运行相应的 CLI 命令：
@@ -224,7 +224,7 @@ Vite 还支持具有多个 `.html` 入口点的 [多页应用](./build#multi-pag
 
 你可以指定额外的 CLI 选项，如 `--port` 或 `--open`。如需完整的 CLI 选项列表，请在你的项目中运行 `npx vite --help`。
 
-了解更多关于 [命令行界面](./cli.md) 的信息
+详细了解[命令行界面](./cli.md)。
 
 ## 使用未发布的提交
 
@@ -260,15 +260,15 @@ cd vite
 pnpm install
 cd packages/vite
 pnpm run build
-pnpm link # use your preferred package manager for this step
+pnpm link # 在此步骤中使用你偏好的包管理器
 ```
 
 然后进入你的基于 Vite 的项目并运行 `pnpm link vite`（或使用你用来全局链接 `vite` 的包管理器）。现在重启开发服务器以体验最新前沿功能！
 
 要了解有关 Vite 如何以及何时发布的更多信息，请查看 [发布](../releases.md) 文档。
 
-::: tip Dependencies using Vite
-To replace the Vite version used by dependencies transitively, you should use [npm overrides](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#overrides) or [pnpm overrides](https://pnpm.io/settings#overrides).
+::: tip 使用 Vite 的依赖
+要替换依赖项传递使用的 Vite 版本，你应该使用 [npm overrides](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#overrides) 或 [pnpm overrides](https://pnpm.io/settings#overrides)。
 :::
 
 ## 社区

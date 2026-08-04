@@ -7,7 +7,7 @@
 - **类型：** `string | boolean`
 - **默认值：** `'localhost'`
 
-指定服务器应该监听哪些 IP 地址。
+指定服务器应该监听哪些 IP 地址。  
 将其设置为 `0.0.0.0` 或 `true` 以监听所有地址，包括局域网和公共地址。
 
 可以通过 CLI 使用 `--host 0.0.0.0` 或 `--host` 来设置。
@@ -24,7 +24,7 @@
 
 ::: tip 从局域网访问 WSL2 上的服务器
 
-在 WSL2 上运行 Vite 时，仅设置 `host: true` 不足以从局域网访问服务器。
+在 WSL2 上运行 Vite 时，仅设置 `host: true` 不足以从局域网访问服务器。  
 请参阅 [WSL 文档](https://learn.microsoft.com/en-us/windows/wsl/networking#accessing-a-wsl-2-distribution-from-your-local-area-network-lan) 了解更多详情。
 
 :::
@@ -142,7 +142,7 @@ export default defineConfig({
         target: 'http://jsonplaceholder.typicode.com',
         changeOrigin: true,
         configure: (proxy, options) => {
-          // proxy 将是 'http-proxy' 的一个实例
+          // proxy 将是 'http-proxy-3' 的一个实例
         },
       },
       // 代理 websockets 或 socket.io：
@@ -162,14 +162,14 @@ export default defineConfig({
 
 ## server.cors
 
-- **Type:** `boolean | CorsOptions`
-- **Default:** `{ origin: /^https?:\/\/(?:(?:[^:]+\.)?localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/ }` (allows localhost, `127.0.0.1`, and `::1`)
+- **类型：** `boolean | CorsOptions`
+- **默认值：** `{ origin: /^https?:\/\/(?:(?:[^:]+\.)?localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/ }`（允许 localhost、`127.0.0.1` 和 `::1`）
 
-Configure CORS for the development server. Pass an [options object](https://github.com/expressjs/cors#configuration-options) to fine-tune behavior, or pass `true` to allow any origin.
+配置开发服务器的 CORS。传入一个[选项对象](https://github.com/expressjs/cors#configuration-options)以微调行为，或传入 `true` 以允许任何来源。
 
 ::: danger
 
-Setting `server.cors` to `true` allows any website to send requests to your development server and download your source code and content. We recommend always using an explicit allowlist of origins.
+将 `server.cors` 设置为 `true` 会允许任何网站向您的开发服务器发送请求，并下载您的源代码和内容。我们建议始终使用明确的来源允许列表。
 
 :::
 
@@ -282,7 +282,7 @@ export default defineConfig({
 - **类型：** `{ clientFiles?: string[], ssrFiles?: string[] }`
 - **相关：** [预热常用文件](/guide/performance.html#warm-up-frequently-used-files)
 
-预热文件以提前转换并缓存结果。这可以改善服务器启动期间的初始页面加载，并防止转换瀑布流。
+预热文件会提前转换并缓存结果。这可以改善服务器启动期间的初始页面加载，并防止转换瀑布流。
 
 `clientFiles` 是仅在客户端使用的文件，而 `ssrFiles` 是仅在 SSR 中使用的文件。它们接受相对于 `root` 的文件路径数组或 [`tinyglobby` 模式](https://superchupu.dev/tinyglobby/comparison)。
 
@@ -423,18 +423,18 @@ export default defineConfig({
 
 ## server.fs.deny
 
-- **Type:** `string[]`
-- **Default:** `['.env', '.env.*', '*.{crt,pem,key,p12,pfx,cer,der}', '.npmrc', '.yarnrc.yml', '**/.git/**']`
+- **类型：** `string[]`
+- **默认值：** `['.env', '.env.*', '*.{crt,pem,key,p12,pfx,cer,der}', '.npmrc', '.yarnrc.yml', '**/.git/**']`
 
 限制由 Vite 开发服务器提供的敏感文件的阻止列表。这将比 [`server.fs.allow`](#server-fs-allow) 具有更高的优先级。支持 [picomatch 模式](https://github.com/micromatch/picomatch#globbing-features)。
 
 ::: tip 注意
 
-此阻止列表不适用于 [公共目录](/guide/assets.md#the-public-directory)。公共目录中的所有文件都无需任何过滤即可提供，因为它们在构建期间直接复制到输出目录。
+此阻止列表不适用于[公共目录](/guide/assets.md#the-public-directory)。公共目录中的所有文件都无需任何过滤即可提供，因为它们在构建期间直接复制到输出目录。
 
 :::
 
-::: tip NOTE
+::: tip 注意
 
 拒绝过滤器应用于模块 ID 以及去除查询参数后的 ID。由于插件可以在其加载钩子中读取任何文件（包括将符号链接解析为被拒绝路径），Vite 无法保证被拒绝的文件无法通过替代路径访问。如果你有其他替代路径，也请将其包含在拒绝列表中。
 
@@ -477,6 +477,6 @@ export default defineConfig({
 })
 ```
 
-::: tip Note
+::: tip 注意
 [`server.sourcemapIgnoreList`](#server-sourcemapignorelist) 和 [`build.rolldownOptions.output.sourcemapIgnoreList`](https://rollupjs.org/configuration-options/#output-sourcemapignorelist) 需要分别设置。`server.sourcemapIgnoreList` 仅用于服务器配置，其默认值不会从已定义的 rollup 选项中获取。
 :::

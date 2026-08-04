@@ -8,7 +8,7 @@
 
 - **类型：** `string | string[]`
 
-默认情况下，Vite 会遍历你所有的 `.html` 文件来检测需要预打包的依赖（忽略 `node_modules`、`build.outDir`、`__tests__` 和 `coverage`）。如果指定了 `build.rolldownOptions.input`，Vite 则会改为遍历这些入口点。
+默认情况下，Vite 会爬取所有 `.html` 文件，以检测需要预构建的依赖项（忽略 `node_modules`、`build.outDir`、`__tests__` 和 `coverage`）。如果指定了顶层的 [`input`](/config/shared-options#input) 或 `build.rolldownOptions.input`，Vite 则会改为爬取这些入口。
 
 如果这些都不符合你的需求，你可以使用此选项指定自定义入口——值应该是相对于 Vite 项目根目录的 [`tinyglobby` 模式](https://superchupu.dev/tinyglobby/comparison) 或模式数组。这将覆盖默认的入口推断。当显式定义 `optimizeDeps.entries` 时，默认情况下只有 `node_modules` 和 `build.outDir` 文件夹会被忽略。如果需要忽略其他文件夹，你可以使用忽略模式作为入口列表的一部分，以初始 `!` 标记。对于显式包含字符串 `node_modules` 的模式，`node_modules` 不会被忽略。
 
@@ -35,11 +35,11 @@ export default defineConfig({
 
 ## optimizeDeps.include <NonInheritBadge />
 
-- **类型：** `string[]`
+- **Type:** `string[]`
 
-默认情况下，不在 `node_modules` 内的链接包不会被预打包。使用此选项强制预打包链接包。
+By default, linked packages that are not inside `node_modules` are not pre-bundled. Use this option to force linked packages to be pre-bundled.
 
-**实验性：** 如果你使用的库有很多深层导入，你还可以指定一个尾部 glob 模式来一次性预打包所有深层导入。这将避免每当使用新的深层导入时不断进行预打包。[提供反馈](https://github.com/vitejs/vite/discussions/15833)。例如：
+**Experimental:** If the library you use has many deep imports, you can also specify a trailing glob pattern to pre-bundle all deep imports at once. This avoids repeatedly pre-bundling whenever a new deep import is used. [Provide feedback](https://github.com/vitejs/vite/discussions/15833). For example:
 
 ```js twoslash
 import { defineConfig } from 'vite'
@@ -83,11 +83,11 @@ export default defineConfig({
 
 ## optimizeDeps.holdUntilCrawlEnd <NonInheritBadge />
 
-- **实验性：** [提供反馈](https://github.com/vitejs/vite/discussions/15834)
-- **类型：** `boolean`
-- **默认值：** `true`
+- **Experimental:** [Provide feedback](https://github.com/vitejs/vite/discussions/15834)
+- **Type:** `boolean`
+- **Default:** `true`
 
-启用时，它将保留第一次优化的依赖结果，直到冷启动期间所有静态导入都被爬取完毕。这避免了当发现新依赖并触发生成新的公共块时需要全页刷新。如果扫描器找到了所有依赖以及 `include` 中显式定义的依赖，最好禁用此选项以让浏览器并行处理更多请求。
+When enabled, it holds the results of the first optimization until all static imports have been crawled during cold start. This avoids a full-page reload when new dependencies are discovered and new common chunks are generated. If the scanner has found all dependencies, as well as the dependencies explicitly defined in `include`, it is recommended to disable this option to allow the browser to process more requests in parallel.
 
 ## optimizeDeps.disabled <NonInheritBadge />
 

@@ -34,6 +34,22 @@
 
 请参阅 [环境变量和模式](/guide/env-and-mode) 了解更多详情。
 
+## 输入 <NonInheritBadge />
+
+- **类型：** `string | string[] | { [entryAlias: string]: string }`
+
+应用程序的入口点，相对于项目根目录解析。当未显式设置 [`build.rolldownOptions.input`](/config/build-options#build-rolldownoptions)、[`build.lib.entry`](/config/build-options#build-lib)、[`build.ssr`](/config/build-options#build-ssr)（如果为 `true`）和 [`optimizeDeps.entries`](/config/dep-optimization-options#optimizedeps-entries) 时，此配置会作为它们的默认值。
+
+当应用程序不使用 `index.html` 入口时，此配置非常有用。这样你只需声明一次入口，而不必在上述选项中重复配置。
+
+```js twoslash [vite.config.js]
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  input: 'src/main.ts',
+})
+```
+
 ## define
 
 - **类型：** `Record<string, any>`
@@ -192,13 +208,13 @@ resolve: {
 
 ## resolve.preserveSymlinks
 
-- **Type:** `boolean`
-- **Default:** `false`
+- **类型：** `boolean`
+- **默认值：** `false`
 
-Enabling this option will cause vite to determine file identity using the original file path (that is, the path without following symlinks) rather than the real file path (that is, the path after following symlinks).
+启用此选项后，Vite 将使用原始文件路径（即不跟随符号链接的路径）而不是实际文件路径（即跟随符号链接后的路径）来确定文件身份。
 
-- **Related:** [esbuild#preserve-symlinks](https://esbuild.github.io/api/#preserve-symlinks), [webpack#resolve.symlinks
-  ](https://webpack.js.org/configuration/resolve/#resolvesymlinks)
+- **相关：** [esbuild#preserve-symlinks](https://esbuild.github.io/api/#preserve-symlinks)、[webpack#resolve.symlinks
+  ](https://webpack.js.org/configuration/resolve/#resolvesymlinks)。
 
 ## resolve.tsconfigPaths
 
@@ -282,8 +298,7 @@ export default defineConfig({
     globalModulePaths?: RegExp[]
     exportGlobals?: boolean
     generateScopedName?:
-      | string
-      | ((name: string, filename: string, css: string) => string)
+      string | ((name: string, filename: string, css: string) => string)
     hashPrefix?: string
     /**
      * 默认值：undefined
@@ -319,17 +334,17 @@ export default defineConfig({
 
 ## css.preprocessorOptions
 
-- **Type:** `Record<string, object>`
+- **类型：** `Record<string, object>`
 
-Specify options to pass to CSS preprocessors. The file extension will be used as the key for the options. Supported options for each preprocessor can be found in their respective documentation:
+指定要传递给 CSS 预处理器的选项。文件扩展名将用作选项的键。每种预处理器支持的选项可以在其相应的文档中找到：
 
-- `sass`/`scss`:
-  - If `sass-embedded` is installed, it will be used; otherwise, `sass` will be used. For best performance, it is recommended to install the `sass-embedded` package.
-  - [Options](https://sass-lang.com/documentation/js-api/interfaces/stringoptions/)
-- `less`: [Options](https://lesscss.org/usage/#less-options).
-- `styl`/`stylus`: Only [`define`](https://stylus-lang.com/docs/js.html#define-name-node) is supported, and it can be passed as an object.
+- `sass`/`scss`：
+  - 如果安装了 `sass-embedded`，将使用它；否则将使用 `sass`。为获得最佳性能，建议安装 `sass-embedded` 包。
+  - [选项](https://sass-lang.com/documentation/js-api/interfaces/stringoptions/)
+- `less`：[选项](https://lesscss.org/usage/#less-options)。
+- `styl`/`stylus`：仅支持 [`define`](https://stylus-lang.com/docs/js.html#define-name-node)，并且可以将其作为对象传递。
 
-**Example:**
+**示例：**
 
 ```js
 export default defineConfig({
@@ -355,11 +370,11 @@ export default defineConfig({
 
 ### css.preprocessorOptions[extension].additionalData
 
-- **Type:** `string | ((source: string, filename: string) => (string | { content: string; map?: SourceMap }))`
+- **类型：** `string | ((source: string, filename: string) => (string | { content: string; map?: SourceMap }))`
 
-This option can be used to inject extra code into each style content. Note that if actual styles are included instead of just variables, these styles will be duplicated in the final bundle.
+此选项可用于向每个样式内容中注入额外代码。请注意，如果包含的是实际样式而不只是变量，这些样式将在最终构建产物中重复。
 
-**Example:**
+**示例：**
 
 ```js
 export default defineConfig({
@@ -373,8 +388,8 @@ export default defineConfig({
 })
 ```
 
-::: tip Importing Files
-Since the same code will be prepended to files in different directories, relative paths cannot be resolved correctly. Please use absolute paths or [aliases](#resolve-alias).
+::: tip 导入文件
+由于相同的代码将添加到不同目录中的文件前面，相对路径无法被正确解析。请使用绝对路径或[别名](#resolve-alias)。
 :::
 
 ## css.preprocessorMaxWorkers

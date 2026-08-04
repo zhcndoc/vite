@@ -21,7 +21,7 @@
 - **类型：** `boolean | { polyfill?: boolean, resolveDependencies?: ResolveModulePreloadDependenciesFn }`
 - **默认值：** `{ polyfill: true }`
 
-默认情况下，会自动注入 [module preload polyfill](https://guybedford.com/es-module-preloading-integrity#modulepreload-polyfill)。该 polyfill 会自动注入到每个 `index.html` 入口的代理模块中。如果构建配置为通过 `build.rolldownOptions.input` 使用非 HTML 的自定义入口，则需要在你的自定义入口中手动导入该 polyfill：
+默认情况下，会自动注入 [模块预加载 polyfill](https://guybedford.com/es-module-preloading-integrity#modulepreload-polyfill)。该 polyfill 会自动注入到每个 `index.html` 入口的代理模块中。如果构建配置为通过 `build.rolldownOptions.input` 使用非 HTML 的自定义入口，则需要在你的自定义入口中手动导入该 polyfill：
 
 ```js
 import 'vite/modulepreload-polyfill'
@@ -46,7 +46,7 @@ type ResolveModulePreloadDependenciesFn = (
 ) => string[]
 ```
 
-`resolveDependencies` 函数将为每个动态导入调用，并传入它所依赖的 chunk 列表，它也会为入口 HTML 文件中导入的每个 chunk 调用。可以返回一个新的依赖数组，其中过滤了这些依赖或注入了更多依赖，并修改了它们的路径。`deps` 路径是相对于 `build.outDir` 的。返回值应该是相对于 `build.outDir` 的相对路径。
+`resolveDependencies` 函数将为每个动态导入调用，并传入它所依赖的 chunk 列表；它也会为入口 HTML 文件中导入的每个 chunk 调用。可以返回一个新的依赖数组，其中过滤了这些依赖或注入了更多依赖，并修改了它们的路径。`deps` 路径是相对于 `build.outDir` 的。返回值应该是相对于 `build.outDir` 的相对路径。
 
 ```js twoslash
 /** @type {import('vite').UserConfig} */
@@ -149,20 +149,22 @@ npm add -D esbuild
 
 ## build.chunkImportMap
 
-- **Type:** `boolean`
-- **Default:** `false`
-- **Experimental**
-- **Related:** [Chunk Import Map Optimization](/guide/features#chunk-import-map-optimization)
+- **类型：** `boolean`
+- **默认值：** `false`
+- **实验性**
+- **相关：** [分块导入映射优化](/guide/features#chunk-import-map-optimization)
 
 是否使用 import maps 特性来优化 chunk 缓存效率。
 
-请注意，此选项需要 [`import.meta.resolve` 支持](https://caniuse.com/mdn-javascript_operators_import_meta_resolve)。如果你需要支持较旧的浏览器，请查看 [`@vitejs/plugin-legacy`](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy)。
+请注意，此选项需要 [`import.meta.resolve 支持`](https://caniuse.com/mdn-javascript_operators_import_meta_resolve)。如果你需要支持较旧的浏览器，请查看 [`@vitejs/plugin-legacy`](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy)。
 
 ## build.rolldownOptions
 
 - **类型：** [`RolldownOptions`](https://rolldown.rs/reference/)
 
 直接自定义底层的 Rolldown bundle。这与可以从 Rolldown 配置文件导出的选项相同，并将与 Vite 内部的 Rolldown 选项合并。查看更多详情请参阅 [Rolldown 选项文档](https://rolldown.rs/reference/)。
+
+相比于使用 `build.rolldownOptions.input`，建议设置顶层的 [`input`](/config/shared-options#input) 选项，因为它在开发环境中也会生效。如果设置了 `build.rolldownOptions.input`，则它只会在构建时覆盖顶层的 `input` 选项。
 
 ## build.rollupOptions
 
@@ -180,10 +182,10 @@ npm add -D esbuild
 
 ## build.lib
 
-- **类型：** `{ entry: string | string[] | { [entryAlias: string]: string }, name?: string, formats?: ('es' | 'cjs' | 'umd' | 'iife')[], fileName?: string | ((format: ModuleFormat, entryName: string) => string), cssFileName?: string }`
+- **类型：** `{ entry?: string | string[] | { [entryAlias: string]: string }, name?: string, formats?: ('es' | 'cjs' | 'umd' | 'iife')[], fileName?: string | ((format: ModuleFormat, entryName: string) => string), cssFileName?: string }`
 - **相关：** [库模式](/guide/build#library-mode)
 
-作为库构建。由于库不能使用 HTML 作为入口，因此 `entry` 是必需的。`name` 是暴露的全局变量，当 `formats` 包含 `'umd'` 或 `'iife'` 时是必需的。默认 `formats` 是 `['es', 'umd']`，如果使用了多个入口，则为 `['es', 'cjs']`。
+构建为库。`entry` 默认为顶层的 [`input`](/config/shared-options#input) 选项。由于库不能使用 HTML 作为入口，因此必须设置两者之一。`name` 是暴露的全局变量，当 `formats` 包含 `'umd'` 或 `'iife'` 时必须设置。默认的 `formats` 为 `['es', 'umd']`；如果使用多个入口，则为 `['es', 'cjs']`。
 
 `fileName` 是包文件输出的名称，默认为 `package.json` 中的 `"name"`。它也可以定义为接受 `format` 和 `entryName` 作为参数并返回文件名的函数。
 
@@ -243,7 +245,7 @@ export default defineConfig({
     rolldownOptions: {
       output: {
         postBanner:
-          '/* 查看 bundled dependencies 的许可证于 https://example.com/license.md */',
+          '/* 查看打包依赖的许可证于 https://example.com/license.md */',
       },
     },
   },
@@ -280,7 +282,7 @@ export default defineConfig({
 - **默认值：** `false`
 - **相关：** [服务端渲染](/guide/ssr)
 
-为 SSR 生成构建。该值可以是一个字符串，用于直接指定 SSR 入口；或者为 `true`，此时需要通过 `rolldownOptions.input` 指定 SSR 入口。
+生成面向 SSR 的构建结果。该值可以是字符串，用于直接指定 SSR 入口；也可以是 `true`，此时需要通过 [`input`](/config/shared-options#input) 或 `build.rolldownOptions.input` 指定 SSR 入口。
 
 ## build.emitAssets
 
@@ -362,9 +364,9 @@ chunk 大小警告的限制（以 kB 为单位）。它与未压缩的 chunk 大
 - **类型：** [`WatcherOptions`](https://rolldown.rs/reference/InputOptions.watch)`| null`
 - **默认值：** `null`
 
-设置为 `{}` 以启用 rollup watcher。这主要用于涉及仅构建插件或集成流程的情况。
+设置为 `{}` 以启用 Rollup 监视器。这主要用于涉及仅构建插件或集成流程的情况。
 
-::: warning 在 Windows Subsystem for Linux (WSL) 2 上使用 Vite
+::: warning 在适用于 Linux 的 Windows 子系统 (WSL) 2 上使用 Vite
 
 在某些情况下，文件系统监视在 WSL2 上不起作用。
 有关更多详细信息，请参阅 [`server.watch`](./server-options.md#server-watch)。
