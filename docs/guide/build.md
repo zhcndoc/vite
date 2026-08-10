@@ -6,7 +6,7 @@
 
 ## 浏览器兼容性
 
-默认情况下，生产环境包假设使用的是包含在 [Baseline](https://web-platform-dx.github.io/web-features/) 广泛可用目标中的现代浏览器。默认的浏览器支持范围是：
+默认情况下，生产环境构建产物面向截至每个主版本发布时确定的、与 [Baseline 广泛可用](https://web-platform-dx.github.io/baseline/) 兼容的最低浏览器版本。此主版本默认的浏览器支持范围为：
 
 <!-- 搜索 `ESBUILD_BASELINE_WIDELY_AVAILABLE_TARGET` 常量以获取更多信息 -->
 
@@ -84,7 +84,7 @@ window.addEventListener('vite:preloadError', (event) => {
 
 ## 文件变更时重新构建
 
-你可以使用 `vite build --watch` 启用 rollup 监视器。或者，你可以通过 `build.watch` 直接调整底层的 [`WatcherOptions`](https://rolldown.rs/reference/InputOptions.watch)：
+你可以使用 `vite build --watch` 启用 Rollup 监视器。或者，你可以通过 `build.watch` 直接调整底层的 [`WatcherOptions`](https://rolldown.rs/reference/InputOptions.watch)：
 
 ```js [vite.config.js]
 export default defineConfig({

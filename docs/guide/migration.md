@@ -11,11 +11,11 @@
 - Firefox 104 → 114
 - Safari 16.0 → 16.4
 
-这些浏览器版本与截至 2026-01-01 的 [基线广泛可用](https://web-platform-dx.github.io/web-features/) 功能集保持一致。换句话说，它们都是在大约两年前发布的。
+这些浏览器版本与截至 2026-01-01 的 [Baseline 广泛可用](https://web-platform-dx.github.io/baseline/)功能集保持一致。换句话说，它们均是在大约两年半前发布的。
 
 ## Rolldown
 
-Vite 8 使用基于 [Rolldown](https://rolldown.rs/) 和 [Oxc](https://oxc.rs/) 的工具，而不是 [esbuild](https://esbuild.github.io/) 和 [Rollup](https://rollupjs.org/)。
+Vite 8 使用基于 [Rolldown](https://rolldown.rs/) 和 [Oxc](https://oxc.rs/) 的工具，而不是基于 [esbuild](https://esbuild.github.io/) 和 [Rollup](https://rollupjs.org/) 的工具。
 
 ### 渐进式迁移
 
@@ -179,6 +179,7 @@ $ deno add -D npm:@rollup/plugin-swc npm:@swc/core
 
 ```js
 import { defineConfig, withFilter } from 'vite'
+import swc from '@rollup/plugin-swc'
 
 export default defineConfig({
   // ...
@@ -215,8 +216,8 @@ Oxc 不支持属性混淆及其相关选项 ([`mangleProps`, `reserveProps`, `ma
 
 esbuild 和 Oxc Minifier 对源代码的假设略有不同。如果你怀疑压缩器导致代码损坏，可以在此处比较这些假设：
 
-- [esbuild minify assumptions](https://esbuild.github.io/api/#minify-considerations)
-- [Oxc Minifier assumptions](https://github.com/oxc-project/oxc/blob/main/crates/oxc_minifier/docs/ASSUMPTIONS.md)
+- [esbuild 压缩假设](https://esbuild.github.io/api/#minify-considerations)
+- [Oxc Minifier 压缩假设](https://github.com/oxc-project/oxc/blob/main/crates/oxc_minifier/docs/ASSUMPTIONS.md)
 
 请报告你在 JavaScript 应用中发现的任何与压缩相关的问题。
 
@@ -369,7 +370,7 @@ const plugin = {
   - `resolveFileUrl` 钩子
 - 现在不推荐使用 `parseAst` / `parseAstAsync` 函数，建议改用功能更丰富的 `parseSync` / `parse` 函数。
 - 注释会在 `renderChunk` 钩子之前移除，而不是在 `renderChunk` 钩子之后移除
-- 除了[此处](https://rolldown.rs/reference/OutputOptions.comments)列出的注释之外的其他注释会被移动，而 Rollup 仅在相邻代码被移除时才会移除注释
+- 除了[此处](https://rolldown.rs/reference/OutputOptions.comments)列出的注释之外的其他注释会被移动，而 Rollup 仅在相邻代码被移除时才会移除注释。
 
 ## 从 v6 迁移
 

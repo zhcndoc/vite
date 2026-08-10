@@ -4,10 +4,11 @@
   欢迎提交 PR 添加一个新的章节，并链接到你平台的部署指南，
   只要它符合以下标准：
 
-  1. 用户应该能够免费部署他们的站点。
-  2. 免费套餐应无限期托管站点，不受时间限制。
-     作为交换，提供有限数量的计算资源或站点数量是可以的。
-  3. 链接的指南不应包含任何恶意内容。
+  1. 用户应该能够免费部署其站点。
+  2. 免费层级提供的服务应无限期托管站点，且不受时间限制。
+     作为交换，限制计算资源或站点数量是可以接受的。
+  3. 所链接的指南不应包含任何恶意内容。
+  4. 平台必须已运营至少 1 年。请在 PR 描述中提供一些证据证明这一点。
 
   新章节应添加在文件的最后。请参考本文件底部的现有章节，
   以了解如何格式化新章节的示例。
@@ -93,7 +94,7 @@ $ npm run preview
 
    这是一个示例工作流，它使用 npm 安装依赖，构建站点，并在你推送更改到 `main` 分支时部署它：
 
-   <<< ./static-deploy-github-pages.yaml#content [.github/workflows/deploy.yml]
+   <<< ./static-deploy-github-pages.yaml#content [.github/workflows/deploy.yml]。
 
 ## GitLab Pages 和 GitLab CI
 
@@ -203,10 +204,10 @@ export default defineConfig({
 
 Cloudflare Pages 提供了一种直接部署到 Cloudflare 而无需管理 Wrangler 文件的方法。
 
-1. 将代码推送到你的 git 仓库（GitHub、GitLab）。
+1. 将代码推送到你的 Git 仓库（GitHub、GitLab）。
 2. 登录 Cloudflare 控制台并在 **账户主页** > **Workers & Pages** 中选择你的账户。
 3. 选择 **创建新项目** 和 **Pages** 选项，然后选择 Git。
-4. 选择你要部署的 git 项目并点击 **开始设置**
+4. 选择你要部署的 Git 项目并点击 **开始设置**
 5. 根据你选择的 Vite 框架，在构建设置中选择相应的框架预设。否则，输入项目的构建命令和预期的输出目录。
 6. 然后保存并部署！
 7. 你的应用已部署！（例如 `https://<PROJECTNAME>.pages.dev/`）
@@ -258,19 +259,19 @@ Cloudflare Pages 提供了一种直接部署到 Cloudflare 而无需管理 Wrang
 
 你也可以通过添加 `surge dist yourdomain.com` 部署到 [自定义域名](https://surge.sh/help/adding-a-custom-domain)。
 
-## Azure Static Web Apps
+## Azure 静态 Web 应用
 
-你可以使用 Microsoft Azure [Static Web Apps](https://aka.ms/staticwebapps) 服务快速部署你的 Vite 应用。你需要：
+你可以使用 Microsoft Azure [静态 Web 应用](https://aka.ms/staticwebapps) 服务快速部署你的 Vite 应用。你需要：
 
 - 一个 Azure 账户和订阅密钥。你可以在此处创建 [免费 Azure 账户](https://azure.microsoft.com/free)。
 - 你的应用代码已推送到 [GitHub](https://github.com)。
 - [Visual Studio Code](https://code.visualstudio.com) 中的 [SWA 扩展](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurestaticwebapps)。
 
-在 VS Code 中安装扩展并导航到你的应用根目录。打开 Static Web Apps 扩展，登录 Azure，然后点击“+”符号创建一个新的 Static Web App。系统将提示你指定使用哪个订阅密钥。
+在 VS Code 中安装扩展并导航到你的应用根目录。打开静态 Web 应用扩展，登录 Azure，然后点击“+”符号创建一个新的静态 Web 应用。系统将提示你指定使用哪个订阅密钥。
 
 按照扩展启动的向导为你的应用命名，选择框架预设，并指定应用根目录（通常为 `/`）和构建文件位置 `/dist`。向导将运行并在你的仓库的 `.github` 文件夹中创建一个 GitHub action。
 
-该 action 将部署你的应用（在仓库的 Actions 标签页中查看进度）。成功完成后，你可以点击 GitHub action 运行后出现的“Browse Website”按钮，在扩展进度窗口中提供的地址查看你的应用。
+该 action 将部署你的应用（在仓库的 Actions 标签页中查看进度）。成功完成后，你可以点击 GitHub action 运行后出现的“浏览网站”按钮，在扩展进度窗口中提供的地址查看你的应用。
 
 ## Render
 

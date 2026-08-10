@@ -19,7 +19,7 @@
 
 全局钩子只调用一次，与配置的环境无关。它们处理整个应用范围内的事项，例如解析配置或设置开发服务器和预览服务器，因此 `this.environment` 对它们没有意义。与配置解析相关的钩子和与服务器相关的钩子都是全局钩子。
 
-每个环境的钩子会为每个环境调用一次，并通过其上下文中的 `this.environment` 提供当前环境。所有[通用钩子](/guide/api-plugin#universal-hooks)都是每个环境的钩子，其他用于处理模块的 Vite 特定钩子也是如此。不过请注意，`buildStart` 和 `buildEnd` 只会为客户端环境调用，除非启用了[`perEnvironmentStartEndDuringDev: true` 标志](##per-environment-state-in-plugins)。
+每个环境的钩子会针对每个环境调用一次，并在其上下文中通过 `this.environment` 提供当前环境。所有 [Rolldown 钩子](/guide/api-plugin#rolldown-hooks) 都是每个环境的钩子，其他处理模块的 Vite 特定钩子也是如此。不过请注意，如果没有启用 [ `perEnvironmentStartEndDuringDev: true` 标志](#per-environment-state-in-plugins)，`buildStart` 和 `buildEnd` 只会针对客户端环境调用。
 
 ## 在 Hook 中访问当前环境
 
@@ -283,7 +283,7 @@ configureServer(server) {
 
 ## 构建钩子中的环境
 
-与开发期间一样，插件钩子在构建期间也会接收环境实例，取代了 `ssr` 布尔值。
+与开发期间一样，插件钩子在构建期间也会接收环境实例，取代了 `ssr` 布尔值。  
 这也适用于 `renderChunk`、`generateBundle` 和其他仅构建钩子。
 
 ## 构建期间共享插件

@@ -1,10 +1,10 @@
 # 使用 `ModuleRunner` API 进行 SSR
 
 ::: tip 反馈
-在 [Environment API 反馈讨论](https://github.com/vitejs/vite/discussions/16358) 给我们反馈
+在 [Environment API 反馈讨论](https://github.com/vitejs/vite/discussions/16358) 中向我们反馈
 :::
 
-`server.ssrLoadModule` 已被从 [模块运行器](/guide/api-environment#modulerunner) 导入所取代。
+`server.ssrLoadModule` 已被从 [Module Runner](/guide/api-environment-runtimes#modulerunner) 导入所取代。
 
 影响范围：`Vite 插件作者`
 

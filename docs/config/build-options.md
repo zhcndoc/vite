@@ -8,7 +8,7 @@
 - **默认值：** `'baseline-widely-available'`
 - **相关：** [浏览器兼容性](/guide/build#browser-compatibility)
 
-最终 bundle 的浏览器兼容性目标。默认值是 Vite 的一个特殊值 `'baseline-widely-available'`，它面向 [Baseline](https://web-platform-dx.github.io/web-features/) 中截至 2026-01-01 被广泛支持的浏览器。具体来说，它是 `['chrome111', 'edge111', 'firefox114', 'safari16.4', 'ios16.4']`。
+最终构建产物的浏览器兼容性目标。默认值是 Vite 的特殊值 `'baseline-widely-available'`，它针对截至每个主要版本固定日期符合 [Baseline](https://web-platform-dx.github.io/baseline/) 广泛可用标准的最低浏览器版本（[此主要版本的日期为 2026-01-01](https://web-platform-dx.github.io/supported-browsers/?widelyAvailableOnDate=2026-01-01)）。具体来说，它是 `['chrome111', 'edge111', 'firefox114', 'safari16.4', 'ios16.4']`。
 
 另一个特殊值是 `'esnext'` —— 它假设支持原生动态导入，并且只会执行最小化的转译。
 
@@ -72,7 +72,7 @@ modulePreload: {
 - **默认值：** `true`
 - **已弃用** 请改用 `build.modulePreload.polyfill`
 
-是否自动注入 [module preload polyfill](https://guybedford.com/es-module-preloading-integrity#modulepreload-polyfill)。
+是否自动注入 [模块预加载 polyfill](https://guybedford.com/es-module-preloading-integrity#modulepreload-polyfill)。
 
 ## build.outDir
 

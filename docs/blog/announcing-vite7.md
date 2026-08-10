@@ -61,7 +61,7 @@ Vite 现在需要 Node.js 20.19+、22.12+。我们已经弃用了 Node.js 18，�
 
 ## 默认浏览器目标更改为 Baseline Widely Available
 
-[Baseline](https://web-platform-dx.github.io/web-features/) 为我们提供了关于哪些 Web 平台功能可以在其核心浏览器集合中工作的清晰信息。Baseline Widely Available 表示该功能已成熟，并在许多设备和浏览器版本中工作，在浏览器中可用至少 30 个月。
+[Baseline](https://web-platform-dx.github.io/baseline/) 为我们提供了清晰的信息，说明哪些 Web 平台功能目前可在其核心浏览器集合中正常运行。Baseline Widely Available 表示该功能已经非常成熟，可在多种设备和浏览器版本中正常运行，并且至少已在各浏览器中提供 30 个月。
 
 在 Vite 7 中，默认浏览器目标将从 `'modules'` 更改为新的默认值：`'baseline-widely-available'`。浏览器集合将在每个大版本中更新，以匹配与 Baseline Widely available 功能兼容的最小浏览器版本列表。`build.target` 的默认浏览器值在 Vite 7.0 中正在更改：
 
@@ -76,13 +76,13 @@ Vite 现在需要 Node.js 20.19+、22.12+。我们已经弃用了 Node.js 18，�
 
 对于 Vitest 用户，Vite 7.0 从 Vitest 3.2 开始支持。你可以在 [Vitest 3.2 发布博客文章](https://vitest.dev/blog/vitest-3-2.html) 中阅读更多关于 Vitest 团队如何不断改进 Vite 测试故事的内容。
 
-## Environment API
+## 环境 API
 
-Vite 6 是自 Vite 2 以来最重要的大版本更新，增加了 [新的实验性 Environment API](https://vite.zhcndoc.com/blog/announcing-vite6.html#experimental-environment-api) 的新功能。我们将保留新 API 为实验性，同时生态系统审查新 API 如何适应他们的项目并提供反馈。如果你建立在 Vite 之上，我们鼓励你测试新 API 并在 [这里的开放反馈讨论](https://github.com/vitejs/vite/discussions/16358) 中联系我们。
+Vite 6 是自 Vite 2 以来最重要的大版本更新，增加了 [新的实验性环境 API](https://vite.zhcndoc.com/blog/announcing-vite6.html#experimental-environment-api) 的新功能。我们将保留新 API 为实验性，同时生态系统审查新 API 如何适应他们的项目并提供反馈。如果你建立在 Vite 之上，我们鼓励你测试新 API 并在 [这里的开放反馈讨论](https://github.com/vitejs/vite/discussions/16358) 中联系我们。
 
-在 Vite 7 中，我们添加了一个新的 `buildApp` hook，让插件协调环境的构建。请在 [框架的 Environment API 指南](/guide/api-environment-frameworks.html#environments-during-build) 中阅读更多内容。
+在 Vite 7 中，我们添加了一个新的 `buildApp` 钩子，让插件协调环境的构建。请在 [框架的环境 API 指南](/guide/api-environment-frameworks.html#environments-during-build) 中阅读更多内容。
 
-我们要感谢一直测试新 API 并帮助我们稳定新功能的团队。例如，Cloudflare 团队宣布了他们的 Cloudflare Vite 插件的 1.0 版本，以及对 React Router v7 的官方支持。他们的插件展示了 Environment API 对于运行时提供商的潜力。在 ["Just use Vite"… with the Workers runtime](https://blog.cloudflare.com/introducing-the-cloudflare-vite-plugin/) 中了解更多关于他们的方法和未来步骤。
+我们要感谢一直测试新 API 并帮助我们稳定新功能的团队。例如，Cloudflare 团队宣布了他们的 Cloudflare Vite 插件的 1.0 版本，以及对 React Router v7 的官方支持。他们的插件展示了环境 API 对于运行时提供商的潜力。在 [“直接使用 Vite”…以及 Workers 运行时](https://blog.cloudflare.com/introducing-the-cloudflare-vite-plugin/) 中了解更多关于他们的方法和未来步骤。
 
 ## 迁移到 Vite 7
 

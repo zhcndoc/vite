@@ -22,9 +22,9 @@ Vite 还可通过其 [插件 API](./api-plugin) 和 [JavaScript API](./api-javas
 
 ## 浏览器支持
 
-在开发期间，Vite 假设使用现代浏览器。这意味着浏览器支持大多数最新的 JavaScript 和 CSS 特性。因此，Vite 将 [`esnext` 设置为转换目标](https://oxc.rs/docs/guide/usage/transformer/lowering.html#target)。这防止了语法降级，让 Vite 提供的模块尽可能接近原始源代码。Vite 注入一些运行时代码以使开发服务器工作。此代码使用了每次主要版本发布时 [Baseline](https://web-platform-dx.github.io/web-features/) 新可用的特性（本次主要版本为 2026-01-01）。
+在开发期间，Vite 假设使用的是现代浏览器。这意味着浏览器支持大多数最新的 JavaScript 和 CSS 特性。因此，Vite 将 [`esnext` 设为转换目标](https://oxc.rs/docs/guide/usage/transformer/lowering.html#target)。这会阻止语法降级，使 Vite 能够尽可能贴近原始源代码地提供模块。Vite 会注入一些运行时代码，以使开发服务器正常工作。此代码使用了每个主版本发布时 [Baseline](https://web-platform-dx.github.io/baseline/) 中“新近可用”的特性（本版本对应 2026-01-01）。
 
-对于生产构建，Vite 默认目标为 [Baseline](https://web-platform-dx.github.io/web-features/) 广泛可用的浏览器。这些是至少 2.5 年前发布的浏览器。可以通过配置降低目标。此外，可以通过官方的 [@vitejs/plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy) 支持旧版浏览器。查看 [生产构建](./build) 部分了解更多详情。
+对于生产构建，Vite 默认以每个主版本固定日期时 [Baseline](https://web-platform-dx.github.io/baseline/) 中“广泛可用”的浏览器版本为目标。对于本版本，这对应于[大约在 2023 年年中发布的浏览器版本](https://web-platform-dx.github.io/supported-browsers/?widelyAvailableOnDate=2026-01-01)。可以通过配置降低目标版本。此外，还可以通过官方的 [@vitejs/plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy) 支持旧版浏览器。有关更多详细信息，请参阅[面向生产环境构建](./build)部分。
 
 ## 在线尝试 Vite
 
@@ -204,7 +204,7 @@ Vite 还支持具有多个 `.html` 入口点的 [多页应用](./build#multi-pag
 
 #### 指定替代根目录
 
-运行 `vite` 会使用当前工作目录作为根目录启动开发服务器。你可以使用 `vite serve some/sub/dir` 指定替代根目录。
+运行 `vite` 会使用当前工作目录作为根目录启动开发服务器。你可以使用 `vite serve some/sub/dir` 指定替代根目录。  
 请注意，Vite 还在项目根目录内解析 [其配置文件（即 `vite.config.js`）](/config/#configuring-vite)，所以如果根目录更改，你需要移动它。
 
 ## 命令行界面

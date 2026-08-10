@@ -190,7 +190,7 @@ interface ViteDevServer {
 ```
 
 :::info
-`waitForRequestsIdle` 旨在用作一种逃生舱，以改善无法遵循 Vite 开发服务器按需性质的功能的开发体验 (DX)。它可以在启动期间被 Tailwind 等工具使用，以延迟生成应用 CSS 类，直到看到应用代码，避免样式变化的闪烁。当此函数在 load 或 transform 钩子中使用时，并且使用默认 HTTP1 服务器时，六个 http 通道之一将被阻塞，直到服务器处理完所有静态导入。Vite 的依赖优化器目前使用此函数，通过延迟加载预打包依赖直到从静态导入源收集所有导入的依赖，以避免缺少依赖时的全页重载。Vite 可能会在未来的主要版本中切换到不同的策略，默认设置 `optimizeDeps.crawlUntilStaticImports: false` 以避免大型应用在冷启动期间的性能打击。
+`waitForRequestsIdle` 旨在作为一种逃生舱，用于改善那些无法遵循 Vite 开发服务器按需特性实现的功能的开发体验。Tailwind 等工具可以在启动期间使用它，延迟生成应用的 CSS 类，直到应用代码已被识别，从而避免样式变化的闪烁。当在 load 或 transform 钩子中使用此函数，并且使用默认的 HTTP1 服务器时，六个 http 通道中的一个将被阻塞，直到服务器处理完所有静态导入。Vite 的依赖优化器目前使用此函数，通过延迟加载预构建依赖，直到从静态导入源中收集完所有导入依赖，来避免因缺少依赖而触发整页重新加载。Vite 可能会在未来的主要版本中改用其他策略，将 `optimizeDeps.holdUntilCrawlEnd: false` 设为默认值，以避免大型应用在冷启动期间受到性能影响。
 :::
 
 ## `build`
