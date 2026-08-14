@@ -84,7 +84,7 @@ window.addEventListener('vite:preloadError', (event) => {
 
 ## 文件变更时重新构建
 
-你可以使用 `vite build --watch` 启用 Rollup 监视器。或者，你可以通过 `build.watch` 直接调整底层的 [`WatcherOptions`](https://rolldown.rs/reference/InputOptions.watch)：
+你可以使用 `vite build --watch` 启用 Rolldown 监视器。或者，你可以通过 `build.watch` 直接调整底层的 [`WatcherOptions`](https://rolldown.rs/reference/InputOptions.watch)：
 
 ```js [vite.config.js]
 export default defineConfig({

@@ -1,4 +1,4 @@
-# 服务端渲染 (SSR)
+# 服务端渲染（SSR）
 
 :::tip 注意
 SSR 特指支持在 Node.js 中运行相同应用的前端框架（例如 React、Preact、Vue 和 Svelte），将其预渲染为 HTML，最后在客户端进行水合（hydrate）。如果您希望与传统服务端框架集成，请查看 [后端集成指南](./backend-integration)。
@@ -14,7 +14,7 @@ SSR 特指支持在 Node.js 中运行相同应用的前端框架（例如 React�
 
 ## 示例项目
 
-Vite 提供对服务端渲染 (SSR) 的内置支持。[`create-vite-extra`](https://github.com/bluwy/create-vite-extra) 包含示例 SSR 设置，您可以用作本指南的参考：
+Vite 提供对服务端渲染（SSR）的内置支持。[`create-vite-extra`](https://github.com/bluwy/create-vite-extra) 包含示例 SSR 设置，您可以用作本指南的参考：
 
 - [Vanilla](https://github.com/bluwy/create-vite-extra/tree/master/template-ssr-vanilla)
 - [Vue](https://github.com/bluwy/create-vite-extra/tree/master/template-ssr-vue)
@@ -65,7 +65,7 @@ if (import.meta.env.SSR) {
 
 在构建 SSR 应用时，您可能希望完全控制主服务器并将 Vite 与生产环境解耦。因此建议使用中间件模式使用 Vite。以下是使用 [express](https://expressjs.com/) 的示例：
 
-```js{15-18} twoslash [server.js]
+```js{12-15} twoslash [server.js]
 import fs from 'node:fs'
 import path from 'node:path'
 import express from 'express'
@@ -194,7 +194,7 @@ app.use('*all', async (req, res, next) => {
 
 参考 [示例项目](#example-projects) 获取可行的设置。
 
-## 生成 Preload 指令
+## 生成预加载指令
 
 `vite build` 支持 `--ssrManifest` 标志，它将在构建输出目录中生成 `.vite/ssr-manifest.json`：
 
@@ -215,11 +215,11 @@ const html = await vueServerRenderer.renderToString(app, ctx)
 // ctx.modules 现在是一个在渲染期间使用的模块 ID 的 Set
 ```
 
-在 `server.js` 的生产分支中，我们需要读取 manifest 并将其传递给 `src/entry-server.js` 导出的 `render` 函数。这将为我们提供足够的信息来渲染异步路由使用的文件的 preload 指令！参见 [演示源码](https://github.com/vitejs/vite-plugin-vue/blob/main/playground/ssr-vue/src/entry-server.js) 获取完整示例。您也可以将此信息用于 [103 Early Hints](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103)。
+在 `server.js` 的生产分支中，我们需要读取 manifest 并将其传递给 `src/entry-server.js` 导出的 `render` 函数。这将为我们提供足够的信息来渲染异步路由使用的文件的预加载指令！参见 [演示源码](https://github.com/vitejs/vite-plugin-vue/blob/main/playground/ssr-vue/src/entry-server.js) 获取完整示例。您也可以将此信息用于 [103 Early Hints](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103)。
 
 ## 预渲染 / SSG
 
-如果路由和某些路由所需的数据是预先知道的，我们可以使用与生产 SSR 相同的逻辑将这些路由预渲染为静态 HTML。这也可以被视为一种静态站点生成 (SSG) 形式。参见 [演示预渲染脚本](https://github.com/vitejs/vite-plugin-vue/blob/main/playground/ssr-vue/prerender.js) 获取工作示例。
+如果路由和某些路由所需的数据是预先知道的，我们可以使用与生产 SSR 相同的逻辑将这些路由预渲染为静态 HTML。这也可以被视为一种静态站点生成（SSG）形式。参见 [演示预渲染脚本](https://github.com/vitejs/vite-plugin-vue/blob/main/playground/ssr-vue/prerender.js) 获取工作示例。
 
 ## SSR 外部化
 

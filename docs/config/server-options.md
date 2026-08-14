@@ -330,12 +330,14 @@ Vite 服务器监听器默认监听 `root` 并跳过 `.git/`、`node_modules/`�
 
 ## server.middlewareMode
 
-- **类型：** `boolean`
+- **类型：** `boolean | { server: http.Server }`
 - **默认值：** `false`
 
 以中间件模式创建 Vite 服务器。
 
-- **相关：** [appType](./shared-options#apptype), [SSR - 设置开发服务器](/guide/ssr#setting-up-the-dev-server)
+如果为 WebSocket 设置了 [proxy](./server-options#server-proxy)，则应提供 `server` 以正确绑定代理。
+
+- **相关：** [appType](./shared-options#apptype)、[SSR - 设置开发服务器](/guide/ssr#setting-up-the-dev-server)
 
 - **示例：**
 
@@ -461,7 +463,7 @@ export default defineConfig({
 
 是否忽略服务器 sourcemap 中的源文件，用于填充 [`x_google_ignoreList` 源映射扩展](https://developer.chrome.com/articles/x-google-ignore-list/)。
 
-`server.sourcemapIgnoreList` 是开发服务器中 [`build.rolldownOptions.output.sourcemapIgnoreList`](https://rollupjs.org/configuration-options/#output-sourcemapignorelist) 的对应项。两者之间的区别在于，rollup 函数接收的 `sourcePath` 是相对路径，而 `server.sourcemapIgnoreList` 接收的是绝对路径。在开发过程中，大多数模块的 map 和 source 都位于同一文件夹中，因此 `sourcePath` 的相对路径本身就是文件名。在这些情况下，使用绝对路径反而更方便。
+`server.sourcemapIgnoreList` 等同于开发服务器中的 [`build.rolldownOptions.output.sourcemapIgnoreList`](https://rolldown.rs/reference/OutputOptions.sourcemapIgnoreList)。两个配置选项的区别在于，Rolldown 函数接收的 `sourcePath` 是相对路径，而 `server.sourcemapIgnoreList` 接收的则是绝对路径。在开发期间，大多数模块的映射文件和源文件位于同一文件夹中，因此 `sourcePath` 的相对路径就是文件名本身。在这些情况下，使用绝对路径会更加方便。
 
 默认情况下，它会排除所有包含 `node_modules` 的路径。你可以传递 `false` 来禁用此行为，或者为了完全控制，传递一个接受源路径和 sourcemap 路径并返回是否忽略源路径的函数。
 
@@ -478,5 +480,5 @@ export default defineConfig({
 ```
 
 ::: tip 注意
-[`server.sourcemapIgnoreList`](#server-sourcemapignorelist) 和 [`build.rolldownOptions.output.sourcemapIgnoreList`](https://rollupjs.org/configuration-options/#output-sourcemapignorelist) 需要分别设置。`server.sourcemapIgnoreList` 仅用于服务器配置，其默认值不会从已定义的 rollup 选项中获取。
+[`server.sourcemapIgnoreList`](#server-sourcemapignorelist) 和 [`build.rolldownOptions.output.sourcemapIgnoreList`](https://rolldown.rs/reference/OutputOptions.sourcemapIgnoreList) 需要分别设置。`server.sourcemapIgnoreList` 仅是服务器配置，不会从已定义的 Rolldown 选项中获取其默认值。
 :::

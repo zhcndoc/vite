@@ -281,7 +281,7 @@ Sass 和 Less 文件也支持 `@import` 别名和 URL 重基（见 [CSS 预处�
 
 如果项目包含有效的 PostCSS 配置（[postcss-load-config](https://github.com/postcss/postcss-load-config) 支持的任何格式，例如 `postcss.config.js`），它将自动应用于所有导入的 CSS。
 
-注意 CSS 最小化将在 PostCSS 之后运行，并将使用 [`build.cssTarget`](/config/build-options.md#build-csstarget) 选项。
+请注意，CSS 最小化将在 PostCSS 之后运行，并将使用 [`build.cssTarget`](/config/build-options.md#build-csstarget) 选项。
 
 ### CSS Modules
 

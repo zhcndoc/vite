@@ -123,9 +123,11 @@ Git LFS 占位符会自动排除在内联之外，因为它们不包含所代表
 
 此选项允许用户为 CSS 压缩设置与 JavaScript 转译所使用的不同的浏览器目标。
 
-仅当你针对非主流浏览器时才应使用它。
-一个例子是 Android 微信 WebView，它支持大多数现代 JavaScript 功能，但不支持 [CSS 中的 `#RGBA` 十六进制颜色表示法](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb_colors)。
-在这种情况下，你需要将 `build.cssTarget` 设置为 `chrome61`，以防止 vite 将 `rgba()` 颜色转换为 `#RGBA` 十六进制表示法。
+当 `build.cssMinify` 为 `'lightningcss'`（默认值）时，此选项在压缩步骤中优先于 [`css.lightningcss.targets`](./shared-options.md#css-lightningcss)。
+
+它只应在你要支持非主流浏览器时使用。
+一个例子是 Android WeChat WebView，它支持大多数现代 JavaScript 特性，但不支持 CSS 中的 [`#RGBA` 十六进制颜色表示法](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb_colors)。
+在这种情况下，你需要将 `build.cssTarget` 设置为 `chrome61`，以防止 Vite 将 `rgba()` 颜色转换为 `#RGBA` 十六进制表示法。
 
 ## build.cssMinify
 
@@ -364,7 +366,7 @@ chunk 大小警告的限制（以 kB 为单位）。它与未压缩的 chunk 大
 - **类型：** [`WatcherOptions`](https://rolldown.rs/reference/InputOptions.watch)`| null`
 - **默认值：** `null`
 
-设置为 `{}` 以启用 Rollup 监视器。这主要用于涉及仅构建插件或集成流程的情况。
+设置为 `{}` 以启用 Rolldown 监视器。这主要用于涉及仅构建插件或集成处理流程的场景。
 
 ::: warning 在适用于 Linux 的 Windows 子系统 (WSL) 2 上使用 Vite
 

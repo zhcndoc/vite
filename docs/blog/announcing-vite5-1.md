@@ -54,7 +54,7 @@ Vite 5.1 添加了对新的 Vite 运行时 API 的实验性支持。它允许先
 - 它不依赖任何 node/bun/deno 内置 API，因此可以在任何环境中运行。
 - 它很容易与拥有自己代码运行机制的工具集成（例如你可以提供一个 runner 来使用 `eval` 而不是 `new AsyncFunction`）。
 
-The initial idea [was proposed by Pooya Parsa](https://github.com/nuxt/vite/pull/201) and implemented by [Anthony Fu](https://github.com/antfu) as the [vite-node](https://www.npmjs.com/package/vite-node) package to [power Nuxt 3 Dev SSR](https://antfu.me/posts/dev-ssr-on-nuxt) and later also used as the base for [Vitest](https://vitest.dev). So the general idea of vite-node has been battle-tested for quite some time now. This is a new iteration of the API by [Vladimir Sheremet](https://github.com/sheremet-va), who had already re-implemented vite-node in Vitest and took the learnings to make the API even more powerful and flexible when adding it to Vite Core. The PR was one year in the makings, you can see the evolution and discussions with ecosystem maintainers [here](https://github.com/vitejs/vite/issues/12165).
+最初的想法由 [Pooya Parsa](https://github.com/nuxt/vite/pull/201) 提出，并由 [Anthony Fu](https://github.com/antfu) 实现为 [vite-node](https://www.npmjs.com/package/vite-node) 包，用于 [支持 Nuxt 3 Dev SSR](https://antfu.me/posts/dev-ssr-on-nuxt)，后来也作为 [Vitest](https://vitest.dev) 的基础使用。因此，vite-node 的总体思路已经经过了相当长时间的实战检验。这是由 [Vladimir Sheremet](https://github.com/sheremet-va) 对该 API 的一次新迭代，他已经在 Vitest 中重新实现了 vite-node，并在将其添加到 Vite Core 时吸取经验，使 API 更加强大和灵活。这个 PR 历时一年才完成，你可以[在这里](https://github.com/vitejs/vite/issues/12165)查看其演进过程以及与生态系统维护者的讨论。
 
 ::: info
 Vite 运行时 API 已演变为 Module Runner API，作为 [环境 API](/guide/api-environment) 的一部分在 Vite 6 中发布。
@@ -84,11 +84,11 @@ Vite 运行时 API 已演变为 Module Runner API，作为 [环境 API](/guide/a
 
 ## 性能改进
 
-Vite 随着每个版本的发布变得越来越快，Vite 5.1 充满了性能改进。我们使用 [vite-dev-server-perf](https://github.com/yyx990803/vite-dev-server-perf) 测量了从 Vite 4.0 开始所有次要版本加载 10K 模块（25 层深树）的时间。这是衡量 Vite 无打包方法效果的良好基准。每个模块都是一个带有计数器的小 TypeScript 文件，并导入树中的其他文件，因此这主要测量请求各个单独模块所需的时间。在 Vite 4.0 中，在 M1 MAX 上加载 10K 模块需要 8 秒。我们在 [专注于性能的 Vite 4.3](./announcing-vite4-3.md) 取得了突破，能够在 6.35 秒内加载它们。在 Vite 5.1 中，我们实现了又一次性能飞跃。Vite 现在可以在 5.35 秒内服务 10K 模块。
+Vite 在每次发布中都变得更快，而 Vite 5.1 充满了性能改进。我们使用 [vite-dev-server-perf](https://github.com/yyx990803/vite-dev-server-perf) 测量了从 Vite 4.0 开始的所有次要版本中加载 10K 个模块（25 层深的树）所需的时间。这是衡量 Vite 无打包方式效果的一个很好的基准测试。每个模块都是一个包含计数器以及对树中其他文件的导入的 TypeScript 小文件，因此这主要测量的是将请求作为独立模块处理所需的时间。在 Vite 4.0 中，在 M1 MAX 上加载 10K 个模块需要 8 秒。我们在 [Vite 4.3 专注于性能改进](./announcing-vite4-3.md)时取得了突破，并将加载时间缩短到了 6.35 秒。在 Vite 5.1 中，我们实现了又一次性能飞跃。Vite 现在可以在 5.35 秒内提供这 10K 个模块。
 
 ![Vite 10K 模块加载时间进展](../images/vite5-1-10K-modules-loading-time.webp)
 
-此基准测试的结果在 Headless Puppeteer 上运行，是比较版本的好方法。不过，它们并不代表用户体验到的时间。当在 Chrome 的无痕窗口中运行相同的 10K 模块时，我们有：
+该基准测试的结果在 Headless Puppeteer 上运行，是比较不同版本的好方法。不过，它们并不代表用户实际体验到的时间。在 Chrome 的隐身窗口中运行相同的 10K 个模块时，结果如下：
 
 | 10K 模块         | Vite 5.0 | Vite 5.1 |
 | ---------------- | :------: | :------: |
