@@ -86,7 +86,7 @@ modulePreload: {
 - **类型：** `string`
 - **默认值：** `assets`
 
-指定嵌套生成资产的目录（相对于 `build.outDir`。这在 [库模式](/guide/build#library-mode) 中不使用）。
+指定用于存放生成资源的嵌套目录（相对于 `build.outDir`）。[库模式](/guide/build#library-mode) 不使用此选项。
 
 ## build.assetsInlineLimit
 
@@ -125,9 +125,7 @@ Git LFS 占位符会自动排除在内联之外，因为它们不包含所代表
 
 当 `build.cssMinify` 为 `'lightningcss'`（默认值）时，此选项在压缩步骤中优先于 [`css.lightningcss.targets`](./shared-options.md#css-lightningcss)。
 
-它只应在你要支持非主流浏览器时使用。
-一个例子是 Android WeChat WebView，它支持大多数现代 JavaScript 特性，但不支持 CSS 中的 [`#RGBA` 十六进制颜色表示法](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb_colors)。
-在这种情况下，你需要将 `build.cssTarget` 设置为 `chrome61`，以防止 Vite 将 `rgba()` 颜色转换为 `#RGBA` 十六进制表示法。
+它应该仅在目标浏览器为非主流浏览器时使用。一个例子是 Android WeChat WebView，它支持大多数现代 JavaScript 功能，但不支持 CSS 中的 [`#RGBA` 十六进制颜色表示法](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb_colors)。在这种情况下，你需要将 `build.cssTarget` 设置为 `chrome61`，以防止 Vite 将 `rgba()` 颜色转换为 `#RGBA` 十六进制表示法。
 
 ## build.cssMinify
 
@@ -368,7 +366,7 @@ chunk 大小警告的限制（以 kB 为单位）。它与未压缩的 chunk 大
 
 设置为 `{}` 以启用 Rolldown 监视器。这主要用于涉及仅构建插件或集成处理流程的场景。
 
-::: warning 在适用于 Linux 的 Windows 子系统 (WSL) 2 上使用 Vite
+::: warning 在适用于 Linux 的 Windows 子系统（WSL）2 上使用 Vite
 
 在某些情况下，文件系统监视在 WSL2 上不起作用。
 有关更多详细信息，请参阅 [`server.watch`](./server-options.md#server-watch)。

@@ -335,13 +335,65 @@ Vite 插件还可以提供服务于 Vite 特定目的的钩子。这些钩子被
   })
   ```
 
+### `closeServer`
+
+- **Type:** `(context: { reason: 'restart' | 'close' }) => void | Promise<void>`
+- **Kind:** `async`, `parallel`
+- **Scope:** [Global](/guide/api-environment-plugins#per-environment-hooks-and-global-hooks)
+
+  在开发服务器重启或关闭时、服务器完成拆除后调用。通常用于释放在 [`configureServer`](/guide/api-plugin.html#configureserver) 中创建的资源。
+
+  `context.reason` 用于区分这两种情况：
+  - `'restart'`：服务器正在重启（例如配置文件发生变化，或调用了 `server.restart()`）。
+  - `'close'`：服务器正在关闭（例如使用 `q` 快捷键，或调用了 `server.close()`）。
+
+  ```js
+  const myPlugin = () => {
+    let resource
+    return {
+      name: 'close-server',
+      configureServer(server) {
+        resource = createResource()
+      },
+      async closeServer({ reason }) {
+        if (reason === 'close') {
+          await resource.dispose()
+        }
+      },
+    }
+  }
+  ```
+
+### `closePreviewServer`
+
+- **Type:** `() => void | Promise<void>`
+- **Kind:** `async`, `parallel`
+- **Scope:** [Global](/guide/api-environment-plugins#per-environment-hooks-and-global-hooks)
+
+  与 [`closeServer`](/guide/api-plugin.html#closeserver) 相同，但用于预览服务器。预览服务器不会重启，因此没有 `reason`。
+
+  ```js
+  const myPlugin = () => {
+    let resource
+    return {
+      name: 'close-preview-server',
+      configurePreviewServer(server) {
+        resource = createResource()
+      },
+      async closePreviewServer() {
+        await resource.dispose()
+      },
+    }
+  }
+  ```
+
 ### `transformIndexHtml`
 
 - **Type:** `IndexHtmlTransformHook | { order?: 'pre' | 'post', handler: IndexHtmlTransformHook }`
 - **Kind:** `async`, `sequential`
 - **Scope:** [Per-environment](/guide/api-environment-plugins#per-environment-hooks-and-global-hooks)
 
-  用于转换 HTML 入口文件（如 `index.html`）的专用钩子。该钩子接收当前 HTML 字符串和转换上下文。上下文在开发期间暴露 [`ViteDevServer`](./api-javascript#vitedevserver) 实例，在构建期间暴露 Rollup 输出包。
+  用于转换 HTML 入口文件（如 `index.html`）的专用钩子。该钩子接收当前 HTML 字符串和转换上下文。上下文在开发期间暴露 [`ViteDevServer`](./api-javascript#vitedevserver) 实例，在构建期间暴露 Rolldown 输出包。
 
   该钩子可以是异步的，并且可以返回以下内容之一：
   - 转换后的 HTML 字符串
@@ -478,7 +530,7 @@ Vite 插件还可以提供服务于 Vite 特定目的的钩子。这些钩子被
 
 ## 插件上下文元数据
 
-对于可以访问插件上下文的插件钩子，Vite 会在 `this.meta` 上暴露额外的属性：
+对于可以访问插件上下文的插件钩子，Vite 会在 `this.meta` 上暴露其他属性：
 
 - `this.meta.viteVersion`：当前的 Vite 版本字符串（例如 `"8.0.0"`）。
 
@@ -542,7 +594,34 @@ function outputMetadataPlugin(): Plugin {
 }
 ```
 
-## 插件顺序
+## 引用发出的资产
+
+要从插件中发出资产，请调用 [`this.emitFile({ type: 'asset', ... })`](https://rolldown.rs/reference/Interface.PluginContext#in-depth-type-asset)。它会返回一个 `referenceId`，你可以使用它生成资产的 URL，因为在生成 bundle 之前，资产的最终文件名尚未知晓。
+
+### 在 JavaScript 中
+
+使用 `import.meta.ROLLDOWN_FILE_URL_<referenceId>`：
+
+```js
+const referenceId = this.emitFile({
+  type: 'asset',
+  name: 'icon.png',
+  source: fileContent,
+})
+
+// it's a JavaScript expression, so append any query or hash with string concatenation
+return `export default import.meta.ROLLDOWN_FILE_URL_${referenceId} + '#frag'`
+```
+
+### 在 CSS 或 HTML 中
+
+`import.meta.ROLLDOWN_FILE_URL_<referenceId>` 仅适用于 JavaScript 表达式位置。在 CSS 或 HTML 中，请改用 `__VITE_ASSET__<referenceId>__` 标记，并将查询参数或哈希紧接在其后追加：
+
+```css
+background: url(__VITE_ASSET__<referenceId>__#frag);
+```
+
+## 插件排序
 
 Vite 插件还可以指定一个 `enforce` 属性（类似于 webpack loader）来调整其应用顺序。`enforce` 的值可以是 `"pre"` 或 `"post"`。解析后的插件将按以下顺序排列：
 
@@ -772,7 +851,7 @@ export default defineConfig({
 在内部，Vite 从 `CustomEventMap` 接口推断 payload 的类型，可以通过扩展该接口来为自定义事件添加类型：
 
 :::tip 注意
-指定 TypeScript 声明文件时，请确保包含 `.d.ts` 扩展名。否则，TypeScript 可能不知道模块试图扩展哪个文件。
+指定 TypeScript 声明文件时，请确保包含 `.d.ts` 扩展名。否则，TypeScript 可能不知道模块正在尝试扩展哪个文件。
 :::
 
 ```ts [events.d.ts]

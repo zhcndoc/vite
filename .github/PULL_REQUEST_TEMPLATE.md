@@ -1,15 +1,21 @@
 <!--
-- What is this PR solving? Write a clear and concise description.
-- Reference the issues it solves (e.g. `fixes #123`).
-- What other alternatives have you explored?
-- Are there any parts you think require more attention from reviewers?
+- 此 PR 解决了什么问题？请写一份清晰简洁的描述。
+- 引用它解决的问题（例如 `fixes #123`）。
+- 你还探索过哪些其他方案？
+- 你认为哪些部分需要审阅者更多关注？
 
-Also, please make sure you do the following:
+另外，请确保完成以下事项：
 
-- Read the Contributing Guidelines at https://github.com/vitejs/vite/blob/main/CONTRIBUTING.md.
-- Check that there isn't already a PR that solves the problem the same way. If you find a duplicate, please help us review it.
-- Update the corresponding documentation if needed.
-- Include relevant tests that fail without this PR but pass with it. If the tests are not included, explain why.
+- 阅读 https://github.com/vitejs/vite/blob/main/CONTRIBUTING.md 中的贡献指南。
+- 检查是否已经存在以相同方式解决该问题的 PR。如果发现重复 PR，请帮助我们审阅它。如果你采用了不同的方式解决问题，请说明差异，并在 PR 描述中附上其他 PR 的链接。
+- 如有需要，请更新相应的文档。
+- 包含在没有此 PR 时会失败、但加入此 PR 后能够通过的相关测试。如果未包含测试，请说明原因。
 
-Thank you for contributing to Vite!
+如果你使用了 AI：
+
+- 阅读 https://github.com/vitejs/vite/blob/main/CONTRIBUTING.md#ai-policy 中的 AI 政策。
+- 保持 PR 描述和讨论简洁。使用你自己的话，不要让 AI 代替你写作。
+- 披露并描述你是如何审阅其代码的，例如促成最终代码的思考过程和决策。
+
+感谢你为 Vite 做出贡献！
 -->

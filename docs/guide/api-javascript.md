@@ -1,6 +1,6 @@
 # JavaScript API
 
-Vite 的 JavaScript API 是完全类型化的，建议使用 TypeScript 或在 VS Code 中启用 JS 类型检查以利用智能感知和验证。
+Vite 的 JavaScript API 完全具有类型定义，建议使用 TypeScript 或在 VS Code 中启用 JS 类型检查，以利用 IntelliSense 和验证功能。
 
 ## `createServer`
 

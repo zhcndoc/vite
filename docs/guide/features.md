@@ -655,9 +655,9 @@ const module = await import(`./dir/${file}.js`)
 
 还要注意，动态导入必须符合以下规则才能被打包：
 
-- 导入必须以 `./` 或 `../` 开头：``import(`./dir/${foo}.js`)`` 是有效的，但 ``import(`${foo}.js`)`` 无效。
-- 导入必须以文件扩展名结尾：``import(`./dir/${foo}.js`)`` 是有效的，但 ``import(`./dir/${foo}`)`` 无效。
-- 导入到自身目录必须指定文件名模式：``import(`./prefix-${foo}.js`)`` 是有效的，但 ``import(`./${foo}.js`)`` 无效。
+- 导入必须以 `./`、`../` 或 `#` 开头：``import(`./dir/${foo}.js`)`` 有效，但 ``import(`${foo}.js`)`` 无效。
+- 导入必须以文件扩展名结尾：``import(`./dir/${foo}.js`)`` 有效，但 ``import(`./dir/${foo}`)`` 无效。
+- 导入自身目录时必须指定文件名模式：``import(`./prefix-${foo}.js`)`` 有效，但 ``import(`./${foo}.js`)`` 无效。
 
 强制执行这些规则是为了防止意外导入不应打包的文件。例如，如果没有这些规则，`import(foo)` 将会打包文件系统中的所有内容。
 

@@ -160,6 +160,12 @@ export default defineConfig({
 })
 ```
 
+::: warning WebSocket 的 Origin 检查
+
+Vite 在代理 WebSocket 请求之前不会检查其 Origin。代理目标应检查 `Origin` 请求头或执行其他检查。请注意，`rewriteWsOrigin` 选项会将 Origin 重写为目标 Origin，并导致绕过 Origin 检查。
+
+:::
+
 ## server.cors
 
 - **类型：** `boolean | CorsOptions`
@@ -305,7 +311,9 @@ export default defineConfig({
 
 传递给 [chokidar](https://github.com/paulmillr/chokidar/tree/3.6.0#api) 的文件系统监听器选项。
 
-Vite 服务器监听器默认监听 `root` 并跳过 `.git/`、`node_modules/`、`test-results/` 以及 Vite 的 `cacheDir` 和 `build.outDir` 目录。当更新被监听的文件时，Vite 将应用 HMR 并仅在需要时更新页面。
+启用 bundled-dev 模式后，也接受 [Rolldown watch 选项](https://rolldown.rs/reference/InputOptions.watch)（例如 `usePolling`、`pollInterval`、`useDebounce`、`debounceDuration`、`include`、`exclude`）。chokidar 专用选项仍由 chokidar 监听器使用，该监听器会继续监听模块图之外的文件，例如配置文件依赖项和 env 文件。
+
+Vite 服务器监听器会监听 `root`，并默认跳过 `.git/`、`node_modules/`、`test-results/` 以及 Vite 的 `cacheDir` 和 `build.outDir` 目录。更新被监听的文件时，Vite 将应用 HMR，并仅在需要时更新页面。
 
 如果设置为 `null`，将不会监听任何文件。[`server.watcher`](/guide/api-javascript.html#vitedevserver) 将提供一个兼容的事件发射器，但调用 `add` 或 `unwatch` 将无效。
 
