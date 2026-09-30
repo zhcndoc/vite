@@ -624,10 +624,38 @@ define: {
 - **类型：** `boolean` | `DevToolsConfig`
 - **默认值：** `false`
 
-启用 devtools 集成以可视化内部状态和构建分析。
-确保 `@vitejs/devtools` 已作为依赖安装。此功能目前仅在构建模式下支持。
+启用 devtools 集成，以便检查开发服务器并分析构建。
+确保已将 `@vitejs/devtools` 安装为依赖。安装 `@vitejs/devtools-vite` 可检查 Vite 开发服务器，安装 `@vitejs/devtools-rolldown` 可启用构建分析。默认情况下，DevTools 会同时用于 `serve` 和 `build`；使用 `apply` 可将其限制为其中一个命令。
+
+插件的 `config` 钩子无法更改 `devtools` 选项，请在用户配置中设置该选项。
+
+安装 `@vitejs/devtools` 后，它会提供此选项的类型定义：
+
+```ts
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  devtools: {
+    apply: 'serve',
+  },
+})
+```
 
 详见 [Vite DevTools](https://github.com/vitejs/devtools)。
+
+## tsconfig
+
+- **类型：** `string`
+
+Vite 使用的 TypeScript 配置文件路径。相对路径相对于项目 [`root`](#root) 解析。
+
+未设置此选项时，Vite 会为每个文件查找与其匹配的最近 `tsconfig.json`。详见 [TypeScript 编译器选项](/guide/features#typescript-compiler-options)。
+
+::: warning 建议使用自动发现
+不建议设置此选项，因为它会覆盖 Vite 针对每个文件发现 tsconfig 的行为，而该行为与 TypeScript 语言服务器保持一致。建议在所配置文件附近放置 `tsconfig.json`，并在多项目设置中使用 TypeScript [`references`](https://www.typescriptlang.org/tsconfig/#references)。
+
+如果目的是重映射导入路径，建议使用 [`resolve.alias`](#resolve-alias)，或使用 `package.json` 中的 `imports` 和 `exports` 字段，而不是仅为了 [`compilerOptions.paths`](https://www.typescriptlang.org/tsconfig/#paths) 选择 tsconfig。只有在自动发现无法确定所需配置时，才使用此选项。
+:::
 
 ## future
 

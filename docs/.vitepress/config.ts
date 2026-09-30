@@ -1,4 +1,3 @@
-import path from 'node:path'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 import type { FooterLink } from '@voidzero-dev/vitepress-theme'
 import { extendConfig } from '@voidzero-dev/vitepress-theme/config'
@@ -111,9 +110,9 @@ const config = defineConfig({
   themeConfig: {
     variant: 'vite',
     banner: {
-      id: 'rainyun',
-      text: '雨云 RainYun - 企业级云计算服务提供商：新用户注册立享五折！',
-      url: 'https://www.rainyun.com/mm_?s=zhcndoc',
+      id: 'viteconf-2026',
+      text: 'ViteConf 2026 - 10 月 15 日，线上举办',
+      url: 'https://viteconf.org/',
     },
 
     editLink: {
@@ -555,14 +554,6 @@ const config = defineConfig({
     },
   },
   vite: {
-    resolve: {
-      alias: {
-        '@components/oss/TopBanner.vue': path.resolve(
-          import.meta.dirname,
-          'theme/components/TopBanner.vue',
-        ),
-      },
-    },
     plugins: [
       groupIconVitePlugin({
         customIcon: {

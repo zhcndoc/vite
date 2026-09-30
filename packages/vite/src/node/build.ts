@@ -662,10 +662,15 @@ export function resolveRolldownOptions(
         : false,
     // cache: options.watch ? undefined : false,
     ...options.rolldownOptions,
-    output: options.rolldownOptions.output,
+    tsconfig: environment.config.tsconfig ?? options.rolldownOptions.tsconfig,
+    resolve: environment.config.tsconfig
+      ? {
+          ...options.rolldownOptions.resolve,
+          tsconfigFilename: undefined,
+        }
+      : options.rolldownOptions.resolve,
     input,
     plugins,
-    external: options.rolldownOptions.external,
     onLog(level, log) {
       onRollupLog(level, log, environment)
     },
@@ -781,19 +786,6 @@ export function resolveRolldownOptions(
           (typeof input === 'string' || Object.keys(input).length === 1))
           ? false
           : undefined),
-      comments:
-        typeof output.comments === 'boolean'
-          ? output.comments
-          : {
-              // Do not minify whitespace for ES lib output since that would remove
-              // pure annotations and break tree-shaking
-              annotation:
-                !options.minify ||
-                (libOptions && (format === 'es' || format === 'esm')),
-              jsdoc: !options.minify,
-              legal: !options.minify,
-              ...output.comments,
-            },
       minify:
         options.minify === 'oxc'
           ? libOptions && (format === 'es' || format === 'esm')
@@ -810,6 +802,19 @@ export function resolveRolldownOptions(
             : false,
       topLevelVar: true,
       ...output,
+      comments:
+        typeof output.comments === 'boolean'
+          ? output.comments
+          : {
+              // Do not minify whitespace for ES lib output since that would remove
+              // pure annotations and break tree-shaking
+              annotation:
+                !options.minify ||
+                (libOptions && (format === 'es' || format === 'esm')),
+              jsdoc: !options.minify,
+              legal: !options.minify,
+              ...output.comments,
+            },
     }
   }
 
@@ -1894,7 +1899,7 @@ export async function createBuilder(
       return output
     },
     async runDevTools() {
-      if (config.devtools.enabled) {
+      if (config.devtools) {
         try {
           const { runDevTools } = await import('@vitejs/devtools/integration')
           await runDevTools(builder)

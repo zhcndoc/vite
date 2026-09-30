@@ -243,6 +243,7 @@ export default defineConfig({
 ```
 
 `applyToEnvironment` 钩子在配置时调用，目前在 `configResolved` 之后，因为生态系统中的项目会在其中修改插件。环境插件解析可能会在未来移到 `configResolved` 之前。
+请注意，`applyToEnvironment` 或 `perEnvironmentPlugin` 返回的插件不应使用 Vite 专属钩子。
 
 ## 应用 - 插件通信
 
