@@ -73,6 +73,7 @@ import {
   asyncReplace,
   combineSourcemaps,
   createSerialPromiseQueue,
+  decodeURIIfPossible,
   emptyCssComments,
   encodeURIPath,
   escapeRegex,
@@ -394,7 +395,9 @@ export function cssPlugin(config: ResolvedConfig): Plugin {
           idResolver(environment, url, importer)
 
         const urlResolver: CssUrlResolver = async (url, importer) => {
-          const decodedUrl = decodeURI(url)
+          // a `%` that doesn't start an escape sequence (e.g. `url(100%.png)`)
+          // is kept as is, like browsers do
+          const decodedUrl = decodeURIIfPossible(url) ?? url
           if (checkPublicFile(decodedUrl, config)) {
             if (encodePublicUrlsInCSS(config)) {
               return [publicFileToBuiltUrl(decodedUrl, config), undefined]
@@ -624,11 +627,9 @@ export function cssPostPlugin(config: ResolvedConfig): Plugin {
 
           const cssContent = await getContentWithSourcemap(css)
           const code = [
-            this.environment.config.isBundled
-              ? `const { updateStyle: __vite__updateStyle, removeStyle: __vite__removeStyle } = import.meta.hot._internal`
-              : `import { updateStyle as __vite__updateStyle, removeStyle as __vite__removeStyle } from ${JSON.stringify(
-                  path.posix.join(config.base, CLIENT_PUBLIC_PATH),
-                )}`,
+            `import { updateStyle as __vite__updateStyle, removeStyle as __vite__removeStyle } from ${JSON.stringify(
+              path.posix.join(config.base, CLIENT_PUBLIC_PATH),
+            )}`,
             `const __vite__id = ${JSON.stringify(id)}`,
             `const __vite__css = ${JSON.stringify(cssContent)}`,
             `__vite__updateStyle(__vite__id, __vite__css)`,
@@ -1080,14 +1081,11 @@ export function cssPostPlugin(config: ResolvedConfig): Plugin {
 
       // With `cssCodeSplit: false`, CSS is emitted as a single stylesheet in the HTML,
       // so this per-chunk import map handling is irrelevant.
-      if (
-        this.environment.config.build.chunkImportMap &&
-        chunkCssReferences.size
-      ) {
+      const importMap = getImportMap(bundle, this.environment.config)
+      if (importMap && chunkCssReferences.size) {
         // The import map hash identifies the JS chunk independently of its content.
         // Since each chunk has at most one extracted CSS sidecar, we can reuse that
         // stable identity with a `.css` extension while mapping it to the CSS content hash.
-        const importMap = getImportMap(bundle, this.environment.config)!
         const importMapReverseMapping = Object.fromEntries(
           Object.entries(importMap.mapping).map(([k, v]) => [v, k]),
         )
@@ -1135,8 +1133,7 @@ export function cssPostPlugin(config: ResolvedConfig): Plugin {
         const pureCssChunkNameSet = new Set(pureCssChunkNames)
 
         let importMapReverseMapping: Record<string, string> | undefined
-        if (this.environment.config.build.chunkImportMap) {
-          const importMap = getImportMap(bundle, this.environment.config)!
+        if (importMap) {
           importMapReverseMapping = Object.fromEntries(
             Object.entries(importMap.mapping).map(([k, v]) => [v, k]),
           )
@@ -1451,7 +1448,7 @@ async function compileCSSPreprocessors(
     environment.getTopLevelConfig(),
   )
   const opts = {
-    ...((preprocessorOptions && preprocessorOptions[lang]) || {}),
+    ...(preprocessorOptions && preprocessorOptions[lang]),
     // important: set this for relative import resolving
     filename: cleanUrl(id),
     enableSourcemap: devSourcemap ?? false,
@@ -3334,7 +3331,7 @@ async function compileLightningCSS(
               if (isPreProcessor(lang)) {
                 const result = await compileCSSPreprocessors(
                   environment,
-                  id,
+                  filePath,
                   lang,
                   code,
                   workerController,
@@ -3343,7 +3340,11 @@ async function compileLightningCSS(
                 // TODO: support source map
                 return result.code
               } else if (lang === 'sss') {
-                const sssResult = await transformSugarSS(environment, id, code)
+                const sssResult = await transformSugarSS(
+                  environment,
+                  filePath,
+                  code,
+                )
                 // TODO: support source map
                 return sssResult.code
               }

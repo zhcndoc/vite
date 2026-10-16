@@ -269,6 +269,20 @@ test('non optimized module is not duplicated', async () => {
     .toBe('from-absolute-path, from-relative-path')
 })
 
+test.runIf(isServe)(
+  'optimized browser:false is empty without warning',
+  async () => {
+    expect(await page.textContent('.browser-false-optimized')).toBe('[success]')
+    expect(browserLogs).not.toEqual(
+      expect.arrayContaining([
+        expect.stringContaining(
+          'Module "browser-false-only" has been externalized for browser compatibility',
+        ),
+      ]),
+    )
+  },
+)
+
 test.runIf(isServe)('error on builtin modules usage', () => {
   expect(browserLogs).toEqual(
     expect.arrayContaining([
@@ -409,6 +423,18 @@ test('dependency with external sub-dependencies', async () => {
     .poll(() => page.textContent('.dep-cjs-with-external-deps-node-builtin'))
     .toBe('foo bar')
 })
+
+test.runIf(isServe)(
+  'discovers deep imports with custom html-like extensions during dep scan',
+  async () => {
+    await expect
+      .poll(() => page.textContent('.svelte-deep-import'))
+      .toBe('[success]')
+    expect(serverLogs.join('\n')).not.toContain(
+      "Could not resolve './relative.svelte' in virtual-module:",
+    )
+  },
+)
 
 test('virtual module with .vue extension does not error during scan', async () => {
   await expect.poll(() => page.textContent('.virtual-module-vue')).toBe('ok')

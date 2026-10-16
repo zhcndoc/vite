@@ -80,6 +80,8 @@ window.addEventListener('vite:preloadError', (event) => {
 })
 ```
 
+支持[可重试模块加载](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import#browser_compatibility)的浏览器允许应用或框架在遇到临时网络错误或 HTTP 错误后重试原始动态导入。较旧的浏览器会缓存模块映射中的加载失败，因此需要重新加载页面。
+
 当新的部署发生时，托管服务可能会删除之前部署中的资源。因此，在新部署之前访问过你的网站的用户可能会遇到导入错误。此错误发生是因为在该用户设备上运行的资源已过时，而代码尝试导入相应的旧块，但该旧块已被删除。此事件有助于处理这种情况。在这种情况下，请务必在 HTML 文件上设置 `Cache-Control: no-cache`，否则仍会引用旧资源。
 
 ## 文件变更时重新构建
@@ -202,8 +204,8 @@ export default defineConfig({
 入口文件将包含可由你的包用户导入的导出：
 
 ```js [lib/main.js]
-import Foo from './Foo.vue'
 import Bar from './Bar.vue'
+import Foo from './Foo.vue'
 export { Foo, Bar }
 ```
 
@@ -334,8 +336,8 @@ experimental: {
 如果哈希资源和公共文件没有部署在一起，可以使用传递给函数的第二个 `context` 参数中包含的资源 `type` 来独立定义每个组的选项。
 
 ```ts twoslash
-import type { UserConfig } from 'vite'
 import path from 'node:path'
+import type { UserConfig } from 'vite'
 // prettier-ignore
 const config: UserConfig = {
 // ---cut-before---

@@ -134,6 +134,20 @@ security add-trusted-cert -d -r trustRoot -k ~/Library/Keychains/login.keychain-
 
 详见 [#16522](https://github.com/vitejs/vite/issues/16522)。
 
+### 监视文件时出现非法操作错误
+
+如果文件或目录位于不支持文件系统事件的文件系统中，Vite 可能无法监视它。
+
+例如，你可能会遇到以下错误：
+
+```
+Error: EISDIR: illegal operation on a directory, watch 'C:/Users/me/project/vite.config.js'
+```
+
+例如，共享 VirtualBox 文件夹中可能会发生这种情况。
+
+要解决此问题，你可以启用 [`server.watch.usePolling`](/config/server-options#server-watch)。请注意，[`usePolling` 会导致 CPU 使用率较高](https://github.com/paulmillr/chokidar/tree/3.6.0#performance)。
+
 ## HMR
 
 ### Vite 检测到文件更改但 HMR 不起作用
@@ -205,7 +219,9 @@ import './Foo.js' // 应该是 './foo.js'
 
 此错误可能发生在不稳定的网络环境中。例如，当请求因网络错误或服务器停机而失败时。
 
-请注意，由于浏览器限制，你无法重试动态导入 ([whatwg/html#6768](https://github.com/whatwg/html/issues/6768))。
+支持[可重试模块加载](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import#browser_compatibility)的浏览器不会在模块映射中缓存网络错误和 HTTP 错误。在这些浏览器中，你的应用或框架可以重试原始动态导入。较旧的浏览器会缓存加载失败，因此重新加载页面仍是回退方案。
+
+如果某个 chunk 已在部署后被永久删除，重试也无法解决[版本偏差](#version-skew)。
 
 #### 浏览器扩展阻止请求
 

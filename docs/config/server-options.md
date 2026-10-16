@@ -248,7 +248,7 @@ Direct websocket connection fallback. Check out https://vite.dev/config/server-o
 ## server.forwardConsole
 
 - **类型：** `boolean | { unhandledErrors?: boolean, logLevels?: ('error' | 'warn' | 'info' | 'log' | 'debug')[] }`
-- **默认值：** 自动（当基于 [`@vercel/detect-agent`](https://www.npmjs.com/package/@vercel/detect-agent) 检测到 AI 编码代理时为 `true`，否则为 `false`）
+- **默认值：** 自动（当基于 [`std-env`](https://www.npmjs.com/package/std-env) 检测到 AI 编码代理时为 `true`，否则为 `false`）
 
 在开发期间将浏览器运行时事件转发到 Vite 服务器控制台。
 

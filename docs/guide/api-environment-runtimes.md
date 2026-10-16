@@ -222,12 +222,12 @@ await moduleRunner.import('/src/entry-point.js')
 ## `ModuleRunnerOptions`
 
 ```ts twoslash
+import type { Debug } from '@type-challenges/utils'
 import type {
   InterceptorOptions as InterceptorOptionsRaw,
   ModuleRunnerHmr as ModuleRunnerHmrRaw,
   EvaluatedModules,
 } from 'vite/module-runner'
-import type { Debug } from '@type-challenges/utils'
 
 type InterceptorOptions = Debug<InterceptorOptionsRaw>
 type ModuleRunnerHmr = Debug<ModuleRunnerHmrRaw>
@@ -248,7 +248,10 @@ interface ModuleRunnerOptions {
    * 您可以提供一个对象来配置未由 Vite 处理的文件的文件内容和源映射如何解析。
    */
   sourcemapInterceptor?:
-    false | 'node' | 'prepareStackTrace' | InterceptorOptions
+    | false
+    | 'node'
+    | 'prepareStackTrace'
+    | InterceptorOptions
   /**
    * 禁用 HMR 或配置 HMR 选项。
    *
@@ -267,8 +270,8 @@ interface ModuleRunnerOptions {
 **类型签名：**
 
 ```ts twoslash
-import type { ModuleRunnerContext as ModuleRunnerContextRaw } from 'vite/module-runner'
 import type { Debug } from '@type-challenges/utils'
+import type { ModuleRunnerContext as ModuleRunnerContextRaw } from 'vite/module-runner'
 
 type ModuleRunnerContext = Debug<ModuleRunnerContextRaw>
 
@@ -324,8 +327,8 @@ interface ModuleRunnerTransport {
 ::: code-group
 
 ```js [worker.js]
-import { parentPort } from 'node:worker_threads'
 import { fileURLToPath } from 'node:url'
+import { parentPort } from 'node:worker_threads'
 import {
   ESModulesEvaluator,
   ModuleRunner,

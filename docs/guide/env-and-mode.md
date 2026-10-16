@@ -145,7 +145,7 @@ interface ImportMeta {
 }
 ```
 
-如果你的代码依赖于来自浏览器环境的类型，例如 [DOM](https://github.com/microsoft/TypeScript/blob/main/src/lib/dom.generated.d.ts) 和 [WebWorker](https://github.com/microsoft/TypeScript/blob/main/src/lib/webworker.generated.d.ts)，你可以更新 `tsconfig.json` 中的 [lib](https://www.typescriptlang.org/tsconfig#lib) 字段。
+如果你的代码依赖于来自浏览器环境的类型，例如 [DOM](https://github.com/microsoft/TypeScript/blob/main/tsc/internal/bundled/libs/lib.dom.d.ts) 和 [WebWorker](https://github.com/microsoft/TypeScript/blob/main/tsc/internal/bundled/libs/lib.webworker.d.ts)，你可以更新 `tsconfig.json` 中的 [lib](https://www.typescriptlang.org/tsconfig#lib) 字段。
 
 ```json [tsconfig.json]
 {

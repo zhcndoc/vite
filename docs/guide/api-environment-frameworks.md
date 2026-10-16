@@ -180,7 +180,7 @@ Vite 验证 `dispatchFetch` 方法的输入和输出：请求必须是全局 `Re
 // 使用 Vite API 的代码
 import { createServer } from 'vite'
 
-const server = createServer({
+const server = await createServer({
   plugins: [
     // 一个处理 `virtual:entrypoint` 的插件
     {
@@ -189,7 +189,7 @@ const server = createServer({
     },
   ],
 })
-const ssrEnvironment = server.environment.ssr
+const ssrEnvironment = server.environments.ssr
 const input = {}
 
 // 使用运行代码的每个环境工厂暴露的函数
@@ -252,7 +252,7 @@ function vitePluginVirtualIndexHtml(): Plugin {
 // 使用 Vite API 的代码
 import { createServer } from 'vite'
 
-const server = createServer({
+const server = await createServer({
   plugins: [
     // 一个处理 `virtual:entrypoint` 的插件
     {
@@ -261,13 +261,13 @@ const server = createServer({
     },
   ],
 })
-const ssrEnvironment = server.environment.ssr
+const ssrEnvironment = server.environments.ssr
 const input = {}
 
 // 使用运行代码的每个环境工厂暴露的函数
 // 检查每个环境工厂提供什么
 if (ssrEnvironment instanceof RunnableDevEnvironment) {
-  ssrEnvironment.runner.import('virtual:entrypoint')
+  await ssrEnvironment.runner.import('virtual:entrypoint')
 } else if (ssrEnvironment instanceof CustomDevEnvironment) {
   ssrEnvironment.runEntrypoint('virtual:entrypoint')
 } else {
@@ -277,9 +277,9 @@ if (ssrEnvironment instanceof RunnableDevEnvironment) {
 const req = new Request('http://example.com/')
 
 const uniqueId = 'a-unique-id'
-ssrEnvironment.send('request', serialize({ req, uniqueId }))
+ssrEnvironment.hot.send('request', serialize({ req, uniqueId }))
 const response = await new Promise((resolve) => {
-  ssrEnvironment.on('response', (data) => {
+  ssrEnvironment.hot.on('response', (data) => {
     data = deserialize(data)
     if (data.uniqueId === uniqueId) {
       resolve(data.res)
@@ -297,8 +297,6 @@ import.meta.hot.on('request', (data) => {
   const res = handler(req)
   import.meta.hot.send('response', serialize({ res: res, uniqueId }))
 })
-
-const response = handler(new Request('http://example.com/'))
 
 // -------------------------------------
 // ./entrypoint.js
