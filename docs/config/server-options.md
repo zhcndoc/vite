@@ -311,7 +311,7 @@ export default defineConfig({
 
 传递给 [chokidar](https://github.com/paulmillr/chokidar/tree/3.6.0#api) 的文件系统监听器选项。
 
-启用 bundled-dev 模式后，也接受 [Rolldown watch 选项](https://rolldown.rs/reference/InputOptions.watch)（例如 `usePolling`、`pollInterval`、`useDebounce`、`debounceDuration`、`include`、`exclude`）。chokidar 专用选项仍由 chokidar 监听器使用，该监听器会继续监听模块图之外的文件，例如配置文件依赖项和 env 文件。
+启用 bundled-dev 模式后，也接受 [Rolldown watch 选项](https://rolldown.rs/reference/InputOptions.watch)（例如 `watcher.usePolling`、`watcher.pollInterval`、`watcher.useDebounce`、`watcher.debounceDuration`、`include`、`exclude`）。chokidar 专用选项仍由 chokidar 监听器使用，该监听器会继续监听模块图之外的文件，例如配置文件依赖项和 env 文件。
 
 Vite 服务器监听器会监听 `root`，并默认跳过 `.git/`、`node_modules/`、`test-results/` 以及 Vite 的 `cacheDir` 和 `build.outDir` 目录。更新被监听的文件时，Vite 将应用 HMR，并仅在需要时更新页面。
 
@@ -378,16 +378,18 @@ createServer()
 
 ## server.fs.strict
 
-- **类型：** `boolean`
+- **类型：** `boolean | 'extended'`
 - **默认值：** `true`（自 Vite 2.7 起默认启用）
 
 限制提供工作区根目录之外的文件。
+
+设置为 `'extended'` 时，也会对插件 `load` 的模块应用访问检查，但 ID 以 `\0` 开头的模块除外。
 
 ## server.fs.allow
 
 - **类型：** `string[]`
 
-限制可以通过 `/@fs/` 提供的文件。当 `server.fs.strict` 设置为 `true` 时，访问此目录列表之外且未从允许的文件导入的文件将导致 403。
+限制可以通过 `/@fs/` 提供的文件。当 `server.fs.strict` 设置为 `true` 或 `'extended'` 时，访问此目录列表之外且未从允许的文件导入的文件将导致 403。
 
 可以提供目录和文件。
 
@@ -437,6 +439,8 @@ export default defineConfig({
 - **默认值：** `['.env', '.env.*', '*.{crt,pem,key,p12,pfx,cer,der}', '.npmrc', '.yarnrc.yml', '**/.git/**']`
 
 限制由 Vite 开发服务器提供的敏感文件的阻止列表。这将比 [`server.fs.allow`](#server-fs-allow) 具有更高的优先级。支持 [picomatch 模式](https://github.com/micromatch/picomatch#globbing-features)。
+
+设置此选项会完全替换默认列表。请在自定义列表中包含你想保留的默认模式。
 
 ::: tip 注意
 

@@ -24,11 +24,11 @@ import type {
   WatcherOptions,
 } from 'rolldown'
 import { viteLoadFallbackPlugin as nativeLoadFallbackPlugin } from 'rolldown/experimental'
-import { esmExternalRequirePlugin } from 'rolldown/plugins'
 import type { RollupCommonJSOptions } from '#dep-types/commonjs'
 import type { RollupDynamicImportVarsOptions } from '#dep-types/dynamicImportVars'
 import type { EsbuildTarget } from '#types/internal/esbuildOptions'
 import type { AssetMetadata, ChunkMetadata } from '#types/metadata'
+import { joinUrlSegments } from '../shared/utils'
 import type { PartialEnvironment } from './baseEnvironment'
 import { BaseEnvironment } from './baseEnvironment'
 import type {
@@ -43,6 +43,7 @@ import {
   ESBUILD_BASELINE_WIDELY_AVAILABLE_TARGET,
   ROLLUP_HOOKS,
   VERSION,
+  CSS_LANGS_RE,
 } from './constants'
 import {
   isFutureDeprecationEnabled,
@@ -58,7 +59,7 @@ import { getHookHandler } from './plugins'
 import { buildEsbuildPlugin } from './plugins/esbuild'
 import { buildImportAnalysisPlugin } from './plugins/importAnalysisBuild'
 import { type LicenseOptions, licensePlugin } from './plugins/license'
-import { manifestPlugin } from './plugins/manifest'
+import { type Manifest, manifestPlugin } from './plugins/manifest'
 import { prepareOutDirPlugin } from './plugins/prepareOutDir'
 import { buildReporterPlugin } from './plugins/reporter'
 import { type TerserOptions, terserPlugin } from './plugins/terser'
@@ -75,7 +76,6 @@ import {
   createDebugger,
   displayTime,
   getPkgName,
-  joinUrlSegments,
   mergeConfig,
   mergeWithDefaults,
   partialEncodeURIPath,
@@ -465,7 +465,7 @@ export function resolveBuildEnvironmentOptions(
     } satisfies BuildEnvironmentOptions,
     raw,
   )
-  setupRollupOptionCompat(merged, 'build')
+  setupRollupOptionCompat(merged)
   if (isBundledDev) {
     merged.chunkImportMap = false
   }
@@ -521,7 +521,7 @@ export function resolveBuildEnvironmentOptions(
   }
   // The object spread above evaluates the `rollupOptions` getter set up on
   // `merged` and copies it as a plain data property.
-  setupRollupOptionCompat(resolved, 'build')
+  setupRollupOptionCompat(resolved)
 
   return resolved
 }
@@ -643,7 +643,7 @@ export function resolveRolldownOptions(
         : Array.isArray(input)
           ? input
           : Object.values(input)
-    if (inputs.some((input) => input.endsWith('.css'))) {
+    if (inputs.some((input) => CSS_LANGS_RE.test(input))) {
       throw new Error(
         `When "build.cssCodeSplit: false" is set, "rolldownOptions.input" should not include CSS files.`,
       )
@@ -709,12 +709,6 @@ export function resolveRolldownOptions(
   const isSsrTargetWebworkerEnvironment =
     environment.name === 'ssr' &&
     environment.getTopLevelConfig().ssr?.target === 'webworker'
-
-  // For webworker SSR with platform: 'browser', external CJS require() calls
-  // need to be converted to ESM imports since createRequire is not available.
-  if (isSsrTargetWebworkerEnvironment) {
-    plugins.push(esmExternalRequirePlugin())
-  }
 
   const buildOutputOptions = (output: OutputOptions = {}): OutputOptions => {
     // @ts-expect-error See https://github.com/vitejs/vite/issues/5812#issuecomment-984345618
@@ -1761,6 +1755,18 @@ export class BuildEnvironment extends BaseEnvironment {
   mode = 'build' as const
 
   isBuilt = false
+
+  /**
+   * The build manifest for this environment. It is populated once the
+   * environment has been built and is available regardless of the
+   * `build.manifest` option, which only controls whether the manifest file is
+   * written to disk. This allows accessing the manifest in the `buildApp` hook
+   * without reading it from the file system.
+   *
+   * @experimental
+   */
+  manifest?: Manifest
+
   constructor(
     name: string,
     config: ResolvedConfig,

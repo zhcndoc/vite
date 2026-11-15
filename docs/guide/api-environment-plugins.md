@@ -37,6 +37,35 @@ Vite 服务器有一个共享的插件管道，但在处理模块时，总是在
   }
 ```
 
+## 注册安全模块
+
+在开发期间，插件可以调用 `this.environment.addSafeModule(id)`，允许在 [`server.fs.allow`](/config/server-options#server-fs-allow) 之外加载已解析的模块 ID。
+
+对于文件系统模块，请传入规范化的绝对路径，可选地附带查询参数。使用 Vite 的 `normalizePath` 工具规范化文件系统路径。此方法会同时注册完整 ID，以及移除查询参数和 hash 后的路径。其他查询参数变体必须单独注册。
+
+当插件添加了 Vite 无法通过导入分析发现的引用时，请在同一个 `transform` 钩子中注册该引用的 ID。这样之后请求该模块时，它就能通过访问检查。
+
+```ts
+import type { Plugin } from 'vite'
+
+// runtimeId is a normalized absolute path, optionally with a query.
+// runtimeUrl is the URL to insert into the transformed code.
+function runtimePlugin(runtimeId: string, runtimeUrl: string): Plugin {
+  return {
+    name: 'plugin-runtime',
+    transform: {
+      filter: { code: '__RUNTIME_URL__' },
+      handler(code) {
+        if (this.environment.mode === 'dev') {
+          this.environment.addSafeModule(runtimeId)
+        }
+        return code.replaceAll('__RUNTIME_URL__', JSON.stringify(runtimeUrl))
+      },
+    },
+  }
+}
+```
+
 ## 使用 Hook 注册新环境
 
 插件可以在 `config` Hook 中添加新环境。例如，[RSC 支持](/plugins/#vitejs-plugin-rsc) 使用一个额外的环境来拥有一个带有 `react-server` 条件的独立模块图：

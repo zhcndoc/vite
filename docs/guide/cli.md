@@ -1,5 +1,9 @@
 # 命令行界面
 
+## 进程锁
+
+`vite`、`vite build` 和 `vite preview` 命令会在 [`cacheDir`](/config/shared-options#cachedir) 的 `lock` 子目录中创建锁文件。如果锁属于另一个使用相同命令、项目根目录、配置文件和模式运行的进程，Vite 就会退出。若要同时运行另一个实例，请传入 `--bypass-lock`。
+
 ## 开发服务器
 
 ### `vite`
@@ -23,11 +27,12 @@ vite [root]
 | `--strictPort`            | 如果指定端口已被占用则退出（`boolean`）                                                                                                              |
 | `--force`                 | 强制优化器忽略缓存并重新打包（`boolean`）                                                                                                            |
 | `--experimentalBundle`    | 使用实验性的完整打包模式（该功能高度实验性）（`boolean`）                                                                                            |
+| `--bypass-lock`           | 允许与此项目的另一个 Vite 进程同时运行（`boolean`）                                                                                                  |
 | `-c, --config <file>`     | 使用指定的配置文件（`string`）                                                                                                                       |
 | `--base <path>`           | 公共基础路径（默认值：`/`）（`string`）                                                                                                              |
 | `-l, --logLevel <level>`  | info \| warn \| error \| silent（`string`）                                                                                                          |
 | `--clearScreen`           | 允许／禁用日志记录时清屏（`boolean`）                                                                                                                |
-| `--configLoader <loader>` | 使用 `bundle` 通过 Rolldown 打包配置，或使用 `runner`（实验性）即时处理，或使用 `native`（实验性）通过原生运行时加载（默认值：`bundle`）             |
+| `--configLoader <loader>` | 使用 `bundle` 通过 Rolldown 打包配置，或使用 `native` 通过原生运行时加载（默认值：`bundle`）                                                         |
 | `--profile [name]`        | 启动内置 Node.js 检查器并将性能分析写入 `<name>.cpuprofile`（参见[性能瓶颈](/guide/troubleshooting#performance-bottlenecks)）（`boolean \| string`） |
 | `-d, --debug [feat]`      | 显示调试日志（`string \| boolean`）                                                                                                                  |
 | `-f, --filter <filter>`   | 过滤调试日志（`string`）                                                                                                                             |
@@ -62,11 +67,12 @@ vite build [root]
 | `--ssrManifest [name]`         | 输出 ssr 清单 json（`boolean \| string`）                                                                                                            |
 | `--emptyOutDir`                | 当 outDir 位于根目录之外时强制清空 outDir（`boolean`）                                                                                               |
 | `-w, --watch`                  | 磁盘上的模块发生更改时重新构建（`boolean`）                                                                                                          |
+| `--bypass-lock`                | 允许与此项目的另一个 Vite 进程同时运行（`boolean`）                                                                                                  |
 | `-c, --config <file>`          | 使用指定的配置文件（`string`）                                                                                                                       |
 | `--base <path>`                | 公共基础路径（默认值：`/`）（`string`）                                                                                                              |
 | `-l, --logLevel <level>`       | info \| warn \| error \| silent（`string`）                                                                                                          |
 | `--clearScreen`                | 允许／禁用日志记录时清屏（`boolean`）                                                                                                                |
-| `--configLoader <loader>`      | 使用 `bundle` 通过 Rolldown 打包配置，或使用 `runner`（实验性）即时处理，或使用 `native`（实验性）通过原生运行时加载（默认值：`bundle`）             |
+| `--configLoader <loader>`      | 使用 `bundle` 通过 Rolldown 打包配置，或使用 `native` 通过原生运行时加载（默认值：`bundle`）                                                         |
 | `--profile [name]`             | 启动内置 Node.js 检查器并将性能分析写入 `<name>.cpuprofile`（参见[性能瓶颈](/guide/troubleshooting#performance-bottlenecks)）（`boolean \| string`） |
 | `-d, --debug [feat]`           | 显示调试日志（`string \| boolean`）                                                                                                                  |
 | `-f, --filter <filter>`        | 过滤调试日志（`string`）                                                                                                                             |
@@ -90,18 +96,18 @@ vite optimize [root]
 
 #### 选项
 
-| 选项                      |                                                                                                                                          |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `--force`                 | 强制优化器忽略缓存并重新打包（`boolean`）                                                                                                |
-| `-c, --config <file>`     | 使用指定的配置文件（`string`）                                                                                                           |
-| `--base <path>`           | 公共基础路径（默认值：`/`）（`string`）                                                                                                  |
-| `-l, --logLevel <level>`  | info \| warn \| error \| silent（`string`）                                                                                              |
-| `--clearScreen`           | 允许／禁用日志记录时清屏（`boolean`）                                                                                                    |
-| `--configLoader <loader>` | 使用 `bundle` 通过 Rolldown 打包配置，或使用 `runner`（实验性）即时处理，或使用 `native`（实验性）通过原生运行时加载（默认值：`bundle`） |
-| `-d, --debug [feat]`      | 显示调试日志（`string \| boolean`）                                                                                                      |
-| `-f, --filter <filter>`   | 过滤调试日志（`string`）                                                                                                                 |
-| `-m, --mode <mode>`       | 设置环境模式（`string`）                                                                                                                 |
-| `-h, --help`              | 显示可用的 CLI 选项                                                                                                                      |
+| 选项                      |                                                                                              |
+| ------------------------- | -------------------------------------------------------------------------------------------- |
+| `--force`                 | 强制优化器忽略缓存并重新打包（`boolean`）                                                    |
+| `-c, --config <file>`     | 使用指定的配置文件（`string`）                                                               |
+| `--base <path>`           | 公共基础路径（默认值：`/`）（`string`）                                                      |
+| `-l, --logLevel <level>`  | info \| warn \| error \| silent（`string`）                                                  |
+| `--clearScreen`           | 允许／禁用日志记录时清屏（`boolean`）                                                        |
+| `--configLoader <loader>` | 使用 `bundle` 通过 Rolldown 打包配置，或使用 `native` 通过原生运行时加载（默认值：`bundle`） |
+| `-d, --debug [feat]`      | 显示调试日志（`string \| boolean`）                                                          |
+| `-f, --filter <filter>`   | 过滤调试日志（`string`）                                                                     |
+| `-m, --mode <mode>`       | 设置环境模式（`string`）                                                                     |
+| `-h, --help`              | 显示可用的 CLI 选项                                                                          |
 
 ### `vite preview`
 
@@ -117,19 +123,20 @@ vite preview [root]
 
 #### 选项
 
-| 选项                      |                                                                                                                                          |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `--host [host]`           | 指定主机名（`string`）                                                                                                                   |
-| `--port <port>`           | 指定端口（`number`）                                                                                                                     |
-| `--strictPort`            | 如果指定端口已被占用则退出（`boolean`）                                                                                                  |
-| `--open [path]`           | 启动时打开浏览器（`boolean \| string`）                                                                                                  |
-| `--outDir <dir>`          | 输出目录（默认值：`dist`）（`string`）                                                                                                   |
-| `-c, --config <file>`     | 使用指定的配置文件（`string`）                                                                                                           |
-| `--base <path>`           | 公共基础路径（默认值：`/`）（`string`）                                                                                                  |
-| `-l, --logLevel <level>`  | info \| warn \| error \| silent（`string`）                                                                                              |
-| `--clearScreen`           | 允许／禁用日志记录时清屏（`boolean`）                                                                                                    |
-| `--configLoader <loader>` | 使用 `bundle` 通过 Rolldown 打包配置，或使用 `runner`（实验性）即时处理，或使用 `native`（实验性）通过原生运行时加载（默认值：`bundle`） |
-| `-d, --debug [feat]`      | 显示调试日志（`string \| boolean`）                                                                                                      |
-| `-f, --filter <filter>`   | 过滤调试日志（`string`）                                                                                                                 |
-| `-m, --mode <mode>`       | 设置环境模式（`string`）                                                                                                                 |
-| `-h, --help`              | 显示可用的 CLI 选项                                                                                                                      |
+| 选项                      |                                                                                              |
+| ------------------------- | -------------------------------------------------------------------------------------------- |
+| `--host [host]`           | 指定主机名（`string`）                                                                       |
+| `--port <port>`           | 指定端口（`number`）                                                                         |
+| `--strictPort`            | 如果指定端口已被占用则退出（`boolean`）                                                      |
+| `--open [path]`           | 启动时打开浏览器（`boolean \| string`）                                                      |
+| `--outDir <dir>`          | 输出目录（默认值：`dist`）（`string`）                                                       |
+| `--bypass-lock`           | 允许与此项目的另一个 Vite 进程同时运行（`boolean`）                                          |
+| `-c, --config <file>`     | 使用指定的配置文件（`string`）                                                               |
+| `--base <path>`           | 公共基础路径（默认值：`/`）（`string`）                                                      |
+| `-l, --logLevel <level>`  | info \| warn \| error \| silent（`string`）                                                  |
+| `--clearScreen`           | 允许／禁用日志记录时清屏（`boolean`）                                                        |
+| `--configLoader <loader>` | 使用 `bundle` 通过 Rolldown 打包配置，或使用 `native` 通过原生运行时加载（默认值：`bundle`） |
+| `-d, --debug [feat]`      | 显示调试日志（`string \| boolean`）                                                          |
+| `-f, --filter <filter>`   | 过滤调试日志（`string`）                                                                     |
+| `-m, --mode <mode>`       | 设置环境模式（`string`）                                                                     |
+| `-h, --help`              | 显示可用的 CLI 选项                                                                          |

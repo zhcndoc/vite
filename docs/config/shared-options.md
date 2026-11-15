@@ -402,13 +402,15 @@ export default defineConfig({
 
 根据预处理器选项，即使此选项未设置为 `0`，Vite 也可能在主线程上运行预处理器。
 
-## css.devSourcemap
+## dev.sourcemap
 
-- **实验性：** [提供反馈](https://github.com/vitejs/vite/discussions/13845)
-- **类型：** `boolean`
-- **默认值：** `false`
+- **实验性：** [针对 `dev.sourcemap.css` 提供反馈](https://github.com/vitejs/vite/discussions/13845)
+- **类型：** `boolean | { js?: boolean; css?: boolean }`
+- **默认值：** `{ js: true, css: false }`
 
 是否在开发期间启用 sourcemap。
+
+将 `dev.sourcemap` 设为 `boolean` 时，会同时设置 JS 和 CSS。
 
 ## css.transformer
 

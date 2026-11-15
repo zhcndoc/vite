@@ -340,6 +340,31 @@ export default defineConfig({
 
 除了 `builder.buildApp` 配置选项之外，插件还可以定义 `buildApp` 钩子来参与应用构建。配置选项和插件钩子会按照规定的顺序运行：顺序为 `'pre'` 或 `null` 的钩子首先运行，然后运行配置的 `builder.buildApp`，最后运行顺序为 `'post'` 的钩子。在钩子内部，`environment.isBuilt` 可以告知你某个环境是否已经构建，这使插件能够避免重复构建该环境。
 
+### 使用 `environment.manifest` 读取构建清单
+
+环境构建完成后，其[构建清单](/config/build-options#build-manifest)可通过 `environment.manifest` 访问。这样插件可以直接在 `buildApp` 钩子中读取已构建环境的清单，无需先写入文件系统再读取。例如，常见做法是利用清单将服务器环境生成的资源移至客户端 bundle。
+
+无论是否启用 [`build.manifest`](/config/build-options#build-manifest) 选项，都会填充清单；该选项只控制是否将清单文件写入磁盘。每个环境都有自己的清单。
+
+```js [vite.config.js]
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  plugins: [
+    {
+      name: 'read-manifest',
+      async buildApp(builder) {
+        const client = builder.environments.client
+        if (!client.isBuilt) {
+          await builder.build(client)
+        }
+        console.log('client manifest', client.manifest)
+      },
+    },
+  ],
+})
+```
+
 ### 使用 `createBuilder` 以编程方式构建
 
 要从你自己的代码触发应用构建，请使用 `createBuilder`，而不是独立的 `build` 函数。`createBuilder` 是 `createServer` 在构建时的对应物：它会解析配置并返回一个 `ViteBuilder`，其 `buildApp` 方法会构建每个已配置的环境。你也可以使用 `builder.build(environment)` 构建单个环境。

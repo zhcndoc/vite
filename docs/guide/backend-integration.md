@@ -162,6 +162,14 @@
       */
      isDynamicEntry?: boolean
      /**
+      * Whether this chunk belongs to a web worker bundle.
+      */
+     isWorker?: boolean
+     /**
+      * Whether this chunk is the entry point of a web worker bundle.
+      */
+     isWorkerEntry?: boolean
+     /**
       * 此块静态导入的块列表
       *
       * 值是清单的键。此字段仅存在于 JS 块中。
@@ -180,6 +188,7 @@
    - **入口块**：由 [`build.rolldownOptions.input`](https://rolldown.rs/reference/InputOptions.input#input) 中指定的文件生成。这些块具有 `isEntry: true`，其键是相对于项目根目录的 src 路径。
    - **动态入口块**：由动态导入生成。这些块具有 `isDynamicEntry: true`，其键是相对于项目根目录的 src 路径。
    - **非入口块**：其键是生成文件的基础名称，并以前缀 `_` 开头。
+   - **Worker 块**：由导入的 web worker 生成。这些块具有 `isWorker: true`。Worker 入口还具有 `isWorkerEntry: true`。其键使用以 `_worker_` 为前缀的生成文件名。
    - **资源块**：由导入的资源（如图像、字体）生成。其键是相对于项目根目录的 src 路径。
    - **CSS 文件**：当 [`build.cssCodeSplit`](/config/build-options.md#build-csscodesplit) 为 `false` 时，会生成一个键为 `style.css` 的单个 CSS 文件。当 `build.cssCodeSplit` 不为 `false` 时，键的生成方式与 JS 块类似（即入口块不会有 `_` 前缀，非入口块会有 `_` 前缀）。
 

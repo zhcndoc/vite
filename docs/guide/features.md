@@ -319,8 +319,9 @@ document.getElementById('foo').className = applyColor
 也就是说，Vite 确实提供了对 `.scss`、`.sass`、`.less`、`.styl` 和 `.stylus` 文件的内置支持。无需为它们安装 Vite 特定的插件，但必须安装相应的预处理器本身：
 
 ```bash
-# .scss 和 .sass
-npm add -D sass-embedded # 或 sass
+# .scss and .sass
+npm add -D sass-embedded # recommended for performance
+npm add -D sass # if the platform is not supported
 
 # .less
 npm add -D less
@@ -679,12 +680,50 @@ console.log(add(1, 2)) // 3
 
 这遵循 [WebAssembly/ES Module Integration 提案](https://github.com/WebAssembly/esm-integration)。由于 WebAssembly 模块是异步实例化的，直接导入的 `.wasm` 文件表现为异步模块，并且需要支持顶层 `await`。
 
+模块编译时启用了 [JS String Builtins](https://github.com/WebAssembly/js-string-builtins) 和 [Imported String Constants](https://github.com/WebAssembly/js-string-builtins) 提案，与 WebAssembly/ES Module Integration loader 保持一致。
+
 ::: tip TypeScript 支持
 
 由于 `.wasm` 文件的类型未知，TypeScript 会报错，例如 `Module '"*.wasm"' has no exported member 'add'`。要修复此问题，请在你的 `tsconfig.json` 中启用 [`allowArbitraryExtensions`](https://www.typescriptlang.org/tsconfig/#allowArbitraryExtensions)，并在你的 `.wasm` 文件旁边创建一个声明文件。启用 `allowArbitraryExtensions` 后，TypeScript 在解析 `.wasm` 导入时会查找名为 `{filename}.d.wasm.ts` 的声明文件。例如，对于 `add.wasm`，创建 `add.d.wasm.ts`：
 
 ```ts [add.d.wasm.ts]
 export function add(a: number, b: number): number
+```
+
+:::
+
+::: details 源码阶段导入支持
+
+#### 源码阶段导入
+
+ESM Integration 提案还为 `.wasm` 文件定义了[源码阶段导入](https://github.com/tc39/proposal-source-phase-imports)，可在不实例化的情况下取得已编译的 [`WebAssembly.Module`](https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/Module)，完全由你控制实例化。这是接管实例化过程的标准方式；[TypeScript 7.1](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/#source-phase-imports) 稳定发布后，它将成为 [`?init`](#manual-initialization) 的推荐替代方案：
+
+```js
+import source mod from './example.wasm'
+
+// `mod` is a `WebAssembly.Module`; instantiate it whenever (and however) you like
+const instance = await WebAssembly.instantiate(mod)
+instance.exports.test()
+```
+
+由于 [`WebAssembly.Instance`](https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/Instance) 由你掌控，你可以满足模块自身的导入需求，并按需多次实例化：
+
+```js
+import source mod from './example.wasm'
+
+const instance = await WebAssembly.instantiate(mod, {
+  './imports.js': {
+    someFunc: () => {
+      /* ... */
+    },
+  },
+})
+```
+
+动态形式也会解析为 `WebAssembly.Module`：
+
+```js
+const mod = await import.source('./example.wasm')
 ```
 
 :::
@@ -724,7 +763,7 @@ init({
 
 ::: warning 对于 SSR 构建，仅支持兼容 Node.js 的运行时
 
-由于缺少一种通用的文件加载方式，直接 `.wasm` 导入和 `.wasm?init` 的内部实现都依赖于 `node:fs` 模块。这意味着这些功能仅在 SSR 构建的 Node.js 兼容运行时中可用。
+由于缺少一种通用的文件加载方式，直接 `.wasm` 导入、源码阶段导入和 `.wasm?init` 的内部实现都依赖于 `node:fs` 模块。这意味着这些功能仅在 SSR 构建的 Node.js 兼容运行时中可用。
 
 :::
 
